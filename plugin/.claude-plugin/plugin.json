@@ -1,0 +1,20 @@
+{
+  "name": "interview-prep-desk",
+  "displayName": "Interview Prep Desk",
+  "version": "0.1.1",
+  "description": "One private dashboard for interview prep: morning research, briefing, FAQ, quiz, flashcards, a practice chat and an optional NotebookLM voice mock.",
+  "author": {
+    "name": "dantonoli",
+    "url": "https://github.com/dantonoli"
+  },
+  "homepage": "https://github.com/dantonoli/interview-prep-desk",
+  "repository": "https://github.com/dantonoli/interview-prep-desk",
+  "license": "MIT",
+  "keywords": [
+    "interview",
+    "job-search",
+    "career",
+    "notebooklm",
+    "artifacts"
+  ]
+}

@@ -1,0 +1,1160 @@
+<title>Interview Prep Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#EEF1F4; --surface:#FFFFFF; --surface-2:#F5F7FA; --ink:#16202B; --ink-2:#4F5D6D; --ink-3:#7A8796;
+  --line:#D6DDE5; --accent:#2B4FA2; --accent-ink:#FFFFFF; --accent-soft:#E3EAF8;
+  --mark:#FFE27A; --ok:#2E7D4F; --ok-soft:#DDF1E5; --warn:#A86A12; --warn-soft:#FBEBCF; --crit:#B83A3A; --crit-soft:#F8DEDE;
+  --shadow:0 1px 2px rgba(22,32,43,.06),0 4px 16px rgba(22,32,43,.05);
+  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --sans:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#10151B; --surface:#171E26; --surface-2:#1D2530; --ink:#E6EBF1; --ink-2:#A3B0BF; --ink-3:#7C8998;
+    --line:#2C3643; --accent:#90B0F5; --accent-ink:#0F1A33; --accent-soft:#1F2C47;
+    --mark:rgba(255,214,90,.30); --ok:#62C68D; --ok-soft:#18311F; --warn:#E3B04B; --warn-soft:#352812; --crit:#F07A7A; --crit-soft:#3A1C1C;
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#10151B; --surface:#171E26; --surface-2:#1D2530; --ink:#E6EBF1; --ink-2:#A3B0BF; --ink-3:#7C8998;
+  --line:#2C3643; --accent:#90B0F5; --accent-ink:#0F1A33; --accent-soft:#1F2C47;
+  --mark:rgba(255,214,90,.30); --ok:#62C68D; --ok-soft:#18311F; --warn:#E3B04B; --warn-soft:#352812; --crit:#F07A7A; --crit-soft:#3A1C1C;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:20px 48px}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:28px;font-weight:700}
+h2{font-size:24px;font-weight:700}
+h3{font-size:15px;font-family:var(--sans);font-weight:600}
+.label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-2)}
+a{color:var(--accent)}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 12px;font-weight:500;font-size:14px;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--ink-3)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--ink-2)}
+.btn.ghost:hover{background:var(--surface-2);color:var(--ink)}
+.btn.danger{color:var(--crit)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+header.top .actions{display:flex;gap:8px;flex-wrap:wrap}
+.banner{border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:10px 14px;font-size:14px;color:var(--ink-2)}
+
+.strip{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.strip > div{background:var(--surface);padding:14px 18px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.strip .big{font-family:var(--display);font-size:22px;font-weight:700;line-height:1.2}
+.strip .sub{font-size:13px;color:var(--ink-2)}
+
+.layout{display:grid;grid-template-columns:320px minmax(0,1fr);gap:20px;align-items:start}
+.layout.solo{grid-template-columns:minmax(0,1fr)}
+.layout.solo .list:empty{display:none}
+.list{display:flex;flex-direction:column;gap:8px}
+.list .section{margin-top:8px}
+.item{display:grid;grid-template-columns:4px 1fr auto;gap:12px;align-items:stretch;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px 10px 0;overflow:hidden;width:100%}
+.item:hover{border-color:var(--ink-3)}
+.item[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.item .stripe{border-radius:0 3px 3px 0;background:var(--ok)}
+.item.warn .stripe{background:var(--warn)} .item.crit .stripe{background:var(--crit)} .item.past .stripe{background:var(--line)}
+.item .co{font-weight:600;font-size:15px;line-height:1.3}
+.item .ro{font-size:13px;color:var(--ink-2);line-height:1.35}
+.item .when{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:6px}
+.meter{height:4px;border-radius:2px;background:var(--surface-2);overflow:hidden;width:56px;border:1px solid var(--line)}
+.meter i{display:block;height:100%;background:var(--accent)}
+
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.chip.ok{background:var(--ok-soft);color:var(--ok)} .chip.warn{background:var(--warn-soft);color:var(--warn)} .chip.crit{background:var(--crit-soft);color:var(--crit)}
+.chip.ex{background:var(--mark);color:var(--ink)}
+.chip.acc{background:var(--accent-soft);color:var(--accent)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+.detail-head{padding:20px 22px 16px;display:flex;flex-direction:column;gap:12px;border-bottom:1px solid var(--line)}
+.detail-head .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.detail-head .chips{display:flex;flex-wrap:wrap;gap:6px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px 20px;font-size:14px}
+.facts > div{display:flex;flex-direction:column;gap:2px;min-width:0;overflow-wrap:anywhere}
+.path{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.path code{font-family:var(--mono);font-size:12.5px;background:var(--surface-2);border:1px solid var(--line);padding:2px 6px;border-radius:5px;overflow-wrap:anywhere}
+.ready{display:flex;align-items:center;gap:12px}
+.ready .bar{flex:1;height:8px;border-radius:4px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden}
+.ready .bar i{display:block;height:100%;background:var(--accent);transition:width .3s}
+
+.tabs{display:flex;gap:2px;padding:0 14px;border-bottom:1px solid var(--line);overflow-x:auto}
+.tab{border:0;background:none;padding:12px 10px;font-weight:500;color:var(--ink-2);border-bottom:2px solid transparent;white-space:nowrap}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tab .n{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-left:4px}
+.tabbody{padding:18px 22px 22px}
+
+.groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.group{display:flex;flex-direction:column;gap:6px}
+.check{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;padding:8px 10px;border-radius:8px;cursor:pointer}
+.check:hover{background:var(--surface-2)}
+.check input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--accent)}
+.check .t{font-weight:500}
+.check.done .t{text-decoration:line-through;text-decoration-color:var(--ink-3);color:var(--ink-2)}
+.check .h{font-size:13px;color:var(--ink-3)}
+.score{display:flex;align-items:center;gap:8px;padding:4px 10px 0 42px;font-size:13px}
+.score input{width:80px}
+
+input[type=text],input[type=date],input[type=time],input[type=url],textarea,select{background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:7px 9px;width:100%}
+textarea{resize:vertical;min-height:120px;line-height:1.5}
+
+/* flashcards */
+.drill{display:flex;flex-direction:column;gap:14px;align-items:stretch}
+.drill-top{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.card{min-height:220px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2);display:flex;flex-direction:column;justify-content:center;gap:10px;padding:28px;text-align:center;cursor:pointer;position:relative;background-image:repeating-linear-gradient(transparent 0 31px,var(--line) 31px 32px);background-position:0 18px}
+.card .side{position:absolute;top:12px;left:16px}
+.card .txt{font-size:19px;font-weight:500;line-height:1.45;max-width:60ch;margin:0 auto;overflow-wrap:anywhere}
+.card.back .txt{font-size:16px;font-weight:400}
+.card .hint{font-size:12px;color:var(--ink-3)}
+.drill-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.progress-dots{display:flex;flex-wrap:wrap;gap:3px}
+.progress-dots i{width:8px;height:8px;border-radius:2px;background:var(--line)}
+.progress-dots i.k{background:var(--ok)}
+.progress-dots i.cur{outline:2px solid var(--accent);outline-offset:1px}
+
+/* questions */
+.qlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.qlist li{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2)}
+.addq{display:flex;gap:8px;margin-top:10px}
+.suggest{margin-top:18px;display:flex;flex-direction:column;gap:6px}
+.suggest button{text-align:left;border:1px dashed var(--line);background:none;border-radius:8px;padding:7px 10px;color:var(--ink-2);font-size:14px}
+.suggest button:hover{border-color:var(--accent);color:var(--ink)}
+
+.empty{padding:36px 24px;display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.empty ol{margin:0;padding-left:20px;color:var(--ink-2);display:flex;flex-direction:column;gap:4px}
+.saved{font-size:12px;color:var(--ink-3)}
+
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);padding:0;width:min(640px,calc(100vw - 32px));max-height:calc(100vh - 48px)}
+dialog::backdrop{background:rgba(10,16,24,.45)}
+dialog form{display:flex;flex-direction:column;gap:14px;padding:20px 22px}
+dialog .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+dialog .full{grid-column:1/-1}
+dialog label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:500;color:var(--ink-2)}
+dialog .foot{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.preview{font-size:13px;color:var(--ink-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:var(--surface-2);max-height:160px;overflow:auto}
+.preview ul{margin:4px 0 0;padding-left:18px}
+.err{color:var(--crit);font-size:13px}
+.confirm{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;background:var(--crit-soft);color:var(--crit);padding:8px 10px;border-radius:8px}
+
+/* materials */
+.seg{display:inline-flex;flex-wrap:wrap;gap:2px;background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:3px;margin-bottom:16px}
+.seg button{border:0;background:none;border-radius:6px;padding:5px 12px;font-size:14px;font-weight:500;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.md{max-width:72ch;font-size:15px;line-height:1.6}
+.md h1,.md h2{font-size:20px;margin:22px 0 8px}
+.md h3{font-size:16px;margin:18px 0 6px;font-family:var(--display)}
+.md > :first-child{margin-top:0}
+.md p,.md ul,.md ol{margin:0 0 10px}
+.md ul,.md ol{padding-left:22px}
+.md li{margin-bottom:4px}
+.md strong{font-weight:600}
+.md mark,.md em strong{background:var(--mark);color:inherit}
+.md blockquote{margin:0 0 10px;padding:6px 12px;border-left:3px solid var(--accent);background:var(--surface-2);border-radius:0 6px 6px 0}
+.md .tw{overflow-x:auto}
+.md table{border-collapse:collapse;font-size:14px;margin:0 0 12px}
+.md th,.md td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+.md th{background:var(--surface-2)}
+.md code{font-family:var(--mono);font-size:13px;background:var(--surface-2);padding:1px 4px;border-radius:4px}
+.faq{display:flex;flex-direction:column;gap:8px}
+.faq details{border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.faq summary{cursor:pointer;padding:11px 14px;font-weight:500;display:flex;gap:10px;align-items:baseline;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{content:"+";font-family:var(--mono);color:var(--ink-3);width:10px;flex:none}
+.faq details[open] summary::before{content:"\2212"}
+.faq details[open] summary{border-bottom:1px solid var(--line)}
+.faq .body{padding:12px 14px 14px 34px}
+.faq .kind{margin-left:auto;flex:none}
+.quiz{display:flex;flex-direction:column;gap:16px;max-width:72ch}
+.qz{display:flex;flex-direction:column;gap:6px}
+.qz .qq{font-weight:600}
+.qz button.opt{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 12px;font-size:14px;display:flex;gap:10px}
+.qz button.opt:hover:not(:disabled){border-color:var(--accent)}
+.qz button.opt .l{font-family:var(--mono);color:var(--ink-3)}
+.qz button.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.qz button.opt.wrong{border-color:var(--crit);background:var(--crit-soft)}
+.qz button.opt:disabled{cursor:default}
+.qz .why{font-size:13px;color:var(--ink-2);padding-left:4px}
+.srcs{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;font-size:14px;overflow-wrap:anywhere}
+.callout{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;border:1px dashed var(--line);border-radius:10px;padding:12px 14px;background:var(--surface-2)}
+
+/* mock interview */
+.mock{display:flex;flex-direction:column;gap:16px;max-width:76ch}
+.mock-top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.mock-top .chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;color:var(--ink-2);font-size:14px}
+.mockq{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.mq{display:grid;grid-template-columns:22px 22px minmax(0,1fr);gap:8px;align-items:start;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);cursor:pointer}
+.mq:hover{border-color:var(--ink-3)}
+.mq input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--accent)}
+.mq .n{font-size:13px;color:var(--ink-3);padding-top:2px}
+.mq.done .q{color:var(--ink-2);text-decoration:line-through;text-decoration-color:var(--ink-3)}
+a.btn{text-decoration:none}
+
+/* practice chat */
+.chat{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:16px}
+.chat-head{display:flex;flex-direction:column;gap:2px}
+.chat-log{display:flex;flex-direction:column;gap:10px;max-height:560px;overflow-y:auto;padding:2px}
+.bub{border:1px solid var(--line);border-radius:12px;padding:10px 14px;max-width:92%;display:flex;flex-direction:column;gap:4px;min-width:0}
+.bub.i{background:var(--surface-2);align-self:flex-start}
+.bub.c{background:var(--accent-soft);border-color:transparent;align-self:flex-end}
+.bub .txt{white-space:pre-wrap;overflow-wrap:anywhere}
+.chat-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+#chat-input{min-height:140px}
+
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr}
+  .strip{grid-template-columns:1fr}
+  dialog .grid{grid-template-columns:1fr}
+  .tabbody,.detail-head{padding-inline:16px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="label">Prepared daily by Claude</div>
+      <h1>Interview Prep Desk</h1>
+    </div>
+    <div class="actions">
+      <button class="btn" id="btn-profile" type="button" data-act="profile">Your profile</button>
+      <button class="btn" id="btn-import" type="button" data-act="import">Import list</button>
+      <button class="btn primary" id="btn-add" type="button" data-act="add">Add interview</button>
+    </div>
+  </header>
+  <div class="banner" id="banner" hidden></div>
+  <section class="strip" id="strip" aria-label="Summary"></section>
+  <div class="layout">
+    <nav class="list" id="list" aria-label="Interviews"></nav>
+    <main id="detail"></main>
+  </div>
+</div>
+
+<dialog id="dlg-edit">
+  <form id="form-edit" method="dialog">
+    <h2 id="edit-title">Add interview</h2>
+    <div class="grid">
+      <label>Company<input type="text" id="f-company" required></label>
+      <label>Role<input type="text" id="f-role" required></label>
+      <label>Date<input type="date" id="f-date"></label>
+      <label>Time<input type="time" id="f-time"></label>
+      <label>Format<input type="text" id="f-format" placeholder="video, onsite, phone"></label>
+      <label>Focus<input type="text" id="f-focus" placeholder="system design, behavioral"></label>
+      <label class="full">Interviewers<input type="text" id="f-interviewers" placeholder="Name (title), Name (title)"></label>
+      <label class="full">Job posting link<input type="url" id="f-job" placeholder="https://"></label>
+      <label class="full">Job description<textarea id="f-jd" style="min-height:100px" placeholder="Paste the posting text. The morning prep uses it when the job page can't be opened."></textarea></label>
+      <label class="full" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="f-request"> Prepare materials on the next morning run, even if the interview is more than 7 days away</label>
+    </div>
+    <div class="err" id="edit-err" hidden></div>
+    <div class="foot">
+      <button class="btn ghost" type="button" data-close>Cancel</button>
+      <button class="btn primary" type="submit" id="edit-save">Save interview</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlg-import">
+  <form id="form-import" method="dialog">
+    <h2>Import a list of interviews</h2>
+    <p class="muted" style="margin:0">Paste a list in the upcoming.md format, or pick the file. Existing interviews keep their checklist, flashcards and notes.</p>
+    <input type="file" id="imp-file" accept=".md,.txt,text/markdown,text/plain">
+    <textarea id="imp-text" placeholder="## Company – Role&#10;- date: 2026-10-05&#10;- time: 14:00&#10;..."></textarea>
+    <div class="preview" id="imp-preview">Nothing to import yet.</div>
+    <div class="foot">
+      <button class="btn ghost" type="button" data-close>Cancel</button>
+      <button class="btn primary" type="submit" id="imp-go" disabled>Import</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlg-cards">
+  <form id="form-cards" method="dialog">
+    <h2>Load flashcards</h2>
+    <p class="muted" style="margin:0">Pick a flashcards file or paste cards. Works with JSON, CSV, and text lines like <code class="mono">Front :: Back</code>, <code class="mono">Front | Back</code> or <code class="mono">Q: … / A: …</code>.</p>
+    <input type="file" id="cards-file" accept=".json,.csv,.md,.txt,.tsv">
+    <textarea id="cards-text" placeholder="What does the company sell? :: Warehouse picking robots"></textarea>
+    <div class="preview" id="cards-preview">No cards found yet.</div>
+    <label style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="cards-replace" checked> Replace the current deck</label>
+    <div class="foot">
+      <button class="btn ghost" type="button" data-close>Cancel</button>
+      <button class="btn primary" type="submit" id="cards-go" disabled>Load cards</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlg-profile">
+  <form id="form-profile" method="dialog">
+    <h2>Your profile</h2>
+    <p class="muted" style="margin:0">Your CV in plain text or markdown. The morning prep uses it to write answers and STAR stories from your real experience, and to find gaps. It stays private unless you share this dashboard.</p>
+    <label>Your name<input type="text" id="profile-name" maxlength="120" placeholder="How interviewers should address you"></label>
+    <textarea id="profile-text" style="min-height:360px;font-size:14px"></textarea>
+    <div class="saved" id="profile-meta"></div>
+    <div class="foot">
+      <button class="btn ghost" type="button" data-close>Cancel</button>
+      <button class="btn primary" type="submit" id="profile-save">Save profile</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="dlg-nlm">
+  <form method="dialog">
+    <h2>Use it in NotebookLM</h2>
+    <div class="saved" id="nlm-status" style="font-size:14px"></div>
+    <textarea id="nlm-text" readonly style="min-height:160px;font-size:13px;font-family:var(--mono)"></textarea>
+    <ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:14px">
+      <li>Open <a href="https://notebooklm.google.com" target="_blank" rel="noopener">notebooklm.google.com</a> and create a new notebook.</li>
+      <li>Add source, choose <strong>Copied text</strong>, and paste.</li>
+      <li>In the Studio panel, choose <strong>Audio Overview</strong>, then Customize. Paste this: <em>"Role-play a live job interview. From the first line you are the interviewers and I am the candidate. Ask the questions from the mock interview script one at a time, tell me to pause and answer out loud, then give a strong answer from my CV and push back when an answer is vague or has no numbers."</em></li>
+      <li>Use <strong>Interactive mode</strong> to join the conversation and practise answering out loud.</li>
+    </ol>
+    <div class="foot"><button class="btn primary" type="submit">Done</button></div>
+  </form>
+</dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script>
+(function(){
+const CHECK = [
+  {id:'briefing',g:'Study',t:'Read the Briefing Doc',h:'Company snapshot, role expectations, red flags'},
+  {id:'faq',g:'Study',t:'Work through the FAQ answers',h:'Rephrase each sample answer in your own words'},
+  {id:'people',g:'Study',t:'Look up your interviewers',h:'LinkedIn, talks, articles, shared contacts'},
+  {id:'quiz',g:'Study',t:'Take the quiz',h:'Log your score'},
+  {id:'cards',g:'Study',t:'Drill the flashcards',h:'Every card marked "Got it"'},
+  {id:'stories',g:'Practice',t:'Prepare 3 STAR stories',h:'Situation, Task, Action, Result for the focus areas'},
+  {id:'mock',g:'Practice',t:'Do a spoken mock run',h:'Use the Mock interview tab, or answer 5 FAQ questions out loud'},
+  {id:'ask',g:'Practice',t:'Pick your questions to ask',h:'At least 3 in the Questions tab'},
+  {id:'logistics',g:'Day before',t:'Sort logistics',h:'Call link or route, time zone, CV copy, water'}
+];
+const SUGGEST = [
+  'What would success look like in the first 90 days?',
+  'What is the biggest challenge the team is facing right now?',
+  'How does the team decide what to work on next?',
+  'How is performance reviewed, and how often?',
+  'What do you enjoy most about working here?',
+  'What are the next steps in the process, and when should I expect to hear back?'
+];
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clone = o => JSON.parse(JSON.stringify(o));
+
+const S = { items:[], sel:null, tab:'materials', mode:'loading', readOnly:false, loaded:false,
+  drill:{idx:0, flipped:false, only:false}, confirmDel:false, editId:null, detailDirty:false,
+  sub:'briefing', quiz:{}, profile:null };
+S.chat = {id:null, busy:false, ctl:null, draft:'', streaming:'', pendingAnswer:'', error:'', confirmReset:false};
+S.sample = null; S.sampleState = 'loading';
+
+function md(s){
+  s = String(s || '');
+  if(window.marked && window.DOMPurify){
+    try {
+      const html = DOMPurify.sanitize(marked.parse(s, {gfm:true, breaks:false}));
+      return html.replace(/<table>/g,'<div class="tw"><table>').replace(/<\/table>/g,'</table></div>');
+    } catch(e){}
+  }
+  return mdLite(s);
+}
+// Small fallback renderer: headings, lists, tables, quotes, bold, italic, code, links. Escapes everything first.
+function mdLite(src){
+  const inline = t => esc(t)
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/(^|[^*])\*([^*\s][^*]*)\*/g,'$1<em>$2</em>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+  const lines = src.replace(/\r/g,'').split('\n'); let out = '', i = 0;
+  while(i < lines.length){
+    const l = lines[i];
+    if(!l.trim()){ i++; continue; }
+    let m;
+    if((m = /^(#{1,4})\s+(.*)$/.exec(l))){ const n = Math.min(m[1].length+1, 3); out += `<h${n}>${inline(m[2])}</h${n}>`; i++; continue; }
+    if(/^\s*\|/.test(l)){
+      const rows = []; while(i < lines.length && /^\s*\|/.test(lines[i])) rows.push(lines[i++]);
+      const cells = r => r.trim().replace(/^\||\|$/g,'').split('|').map(c => c.trim());
+      const body = rows.filter(r => !/^\s*\|?\s*:?-{2,}/.test(r));
+      out += '<div class="tw"><table>' + body.map((r,k) => '<tr>' + cells(r).map(c => k===0 && rows.length>1 && /-{2,}/.test(rows[1]) ? `<th>${inline(c)}</th>` : `<td>${inline(c)}</td>`).join('') + '</tr>').join('') + '</table></div>';
+      continue;
+    }
+    if(/^\s*([-*]|\d+[.)])\s+/.test(l)){
+      const ordered = /^\s*\d/.test(l); const items = [];
+      while(i < lines.length && /^\s*([-*]|\d+[.)])\s+/.test(lines[i])) items.push(lines[i++].replace(/^\s*([-*]|\d+[.)])\s+/,''));
+      out += `<${ordered?'ol':'ul'}>` + items.map(x => `<li>${inline(x)}</li>`).join('') + `</${ordered?'ol':'ul'}>`; continue;
+    }
+    if(/^>\s?/.test(l)){ const q = []; while(i < lines.length && /^>\s?/.test(lines[i])) q.push(lines[i++].replace(/^>\s?/,'')); out += `<blockquote>${inline(q.join(' '))}</blockquote>`; continue; }
+    const p = []; while(i < lines.length && lines[i].trim() && !/^(#{1,4}\s|\s*\||\s*([-*]|\d+[.)])\s+|>)/.test(lines[i])) p.push(lines[i++]);
+    out += `<p>${inline(p.join(' '))}</p>`;
+  }
+  return out;
+}
+
+let db = null;
+const chains = {};
+const timers = {};
+const pending = {};
+
+function tryLS(fn, fallback){ try { return fn(); } catch(e){ return fallback; } }
+S.sel = tryLS(() => localStorage.getItem('prep.sel'), null);
+S.tab = tryLS(() => localStorage.getItem('prep.tab'), null) || 'materials';
+
+// ---------- dates ----------
+function parseDate(s){ const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s||''); return m ? new Date(+m[1], +m[2]-1, +m[3]) : null; }
+function daysUntil(s){ const d = parseDate(s); if(!d) return null; const t = new Date(); t.setHours(0,0,0,0); return Math.round((d - t)/86400000); }
+function fmtDate(s){ const d = parseDate(s); return d ? d.toLocaleDateString(undefined,{weekday:'short', day:'numeric', month:'short'}) : 'No date'; }
+function whenText(n){ if(n===null) return 'No date'; if(n===0) return 'Today'; if(n===1) return 'Tomorrow'; if(n<0) return n===-1 ? 'Yesterday' : `${-n} days ago`; return `In ${n} days`; }
+
+function readiness(it){ const c = it.checks||{}; return CHECK.filter(x => c[x.id]).length / CHECK.length; }
+function level(it){
+  const n = daysUntil(it.date), r = readiness(it);
+  if(n !== null && n < 0) return 'past';
+  if(n !== null && n <= 2 && r < .6) return 'crit';
+  if(n !== null && n <= 7 && r < .6) return 'warn';
+  return 'ok';
+}
+const LEVEL_TEXT = {ok:'On track', warn:'Needs prep', crit:'Behind', past:'Done'};
+function sorted(){
+  return S.items.slice().sort((a,b) => {
+    const da = daysUntil(a.date), dbb = daysUntil(b.date);
+    const pa = da!==null && da<0, pb = dbb!==null && dbb<0;
+    if(pa !== pb) return pa ? 1 : -1;
+    return pa ? (b.date||'').localeCompare(a.date||'') : (a.date||'9').localeCompare(b.date||'9');
+  });
+}
+function slug(s){ return String(s||'').toLowerCase().replace(/\u00df/g,'ss').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60).replace(/-+$/,'') || 'x'; }
+function current(){ return S.items.find(x => x.id === S.sel) || null; }
+
+// ---------- persistence ----------
+function banner(msg){ const b = $('#banner'); b.textContent = msg || ''; b.hidden = !msg; }
+function onWriteError(e){
+  if(e && e.code === 'invalid_argument'){ S.readOnly = true; banner('You can view this board, but your access does not allow changes.'); render(); }
+  else if(e && e.code === 'quota_exceeded'){ banner('The board is full. Delete an old interview to add more.'); }
+  else banner('A change could not be saved. Check your connection and try again.');
+}
+function queue(id, fn){
+  chains[id] = (chains[id] || Promise.resolve()).then(fn).catch(onWriteError);
+  return chains[id];
+}
+function patchLocal(id, patch){
+  const it = S.items.find(x => x.id === id); if(!it) return;
+  for(const k in patch){
+    if(patch[k] && typeof patch[k]==='object' && !Array.isArray(patch[k]) && it[k] && typeof it[k]==='object' && !Array.isArray(it[k])) Object.assign(it[k], patch[k]);
+    else it[k] = patch[k];
+  }
+}
+function save(id, patch, {debounce=0, rerender=true}={}){
+  if(S.readOnly) return;
+  patchLocal(id, patch);
+  if(rerender) render();
+  if(S.mode !== 'db') return;
+  if(debounce){
+    pending[id] = Object.assign(pending[id] || {}, clone(patch));
+    clearTimeout(timers[id]);
+    timers[id] = setTimeout(flushPending, debounce, id);
+  } else {
+    if(pending[id]){ clearTimeout(timers[id]); flushPending(id); }
+    queue(id, () => db.doc('interviews/'+id).update(clone(patch)));
+  }
+}
+function flushPending(id){
+  const p = pending[id]; delete pending[id];
+  if(p && S.items.some(x => x.id === id)) queue(id, () => db.doc('interviews/'+id).update(p));
+}
+function createOrMerge(id, data, isNew){
+  if(S.readOnly) return;
+  const existing = S.items.find(x => x.id === id);
+  if(existing) patchLocal(id, data); else S.items.push(Object.assign({id}, clone(data)));
+  if(S.mode === 'db'){
+    if(isNew || !existing) queue(id, () => db.doc('interviews/'+id).set(clone(data)));
+    else queue(id, () => db.doc('interviews/'+id).update(clone(data)));
+  }
+}
+function removeItem(id){
+  clearTimeout(timers[id]); delete pending[id];
+  S.items = S.items.filter(x => x.id !== id);
+  if(S.sel === id) S.sel = sorted()[0]?.id || null;
+  if(S.mode === 'db') queue(id, () => db.doc('interviews/'+id).delete());
+  render();
+}
+
+// ---------- render ----------
+function render(){ document.querySelector('.layout').classList.toggle('solo', !S.items.length); renderStrip(); renderList(); renderDetailSafe(); $('#btn-add').disabled = $('#btn-import').disabled = $('#btn-profile').disabled = S.readOnly || S.mode==='loading'; }
+
+function renderStrip(){
+  const up = sorted().filter(x => { const n = daysUntil(x.date); return n!==null && n>=0; });
+  const next = up[0];
+  const week = up.filter(x => daysUntil(x.date) <= 7).length;
+  const attention = up.filter(x => ['warn','crit'].includes(level(x))).length;
+  $('#strip').innerHTML = `
+    <div><span class="label">Next up</span>
+      <span class="big">${next ? esc(next.company) : 'Nothing scheduled'}</span>
+      <span class="sub">${next ? `${esc(whenText(daysUntil(next.date)))} · ${esc(fmtDate(next.date))}${next.time?' · '+esc(next.time):''} · ${Math.round(readiness(next)*100)}% ready` : 'Add an interview with a date'}</span></div>
+    <div><span class="label">Next 7 days</span><span class="big mono">${week}</span><span class="sub">${week===1?'interview':'interviews'} coming up</span></div>
+    <div><span class="label">Needs attention</span><span class="big mono" style="color:${attention?'var(--warn)':'var(--ok)'}">${attention}</span><span class="sub">${attention?'under 60% ready within a week':'everything on track'}${lastSync()?` · last prep run ${esc(syncText(lastSync()))}`:''}</span></div>`;
+}
+
+function renderList(){
+  const L = $('#list');
+  if(S.mode === 'loading'){ L.innerHTML = '<div class="muted" style="padding:8px">Loading your interviews…</div>'; return; }
+  const all = sorted();
+  if(!all.length){ L.innerHTML = ''; return; }
+  let html = '', pastShown = false;
+  for(const it of all){
+    const lv = level(it), n = daysUntil(it.date);
+    if(lv==='past' && !pastShown){ html += '<div class="label section">Past</div>'; pastShown = true; }
+    html += `<button type="button" class="item ${lv}" data-id="${esc(it.id)}" aria-current="${it.id===S.sel}">
+      <span class="stripe"></span>
+      <span style="min-width:0"><div class="co">${esc(it.company)}${it.example?' <span class="chip ex">Example</span>':''}</div><div class="ro">${esc(it.role)}</div></span>
+      <span class="when"><span class="chip ${lv==='past'?'':lv}">${esc(whenText(n))}</span>
+        <span class="meter" title="${Math.round(readiness(it)*100)}% ready"><i style="width:${readiness(it)*100}%"></i></span></span>
+    </button>`;
+  }
+  L.innerHTML = html;
+}
+
+function renderDetailSafe(){
+  const a = document.activeElement;
+  if(a && $('#detail').contains(a) && (a.tagName==='TEXTAREA' || (a.tagName==='INPUT' && a.type==='text'))){ S.detailDirty = true; return; }
+  renderDetail();
+}
+
+function renderDetail(){
+  S.detailDirty = false;
+  const D = $('#detail');
+  if(S.mode === 'loading'){ D.innerHTML = ''; return; }
+  if(!S.items.length){
+    D.innerHTML = `<div class="panel empty">
+      <h2>No interviews yet</h2>
+      <ol><li>Add your CV under Your profile.</li>
+      <li>Add an interview with the job link or job description.</li>
+      <li>The next morning, Claude researches the company and fills in the briefing, FAQ, quiz and flashcards here.</li></ol>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="button" data-act="profile" ${S.readOnly?'disabled':''}>Your profile</button><button class="btn primary" type="button" data-act="add" ${S.readOnly?'disabled':''}>Add interview</button></div></div>`;
+    return;
+  }
+  let it = current();
+  if(!it){ it = sorted()[0]; S.sel = it.id; }
+  const lv = level(it), r = readiness(it), n = daysUntil(it.date), ro = S.readOnly ? 'disabled' : '';
+  const cards = it.cards || [], known = cards.filter(c => c.k).length, qs = it.questions || [];
+  D.innerHTML = `<article class="panel">
+    <div class="detail-head">
+      <div class="row">
+        <div class="chips"><span class="chip ${lv==='past'?'':lv}">${esc(LEVEL_TEXT[lv])}</span><span class="chip">${esc(whenText(n))}</span>
+          ${prepChip(it)}${it.example?'<span class="chip ex">Example</span>':''}</div>
+        <div style="display:flex;gap:4px"><button class="btn ghost" type="button" data-act="edit" ${ro}>Edit</button><button class="btn ghost danger" type="button" data-act="del" ${ro}>Delete</button></div>
+      </div>
+      ${S.confirmDel?`<div class="confirm">Delete ${esc(it.company)} and all its progress? <button class="btn danger" type="button" data-act="del-yes">Delete</button><button class="btn ghost" type="button" data-act="del-no">Keep</button></div>`:''}
+      <div><h2>${esc(it.company)}</h2><div class="muted">${esc(it.role)}</div></div>
+      <div class="facts">
+        <div><span class="label">When</span><span class="mono">${esc(fmtDate(it.date))}${it.time?' · '+esc(it.time):''}</span></div>
+        <div><span class="label">Format</span><span>${esc(it.format||'Not set')}</span></div>
+        <div><span class="label">Interviewers</span><span>${esc(it.interviewers||'Not set')}</span></div>
+        <div><span class="label">Focus</span><span>${esc(it.focus||'Not set')}</span></div>
+        <div><span class="label">Job posting</span><span>${linkOr(it.job_link,'Open posting') || 'No link'}${it.jd?' · description saved':''}</span></div>
+        <div><span class="label">NotebookLM</span><span>${linkOr(it.notebook_url,'Open mock interview') || (it.voiceRequested ? 'Queued for the next voice run' : 'No notebook yet')}</span></div>
+        <div><span class="label">Prep</span><span>${it.materials?.generatedAt ? 'Prepared ' + esc(syncText(it.materials.generatedAt)) : it.prepRequested || (n!==null && n>=0 && n<=7) ? 'Queued for the next morning run' : n===null ? 'Add a date, or request prep' : 'Starts 7 days before'}</span></div>
+      </div>
+      <div class="ready"><span class="label" style="white-space:nowrap">Ready</span><span class="bar"><i style="width:${r*100}%"></i></span><span class="mono" style="font-size:13px">${Math.round(r*100)}%</span></div>
+    </div>
+    <div class="tabs" role="tablist">
+      ${[['materials','Materials',''],['mock','Mock interview',mockCount(it)],['checklist','Checklist',`${CHECK.filter(x=>(it.checks||{})[x.id]).length}/${CHECK.length}`],['cards','Flashcards',cards.length?`${known}/${cards.length}`:''],['questions','Questions to ask',qs.length||''],['notes','Notes','']]
+        .map(([k,l,c]) => `<button class="tab" role="tab" type="button" data-tab="${k}" aria-selected="${S.tab===k}">${l}${c!==''?`<span class="n">${c}</span>`:''}</button>`).join('')}
+    </div>
+    <div class="tabbody" role="tabpanel">${tabBody(it)}</div>
+  </article>`;
+  if(S.tab === 'mock') scrollChat();
+}
+function syncText(s){
+  const d = new Date(s||''); if(isNaN(d)) return '';
+  const t = new Date(); t.setHours(0,0,0,0);
+  const day = new Date(d); day.setHours(0,0,0,0);
+  const n = Math.round((t - day)/86400000);
+  const time = d.toLocaleTimeString(undefined,{hour:'numeric', minute:'2-digit'});
+  return n===0 ? `today ${time}` : n===1 ? `yesterday ${time}` : d.toLocaleDateString(undefined,{day:'numeric', month:'short'});
+}
+function prepChip(it){
+  if(it.prepError) return `<span class="chip crit" title="${esc(it.prepError)}">Last prep run failed</span>`;
+  if(it.materials?.generatedAt) return `<span class="chip acc">Materials ready</span>`;
+  if(it.prepRequested) return `<span class="chip">Prep queued</span>`;
+  return `<span class="chip">Materials pending</span>`;
+}
+function lastSync(){ return S.items.map(x => x.syncedAt).filter(Boolean).sort().pop(); }
+
+function materialsBody(it){
+  const m = it.materials || {}, ro = S.readOnly ? 'disabled' : '';
+  if(!m.generatedAt){
+    const n = daysUntil(it.date);
+    const when = it.prepRequested || (n!==null && n>=0 && n<=7) ? 'This interview is queued. The materials appear here after the next morning run.' : n===null ? 'Add a date, or request prep now and it will be prepared on the next morning run.' : 'Prep starts automatically 7 days before the interview. You can also request it now.';
+    return `<div class="empty" style="padding:8px 0">
+      <h3>No materials yet</h3>
+      <div class="muted">${when}</div>
+      <div class="muted" style="font-size:14px">Each morning Claude researches the company and role, reads your profile, and writes a briefing, FAQ answers, a quiz and flashcards.</div>
+      ${!S.profile?.markdown?'<div class="callout"><span>Add your CV so the answers use your real experience.</span><button class="btn" type="button" data-act="profile">Add profile</button></div>':''}
+      <div style="display:flex;gap:8px;flex-wrap:wrap">${it.prepRequested?'':`<button class="btn primary" type="button" data-act="request" ${ro}>Request prep for the next run</button>`}<button class="btn" type="button" data-act="nlm">Copy job and profile for NotebookLM</button></div>
+      ${it.prepError?`<div class="err">Last run: ${esc(it.prepError)}</div>`:''}
+    </div>`;
+  }
+  const faq = m.faq || [], quiz = m.quiz || [], src = m.sources || [];
+  const subs = [['briefing','Briefing'],['faq',`FAQ (${faq.length})`],['quiz',`Quiz (${quiz.length})`],['sources',`Sources (${src.length})`]];
+  if(!subs.some(s => s[0]===S.sub)) S.sub = 'briefing';
+  let body = '';
+  if(S.sub==='briefing') body = `<div class="md">${md(m.briefing || 'No briefing in this run.')}</div>`;
+  else if(S.sub==='faq') body = faq.length ? `<div class="faq">${faq.map(f => `<details><summary><span>${esc(f.q)}</span>${f.kind?`<span class="chip kind">${esc(f.kind)}</span>`:''}</summary><div class="body md">${md(f.a)}</div></details>`).join('')}</div>` : '<div class="muted">No FAQ in this run.</div>';
+  else if(S.sub==='quiz') body = quizBody(it, quiz);
+  else body = src.length ? `<ol class="srcs">${src.map(s => `<li>${/^https?:\/\//.test(s.u||'')?`<a href="${esc(s.u)}" target="_blank" rel="noopener">${esc(s.t||s.u)}</a>`:esc(s.t||'')}</li>`).join('')}</ol>` : '<div class="muted">No sources listed.</div>';
+  return `<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:flex-start">
+      <div class="seg" role="group" aria-label="Materials">${subs.map(([k,l]) => `<button type="button" data-sub="${k}" aria-pressed="${S.sub===k}">${l}</button>`).join('')}</div>
+      <span class="saved"><button class="btn" type="button" data-act="nlm" style="padding:4px 10px;font-size:13px">Copy for NotebookLM</button> Prepared ${esc(syncText(m.generatedAt))}${it.prepRequested?' · refresh queued':''} ${it.prepRequested?'':`<button class="btn ghost" type="button" data-act="request" style="padding:2px 8px;font-size:12px" ${ro}>Refresh next run</button>`}</span>
+    </div>${body}`;
+}
+function quizBody(it, quiz){
+  if(!quiz.length) return '<div class="muted">No quiz in this run.</div>';
+  const A = S.quiz[it.id] || (S.quiz[it.id] = {});
+  const answered = Object.keys(A).length, right = quiz.filter((q,i) => A[i] === q.a).length;
+  return `<div class="quiz">
+    <div class="drill-top"><span class="mono muted" style="font-size:13px">${answered}/${quiz.length} answered · ${right} correct</span>
+      <span style="display:flex;gap:6px">${answered?'<button class="btn ghost" type="button" data-act="quiz-reset">Start over</button>':''}</span></div>
+    ${quiz.map((q,i) => {
+      const picked = A[i];
+      return `<div class="qz"><div class="qq">${i+1}. ${esc(q.q)}</div>
+        ${(q.o||[]).map((o,j) => `<button type="button" class="opt ${picked!==undefined ? (j===q.a ? 'right' : j===picked ? 'wrong' : '') : ''}" data-qi="${i}" data-qo="${j}" ${picked!==undefined?'disabled':''}><span class="l">${'ABCDEF'[j]}</span><span>${esc(o)}</span></button>`).join('')}
+        ${picked!==undefined && q.why ? `<div class="why">${esc(q.why)}</div>` : ''}</div>`;
+    }).join('')}
+  </div>`;
+}
+function voiceState(it){
+  const v = it.voice || {};
+  if(it.voiceRequested) return {text: it.notebook_url ? 'New audio queued for the next voice run' : 'Queued for the next voice run', cls:''};
+  if(v.status === 'failed') return {text:'Last build failed', cls:'crit'};
+  if(v.status === 'generating') return {text:'Audio generating', cls:'warn'};
+  if(v.status === 'ready') return {text:'Audio ready', cls:'ok'};
+  if(it.notebook_url) return {text:'Notebook ready', cls:'acc'};
+  return {text:'Not built yet', cls:''};
+}
+function mockCount(it){
+  const v = it.voice || {}, script = v.script || [], done = v.practised || {};
+  return script.length ? `${script.filter((q,i) => done[i]).length}/${script.length}` : '';
+}
+function mockBody(it){
+  const v = it.voice || {}, script = v.script || [], done = v.practised || {}, ro = S.readOnly ? 'disabled' : '';
+  const st = voiceState(it), n = daysUntil(it.date), has = /^https?:\/\//i.test(it.notebook_url || '');
+  const auto = n !== null && n >= 0 && n <= 7;
+  const count = script.filter((q,i) => done[i]).length;
+  const req = it.voiceRequested ? '' : `<button class="btn${has ? '' : ' primary'}" type="button" data-act="voice-request" ${ro}>${has ? 'Make a new audio on the next run' : 'Build the voice mock on the next run'}</button>`;
+  const intro = it.voiceRequested ? 'Queued. At the next voice run your computer builds a NotebookLM notebook with your CV, the job, the briefing and a mock interview script, plus an Audio Overview where two interviewers question you.'
+    : auto ? 'The daily voice run on your computer builds the NotebookLM mock interview for this interview automatically.'
+    : 'The daily voice run on your computer builds a NotebookLM mock interview 7 days before the interview, or on the next run if you ask for it.';
+  return `<div class="mock">
+    <div class="mock-top">
+      <div class="chips"><span class="chip ${st.cls}">${esc(st.text)}</span>${v.updatedAt ? `<span class="saved">Updated ${esc(syncText(v.updatedAt))}</span>` : ''}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">${has ? `<a class="btn primary" href="${esc(it.notebook_url)}" target="_blank" rel="noopener">Open in NotebookLM</a>` : ''}${req}</div>
+    </div>
+    ${v.status === 'failed' && v.error ? `<div class="err">${esc(v.error)}</div>` : ''}
+    ${has ? `<ol class="steps">
+        <li>Open the notebook and play ${v.audioTitle ? `<strong>${esc(v.audioTitle)}</strong>` : 'the newest Audio Overview'} in the Studio panel.</li>
+        <li>Press <strong>Join</strong> (Interactive mode) and answer each question out loud when the interviewers pause.</li>
+        <li>Tick a question below once you have answered it well.</li></ol>`
+      : `<div class="muted" style="font-size:14px">${intro} It runs while the Claude app is open${it.materials?.generatedAt ? '' : ', after the morning prep has written the materials'}.</div>`}
+    ${script.length ? `<div><div class="label" style="margin-bottom:8px">Questions the interviewers ask · ${count}/${script.length} practised</div>
+      <ul class="mockq">${script.map((q,i) => `<li><label class="mq ${done[i] ? 'done' : ''}"><input type="checkbox" data-mockq="${i}" ${done[i] ? 'checked' : ''} ${ro}><span class="n mono">${i+1}</span><span class="q">${esc(q)}</span></label></li>`).join('')}</ul></div>`
+      : has ? '<div class="muted" style="font-size:14px">The questions appear here after the next voice run.</div>' : ''}
+    ${chatBody(it)}
+    <div class="callout"><span>Prefer to set it up yourself? Copy everything NotebookLM needs.</span><button class="btn" type="button" data-act="nlm">Copy for NotebookLM</button></div>
+  </div>`;
+}
+// ---------- practice chat (Claude plays the interviewer) ----------
+const CHAT_OFF = ['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'];
+const CHAT_ERR = {
+  rate_limited: 'Claude is busy or your usage limit is reached. Wait a minute, then send again.',
+  session_expired: 'Your claude.ai session has expired. Sign in again, then send again.',
+  refused: 'Claude declined that message. Rephrase it and send again.',
+  prompt_too_large: 'The conversation is too long for one reply. Start over to keep practising.',
+  empty_completion: 'Claude returned nothing. Send your answer again.',
+  upstream_error: 'The connection dropped. Your answer is back in the box, so send it again.'
+};
+function chatFor(it){
+  if(S.chat.id !== it.id && !S.chat.busy) S.chat = {id:it.id, busy:false, ctl:null, draft:'', streaming:'', pendingAnswer:'', error:'', confirmReset:false};
+  return S.chat;
+}
+function chatTurns(it){ return ((it.mockChat || {}).turns || []).filter(t => t && (t.r === 'i' || t.r === 'c') && typeof t.t === 'string' && t.t.trim()); }
+function clip(s, n){ s = String(s || ''); return s.length > n ? s.slice(0, n) + '\n[shortened]' : s; }
+function briefingParts(b){
+  const out = {};
+  String(b || '').split(/^## /m).forEach(chunk => { const nl = chunk.indexOf('\n'); if(nl > 0) out[chunk.slice(0, nl).trim().toLowerCase()] = chunk.slice(nl + 1).trim(); });
+  return out;
+}
+function chatRules(it){
+  const v = it.voice || {}, script = v.script || [], m = it.materials || {}, parts = briefingParts(m.briefing);
+  const name = String(S.profile?.name || '').trim(), who = name || 'the candidate';
+  const pick = ['company snapshot','the role and what they are really hiring for','your gaps and how to address them','likely interview themes']
+    .map(k => parts[k] ? `### ${k}\n${parts[k]}` : '').filter(Boolean).join('\n\n');
+  return [
+    name ? `You are running a realistic mock job interview for ${name}, the candidate.` : 'You are running a realistic mock job interview for the candidate.',
+    `Interview: ${it.company}, ${it.role}${it.date ? ', on ' + it.date : ''}. Interviewers: ${it.interviewers || 'the hiring manager, with a more senior leader who may add a question'}.${it.focus ? ' Focus: ' + it.focus + '.' : ''}`,
+    `You are the interviewers. Stay in character when you ask a question, and speak to ${who} as "you".`,
+    'How it runs:',
+    '- Ask one question at a time, starting with question 1 of the script below and going through it in order.',
+    '- After each answer, reply in exactly this shape:',
+    '**Feedback:** two or three sentences on what worked and what was missing.',
+    '**Stronger answer:** 80 to 130 words in the first person, built only from facts in the CV below. Where a number would help but the CV has none, write [add figure].',
+    '**Next:** one line in quotation marks, spoken by the interviewer: a follow-up that probes a vague, generic or number-free answer, or else the next script question. At most one follow-up per script question.',
+    `- Be demanding but fair, like a senior interview panel at ${it.company}. Push back on vague answers and missing numbers.`,
+    `- When the script is finished, or when ${who} asks to stop, reply with **Verdict:** (move to the next round or not, and why) and **Fix first:** three numbered points.`,
+    `- Never invent achievements, employers, figures or dates for ${who}. Use only the job, the briefing and the CV below. Plain text with light markdown, no headings, no em dashes.`,
+    '',
+    'Script questions:',
+    script.length ? script.map((q, i) => `${i + 1}. ${q}`).join('\n') : '(none yet: ask 8 questions based on the job, the gaps and the likely themes below, starting with background and motivation)',
+    '', 'Job description:', clip(it.jd || '(not saved)', 5000),
+    '', 'Briefing excerpts:', clip(pick || m.briefing || '(no briefing yet)', 9000),
+    '', 'Candidate CV:', clip(S.profile?.markdown || '(no profile saved)', 9000)
+  ].join('\n');
+}
+function chatInput(it, turns){
+  const head = [{role:'user', content: chatRules(it)}, {role:'user', content:'Start the interview now: greet me in one sentence and ask question 1.'}];
+  const bytes = a => new TextEncoder().encode(a.map(x => x.content).join('')).length;
+  let body = turns.map(t => ({role: t.r === 'i' ? 'assistant' : 'user', content: t.t}));
+  while(body.length > 2 && bytes(head.concat(body)) > 60000) body = body.slice(2);
+  return head.concat(body);
+}
+function bubble(r, t){
+  return `<div class="bub ${r}"><div class="label">${r === 'i' ? 'Interviewer' : 'You'}</div>${r === 'i' ? `<div class="md">${md(t)}</div>` : `<div class="txt">${esc(t)}</div>`}</div>`;
+}
+function scrollChat(){ const l = document.getElementById('chat-log'); if(l) l.scrollTop = l.scrollHeight; }
+function countText(s){ const w = (String(s || '').trim().match(/\S+/g) || []).length; return w ? `${w} words · about ${(w / 150).toFixed(1)} min spoken` : 'Aim for about two minutes spoken, roughly 250 to 300 words.'; }
+function chatBody(it){
+  const head = '<div class="chat-head"><h3>Practise with Claude</h3><span class="saved">Claude plays the interviewer, follows up on your answers and gives feedback. Each reply uses your own Claude usage.</span></div>';
+  if(S.sampleState === 'loading') return `<div class="chat">${head}<div class="muted" style="font-size:14px">Connecting to Claude…</div></div>`;
+  if(S.sampleState === 'off' || !S.sample) return `<div class="chat">${head}<div class="muted" style="font-size:14px">The practice chat works when you open this dashboard on claude.ai or in the Claude app and allow it to use Claude.</div></div>`;
+  const C = chatFor(it), turns = chatTurns(it), ro = S.readOnly ? 'disabled' : '';
+  const started = turns.length > 0 || C.busy;
+  const log = turns.map(t => bubble(t.r, t.t)).join('')
+    + (C.busy && C.pendingAnswer ? bubble('c', C.pendingAnswer) : '')
+    + (C.busy ? `<div class="bub i"><div class="label">Interviewer</div><div class="md" id="chat-stream">${C.streaming ? md(C.streaming) : '<span class="muted">Thinking…</span>'}</div></div>` : '');
+  return `<div class="chat">${head}
+    ${started ? `<div class="chat-log" id="chat-log" aria-live="polite">${log}</div>` : ''}
+    ${C.error ? `<div class="err">${esc(C.error)}</div>` : ''}
+    ${!started ? `<div><button class="btn primary" type="button" data-act="chat-start" ${ro}>Start the mock interview</button></div>` : `
+    <label class="label" for="chat-input">Your answer</label>
+    <textarea id="chat-input" placeholder="Type your answer, or use your computer's dictation to speak it." ${C.busy || S.readOnly ? 'disabled' : ''}>${esc(C.draft)}</textarea>
+    <div class="chat-actions">
+      <span class="saved mono" id="chat-count">${esc(countText(C.draft))}</span>
+      <span style="display:flex;gap:8px;flex-wrap:wrap">${C.busy ? '<button class="btn" type="button" data-act="chat-stop">Stop</button>' : `
+        <button class="btn ghost" type="button" data-act="chat-reset" ${ro}>Start over</button>
+        <button class="btn" type="button" data-act="chat-end" ${ro}>End and get my verdict</button>
+        <button class="btn primary" type="button" data-act="chat-send" ${ro}>Send answer</button>`}</span>
+    </div>
+    ${C.confirmReset ? '<div class="confirm">Clear this practice conversation? <button class="btn danger" type="button" data-act="chat-reset-yes">Clear</button><button class="btn ghost" type="button" data-act="chat-reset-no">Keep</button></div>' : ''}`}
+  </div>`;
+}
+async function chatCall(it, turns){
+  const C = chatFor(it), id = it.id;
+  C.busy = true; C.error = ''; C.streaming = ''; C.confirmReset = false; C.ctl = new AbortController();
+  renderDetail();
+  try {
+    const res = await S.sample(chatInput(it, turns), {cache:false, signal:C.ctl.signal, onText: ({text}) => {
+      C.streaming = text;
+      const el = document.getElementById('chat-stream'); if(el){ el.innerHTML = md(text); scrollChat(); }
+    }});
+    const reply = res.text + (res.truncated ? '\n\n*(Cut short. Send your next answer to continue.)*' : '');
+    C.busy = false; C.streaming = ''; C.ctl = null;
+    save(id, {mockChat:{turns: turns.concat([{r:'i', t: reply}]), updatedAt: new Date().toISOString()}});
+    return true;
+  } catch(e){
+    const code = e && e.code;
+    C.busy = false; C.streaming = ''; C.ctl = null;
+    if(CHAT_OFF.includes(code)){ S.sampleState = 'off'; C.error = ''; }
+    else C.error = code === 'cancelled' ? '' : (CHAT_ERR[code] || CHAT_ERR.upstream_error);
+    return false;
+  }
+}
+async function chatSend(it, text){
+  text = String(text || '').trim();
+  if(!text || !S.sample || S.chat.busy || S.readOnly) return;
+  const C = chatFor(it);
+  C.pendingAnswer = text; C.draft = '';
+  const ok = await chatCall(it, chatTurns(it).concat([{r:'c', t:text}]));
+  C.pendingAnswer = '';
+  if(!ok){ C.draft = text; renderDetail(); }
+}
+function linkOr(u, label){ return /^https?:\/\//i.test(u||'') ? `<a href="${esc(u)}" target="_blank" rel="noopener">${label}</a>` : ''; }
+
+function tabBody(it){
+  const ro = S.readOnly ? 'disabled' : '';
+  if(S.tab === 'materials') return materialsBody(it);
+  if(S.tab === 'mock') return mockBody(it);
+  if(S.tab === 'checklist'){
+    const c = it.checks || {};
+    const groups = [...new Set(CHECK.map(x => x.g))];
+    return `<div class="groups">${groups.map(g => `<div class="group"><div class="label">${g}</div>${CHECK.filter(x=>x.g===g).map(x => `
+      <label class="check ${c[x.id]?'done':''}"><input type="checkbox" data-check="${x.id}" ${c[x.id]?'checked':''} ${ro}><span><div class="t">${esc(x.t)}</div><div class="h">${esc(x.h)}</div></span></label>
+      ${x.id==='quiz'?`<div class="score"><span class="muted">Score</span><input type="text" id="quiz-score" value="${esc(it.quizScore||'')}" placeholder="12/15" ${ro}></div>`:''}`).join('')}</div>`).join('')}</div>`;
+  }
+  if(S.tab === 'cards') return cardsBody(it);
+  if(S.tab === 'questions'){
+    const qs = it.questions || [];
+    const unused = SUGGEST.filter(s => !qs.includes(s)).slice(0,4);
+    return `<div class="muted" style="margin-bottom:10px;font-size:14px">Questions you plan to ask at the end. The Briefing Doc has a section with ideas specific to ${esc(it.company)}.</div>
+      ${qs.length?`<ol class="qlist">${qs.map((q,i)=>`<li><span>${esc(q)}</span><button class="btn ghost" type="button" data-rmq="${i}" aria-label="Remove question" ${ro}>Remove</button></li>`).join('')}</ol>`:'<div class="muted">No questions yet.</div>'}
+      <div class="addq"><input type="text" id="q-new" placeholder="Type a question and press Enter" ${ro}><button class="btn" type="button" data-act="addq" ${ro}>Add</button></div>
+      ${unused.length && !S.readOnly?`<div class="suggest"><div class="label">Common good ones</div>${unused.map(s=>`<button type="button" data-sugg="${esc(s)}">+ ${esc(s)}</button>`).join('')}</div>`:''}`;
+  }
+  return `<label class="label" for="notes">Notes</label>
+    <textarea id="notes" style="min-height:260px;margin-top:6px" placeholder="Talking points, salary range, names to remember, how it went afterwards…" ${ro}>${esc(it.notes||'')}</textarea>
+    <div class="saved" id="notes-saved">${S.mode==='db'?'Saves as you type.':'Saving is off in this view.'}</div>`;
+}
+
+function cardsBody(it){
+  const cards = it.cards || [], ro = S.readOnly ? 'disabled' : '';
+  if(!cards.length) return `<div class="empty" style="padding:8px 0">
+    <h3>No flashcards yet</h3><div class="muted">The morning prep adds a deck for ${esc(it.company)}. You can also load your own. Progress is saved per card.</div>
+    <button class="btn primary" type="button" data-act="cards" ${ro}>Load flashcards</button></div>`;
+  const D = S.drill;
+  let pool = cards.map((c,i) => i); if(D.only) pool = pool.filter(i => !cards[i].k);
+  const known = cards.filter(c=>c.k).length;
+  if(!pool.length) return `<div class="drill"><div class="drill-top"><span class="chip ok">All ${cards.length} cards marked "Got it"</span>
+    <span style="display:flex;gap:6px"><button class="btn" type="button" data-act="reset-cards" ${ro}>Start over</button><button class="btn ghost" type="button" data-act="cards" ${ro}>Replace deck</button></span></div></div>`;
+  if(!pool.includes(D.idx)) D.idx = pool[0];
+  const c = cards[D.idx], pos = pool.indexOf(D.idx) + 1;
+  return `<div class="drill">
+    <div class="drill-top">
+      <span class="mono muted" style="font-size:13px">Card ${pos} of ${pool.length}${D.only?' still learning':''} · ${known}/${cards.length} known</span>
+      <span style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn ghost" type="button" data-act="only">${D.only?'Show all cards':'Only cards I\u2019m learning'}</button>
+        <button class="btn ghost" type="button" data-act="shuffle">Shuffle</button>
+        <button class="btn ghost" type="button" data-act="cards" ${ro}>Replace deck</button></span>
+    </div>
+    <div class="progress-dots" aria-hidden="true">${cards.map((x,i)=>`<i class="${x.k?'k':''} ${i===D.idx?'cur':''}"></i>`).join('')}</div>
+    <div class="card ${D.flipped?'back':''}" data-act="flip" role="button" tabindex="0" aria-label="Flip card">
+      <span class="label side">${D.flipped?'Answer':'Question'}</span>
+      <div class="txt">${esc(D.flipped ? c.b : c.f)}</div>
+      <div class="hint">${D.flipped?'':'Click or press Space to reveal'}</div>
+    </div>
+    <div class="drill-actions">
+      <button class="btn" type="button" data-act="prev">Back</button>
+      <button class="btn" type="button" data-mark="0" ${ro}>Still learning</button>
+      <button class="btn primary" type="button" data-mark="1" ${ro}>Got it</button>
+      <button class="btn" type="button" data-act="next">Skip</button>
+    </div>
+    <div class="saved" style="text-align:center">Keys: Space flips, 1 still learning, 2 got it, arrows move.</div>
+  </div>`;
+}
+
+// ---------- parsing ----------
+function parseUpcoming(txt){
+  const out = [];
+  const blocks = String(txt).replace(/<!--[\s\S]*?-->/g,'').split(/^##\s+/m).slice(1);
+  for(const b of blocks){
+    const lines = b.split(/\r?\n/);
+    const head = lines[0].trim();
+    const parts = head.split(/\s+[\u2013\u2014-]\s+/);
+    const it = { company:(parts[0]||'').trim(), role:(parts.slice(1).join(' – ')||'').trim() };
+    for(const l of lines.slice(1)){
+      const m = /^\s*[-*]\s*([a-z_ ]+?)\s*:\s*(.*)$/i.exec(l); if(!m) continue;
+      const k = m[1].toLowerCase().replace(/\s+/g,'_'), v = m[2].trim();
+      if(['date','time','format','interviewers','focus','notes'].includes(k)) it[k] = v;
+      else if(k==='job_link' || k==='link' || k==='job') it.job_link = /^https?:\/\/\S+$/.test(v) && !/^https?:\/\/\.\.\.$/.test(v) ? v : '';
+      else if(k==='notebook' || k==='notebook_url' || k==='notebook_link') it.notebook_url = v;
+      else if(k==='prepped') it.prepped = /^(yes|y|true|done)$/i.test(v);
+    }
+    if(!it.company || /^company name$/i.test(it.company)) continue;
+    if(it.format && /\//.test(it.format) && /video.*onsite/i.test(it.format)) it.format = '';
+    out.push(it);
+  }
+  return out;
+}
+function parseCards(txt, name){
+  txt = String(txt||'').trim(); if(!txt) return [];
+  const norm = arr => arr.map(x => {
+    if(Array.isArray(x)) return {f:x[0], b:x[1]};
+    if(x && typeof x==='object') return {f:x.front??x.question??x.q??x.term??x.prompt??x.Front, b:x.back??x.answer??x.a??x.definition??x.Back};
+    return null;
+  }).filter(c => c && c.f && c.b).map(c => ({f:String(c.f).trim(), b:String(c.b).trim(), k:false}));
+  if(/^[\[{]/.test(txt)){
+    try{
+      const j = JSON.parse(txt);
+      const arr = Array.isArray(j) ? j : (j.cards || j.flashcards || j.items || j.data || []);
+      const r = norm(arr); if(r.length) return r;
+    }catch(e){}
+  }
+  const lines = txt.split(/\r?\n/);
+  const out = [];
+  // Q:/A: blocks
+  if(/^\s*(\*\*)?\s*(q|question|front)\s*[:.]/im.test(txt)){
+    let cur = null, target = null;
+    for(const raw of lines){
+      const l = raw.replace(/\*\*/g,'');
+      const q = /^\s*(?:\d+[.)]\s*)?(?:q|question|front)\s*[:.]\s*(.*)$/i.exec(l);
+      const a = /^\s*(?:a|answer|back)\s*[:.]\s*(.*)$/i.exec(l);
+      if(q){ if(cur&&cur.f&&cur.b) out.push(cur); cur = {f:q[1], b:''}; target='f'; }
+      else if(a && cur){ cur.b = a[1]; target='b'; }
+      else if(cur && target && l.trim()) cur[target] += ' ' + l.trim();
+    }
+    if(cur&&cur.f&&cur.b) out.push(cur);
+    if(out.length) return out.map(c => ({f:c.f.trim(), b:c.b.trim(), k:false}));
+  }
+  const tsv = /\.tsv$/i.test(name||'') || lines.every(l => !l.trim() || l.includes('\t'));
+  for(const l of lines){
+    const s = l.trim(); if(!s || /^#/.test(s) || /^\|?\s*-{3,}/.test(s)) continue;
+    let m;
+    if(tsv && s.includes('\t')){ const p = s.split('\t'); out.push([p[0], p.slice(1).join(' ')]); }
+    else if((m = /^(.+?)\s*::\s*(.+)$/.exec(s))) out.push([m[1], m[2]]);
+    else if(s.includes('|')){ const p = s.replace(/^\||\|$/g,'').split('|').map(x=>x.trim()).filter(Boolean); if(p.length>=2) out.push([p[0], p.slice(1).join(' ')]); }
+    else if(/\.csv$/i.test(name||'') || /^".*",/.test(s)){ const p = csvRow(s); if(p.length>=2) out.push([p[0], p.slice(1).join(', ')]); }
+    else if((m = /^[-*]?\s*(.+?\?)\s+(.+)$/.exec(s))) out.push([m[1], m[2]]);
+  }
+  let r = norm(out);
+  if(r.length && /^(front|question|term|q)$/i.test(r[0].f)) r = r.slice(1);
+  return r;
+}
+function csvRow(s){ const out=[]; let cur='', q=false; for(let i=0;i<s.length;i++){ const ch=s[i]; if(q){ if(ch==='"'&&s[i+1]==='"'){cur+='"';i++;} else if(ch==='"') q=false; else cur+=ch; } else if(ch==='"') q=true; else if(ch===','){out.push(cur);cur='';} else cur+=ch; } out.push(cur); return out.map(x=>x.trim()); }
+
+// ---------- events ----------
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-id],[data-tab],[data-sub],[data-qi],[data-act],[data-mark],[data-rmq],[data-sugg],[data-close]');
+  if(!t) return;
+  const it = current();
+  if(t.dataset.close !== undefined){ t.closest('dialog').close(); return; }
+  if(t.dataset.sub){ S.sub = t.dataset.sub; return renderDetail(); }
+  if(t.dataset.qi !== undefined && it){
+    const quiz = it.materials?.quiz || [], A = S.quiz[it.id] || (S.quiz[it.id] = {});
+    A[+t.dataset.qi] = +t.dataset.qo;
+    if(Object.keys(A).length === quiz.length && quiz.length){
+      const right = quiz.filter((q,i) => A[i] === q.a).length;
+      save(it.id, {quizScore:`${right}/${quiz.length}`, checks:{quiz:true}});
+    } else renderDetail();
+    return;
+  }
+  if(t.dataset.act === 'profile') return openProfile();
+  if(t.dataset.id){ S.sel = t.dataset.id; S.confirmDel = false; S.drill = {idx:0, flipped:false, only:S.drill.only}; tryLS(()=>localStorage.setItem('prep.sel', S.sel)); render(); if(innerWidth<860) $('#detail').scrollIntoView({behavior:'smooth', block:'start'}); return; }
+  if(t.dataset.tab){ S.tab = t.dataset.tab; tryLS(()=>localStorage.setItem('prep.tab', S.tab)); renderDetail(); return; }
+  if(t.dataset.mark !== undefined && it) return markCard(it, t.dataset.mark === '1');
+  if(t.dataset.rmq !== undefined && it){ const qs = (it.questions||[]).slice(); qs.splice(+t.dataset.rmq,1); return save(it.id, {questions:qs}); }
+  if(t.dataset.sugg && it) return addQuestion(it, t.dataset.sugg);
+  const a = t.dataset.act;
+  if(a==='add') return openEdit(null);
+  if(a==='import') return openImport();
+  if(!it) return;
+  if(a==='edit') return openEdit(it);
+  if(a==='del'){ S.confirmDel = true; return renderDetail(); }
+  if(a==='del-no'){ S.confirmDel = false; return renderDetail(); }
+  if(a==='del-yes'){ S.confirmDel = false; return removeItem(it.id); }
+  if(a==='request') return save(it.id, {prepRequested:true, prepError:''});
+  if(a==='voice-request') return save(it.id, {voiceRequested:true});
+  if(a==='chat-start'){ if(S.sample && !S.chat.busy && !S.readOnly) chatCall(it, []); return; }
+  if(a==='chat-send') return chatSend(it, $('#chat-input')?.value);
+  if(a==='chat-end') return chatSend(it, "Let's stop here. What is your verdict, and what should I fix first?");
+  if(a==='chat-stop'){ S.chat.ctl?.abort(); return; }
+  if(a==='chat-reset'){ chatFor(it).confirmReset = true; return renderDetail(); }
+  if(a==='chat-reset-no'){ chatFor(it).confirmReset = false; return renderDetail(); }
+  if(a==='chat-reset-yes'){ const C = chatFor(it); C.confirmReset = false; C.error = ''; C.draft = ''; return save(it.id, {mockChat:{turns:[], updatedAt:new Date().toISOString()}}); }
+  if(a==='nlm'){
+    const txt = nlmText(it);
+    const show = () => { $('#nlm-text').value = txt; $('#nlm-status').textContent = 'Select all and copy, then paste it into NotebookLM.'; $('#dlg-nlm').showModal(); $('#nlm-text').select(); };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(() => { $('#nlm-text').value = txt; $('#nlm-status').textContent = 'Copied. Now paste it into NotebookLM as described below.'; $('#dlg-nlm').showModal(); }).catch(show);
+    } else show();
+    return;
+  }
+  if(a==='quiz-reset'){ S.quiz[it.id] = {}; return renderDetail(); }
+  if(a==='addq'){ const inp = $('#q-new'); if(inp.value.trim()){ const v = inp.value.trim(); inp.value=''; inp.blur(); addQuestion(it, v); } return; }
+  if(a==='cards') return openCards();
+  if(a==='flip'){ S.drill.flipped = !S.drill.flipped; return renderDetail(); }
+  if(a==='next' || a==='prev') return stepCard(it, a==='next' ? 1 : -1);
+  if(a==='only'){ S.drill.only = !S.drill.only; S.drill.flipped = false; return renderDetail(); }
+  if(a==='shuffle'){ const c = (it.cards||[]).slice(); for(let i=c.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[c[i],c[j]]=[c[j],c[i]];} S.drill.idx=0; S.drill.flipped=false; return save(it.id,{cards:c}); }
+  if(a==='reset-cards'){ S.drill = {idx:0, flipped:false, only:false}; return save(it.id,{cards:(it.cards||[]).map(c=>({...c,k:false}))}); }
+});
+function addQuestion(it, q){ const qs = (it.questions||[]).slice(); if(!qs.includes(q)) qs.push(q); const patch = {questions:qs}; if(qs.length>=3 && !(it.checks||{}).ask) patch.checks = {ask:true}; save(it.id, patch); }
+function poolOf(it){ const c = it.cards||[]; let p = c.map((_,i)=>i); if(S.drill.only) p = p.filter(i=>!c[i].k); return p; }
+function stepCard(it, d){ const p = poolOf(it); if(!p.length) return; const i = p.indexOf(S.drill.idx); S.drill.idx = p[(i + d + p.length) % p.length]; S.drill.flipped = false; renderDetail(); }
+function markCard(it, k){
+  const cards = (it.cards||[]).map(c => ({...c})); if(!cards[S.drill.idx]) return;
+  cards[S.drill.idx].k = k;
+  const p = poolOf(it); const i = p.indexOf(S.drill.idx);
+  const nextPool = S.drill.only ? p.filter(x => x !== S.drill.idx || !k) : p;
+  const patch = {cards};
+  if(cards.every(c=>c.k) && !(it.checks||{}).cards) patch.checks = {cards:true};
+  S.drill.flipped = false;
+  if(nextPool.length){ const ni = S.drill.only && k ? nextPool[i % nextPool.length] : p[(i+1) % p.length]; if(ni!==undefined) S.drill.idx = ni; }
+  save(it.id, patch, {debounce: patch.checks ? 0 : 700});
+}
+
+document.addEventListener('change', e => {
+  const it = current(); if(!it) return;
+  if(e.target.dataset.check){ const id = e.target.dataset.check; save(it.id, {checks:{[id]: e.target.checked}}); }
+  if(e.target.dataset.mockq !== undefined){
+    const v = it.voice || {}, script = v.script || [];
+    const practised = Object.assign({}, v.practised || {}, {[e.target.dataset.mockq]: e.target.checked});
+    const patch = {voice:{practised}};
+    if(script.length && script.every((q,k) => practised[k]) && !(it.checks||{}).mock) patch.checks = {mock:true};
+    save(it.id, patch);
+  }
+});
+document.addEventListener('input', e => {
+  const it = current(); if(!it) return;
+  if(e.target.id === 'notes'){ save(it.id, {notes:e.target.value}, {debounce:800, rerender:false}); }
+  if(e.target.id === 'quiz-score'){ save(it.id, {quizScore:e.target.value.slice(0,20)}, {debounce:800, rerender:false}); }
+  if(e.target.id === 'chat-input'){ chatFor(it).draft = e.target.value; const c = $('#chat-count'); if(c) c.textContent = countText(e.target.value); }
+});
+document.addEventListener('focusout', () => { setTimeout(() => { if(S.detailDirty) render(); }, 0); });
+document.addEventListener('keydown', e => {
+  if(e.target.id === 'q-new' && e.key === 'Enter'){ e.preventDefault(); $('[data-act="addq"]')?.click(); return; }
+  if(e.target.id === 'chat-input' && e.key === 'Enter' && (e.metaKey || e.ctrlKey)){ e.preventDefault(); $('[data-act="chat-send"]')?.click(); return; }
+  if(S.tab !== 'cards' || /INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.tagName) || document.querySelector('dialog[open]')) return;
+  const it = current(); if(!it || !(it.cards||[]).length) return;
+  if(e.key===' '){ e.preventDefault(); S.drill.flipped=!S.drill.flipped; renderDetail(); }
+  else if(e.key==='ArrowRight') stepCard(it,1);
+  else if(e.key==='ArrowLeft') stepCard(it,-1);
+  else if(e.key==='1' && !S.readOnly) markCard(it,false);
+  else if(e.key==='2' && !S.readOnly) markCard(it,true);
+});
+
+// ---------- dialogs ----------
+const F = k => $('#f-'+k);
+function openEdit(it){
+  S.editId = it ? it.id : null;
+  $('#edit-title').textContent = it ? 'Edit interview' : 'Add interview';
+  F('company').value = it?.company||''; F('role').value = it?.role||''; F('date').value = it?.date||'';
+  F('time').value = it?.time||''; F('format').value = it?.format||''; F('focus').value = it?.focus||'';
+  F('interviewers').value = it?.interviewers||''; F('job').value = it?.job_link||''; F('jd').value = it?.jd||'';
+  F('request').checked = !!it?.prepRequested; $('#edit-err').hidden = true;
+  $('#dlg-edit').showModal();
+}
+$('#form-edit').addEventListener('submit', e => {
+  e.preventDefault();
+  const data = { company:F('company').value.trim(), role:F('role').value.trim(), date:F('date').value, time:F('time').value,
+    format:F('format').value.trim(), focus:F('focus').value.trim(), interviewers:F('interviewers').value.trim(),
+    job_link:F('job').value.trim(), jd:F('jd').value.trim().slice(0,20000), prepRequested:F('request').checked };
+  if(!data.company || !data.role){ $('#edit-err').textContent = 'Company and role are required.'; $('#edit-err').hidden = false; return; }
+  if(S.editId){ save(S.editId, data); }
+  else {
+    const base = slug(data.company + '-' + (data.date || 'undated')); let id = base, n = 2; while(S.items.some(x=>x.id===id)) id = base + '-' + n++;
+    createOrMerge(id, Object.assign(data, {prepped:false, checks:{}, cards:[], questions:[], notes:'', quizScore:'', createdAt:new Date().toISOString()}), true);
+    S.sel = id; render();
+  }
+  $('#dlg-edit').close();
+});
+
+let impParsed = [];
+function openImport(){ $('#imp-text').value=''; $('#imp-file').value=''; updateImport(); $('#dlg-import').showModal(); }
+function updateImport(){
+  impParsed = parseUpcoming($('#imp-text').value);
+  const P = $('#imp-preview');
+  if(!impParsed.length){ P.textContent = $('#imp-text').value.trim() ? 'No interview blocks found. Each interview starts with a "## Company – Role" line.' : 'Nothing to import yet.'; }
+  else P.innerHTML = `<strong>${impParsed.length} ${impParsed.length===1?'interview':'interviews'} found</strong><ul>${impParsed.map(x=>`<li>${esc(x.company)} · ${esc(x.role||'role not set')} · ${esc(x.date||'no date')}${x.prepped?' · prepped':''}${S.items.some(y=>y.id===slug(x.company+'-'+(x.date||'undated')))?' <em>(updates existing)</em>':''}</li>`).join('')}</ul>`;
+  $('#imp-go').disabled = !impParsed.length;
+  $('#imp-go').textContent = impParsed.length ? `Import ${impParsed.length}` : 'Import';
+}
+$('#imp-text').addEventListener('input', updateImport);
+$('#imp-file').addEventListener('change', e => { const f = e.target.files[0]; if(!f) return; f.text().then(t => { $('#imp-text').value = t; updateImport(); }); });
+$('#form-import').addEventListener('submit', e => {
+  e.preventDefault();
+  let firstId = null;
+  for(const x of impParsed){
+    const id = slug(x.company + '-' + (x.date||'undated'));
+    const exists = S.items.some(y => y.id === id);
+    const fields = {}; for(const k of ['company','role','date','time','format','interviewers','focus','job_link','notebook_url']) if(x[k]!==undefined && x[k]!=='') fields[k] = x[k];
+    if(x.prepped !== undefined) fields.prepped = x.prepped;
+    if(exists) createOrMerge(id, fields, false);
+    else createOrMerge(id, Object.assign({company:'',role:'',date:'',time:'',format:'',interviewers:'',focus:'',job_link:'',notebook_url:'',prepped:false}, fields, {notes:x.notes||'', checks:{}, cards:[], questions:[], quizScore:'', createdAt:new Date().toISOString()}), true);
+    firstId = firstId || id;
+  }
+  if(firstId) S.sel = firstId;
+  render(); $('#dlg-import').close();
+});
+
+function nlmText(it){
+  const m = it.materials || {}, v = it.voice || {};
+  const parts = [
+    `INTERVIEW PREP SOURCE: ${it.company}, ${it.role}${it.date ? ', interview on ' + it.date : ''}`,
+    `Use this document to prepare the candidate for this interview. Section 1 is the job, section 2 is the candidate's CV, sections 3 and 4 are research and suggested answers, section 6 is a mock interview script.`,
+    `\n=== 1. JOB DESCRIPTION ===\n${it.jd || '(not saved)'}${it.job_link ? '\nPosting: ' + it.job_link : ''}`,
+    `\n=== 2. CANDIDATE PROFILE ===\n${S.profile?.markdown || '(no profile saved)'}`,
+    `\n=== 3. BRIEFING ===\n${m.briefing || '(not prepared yet)'}`,
+    `\n=== 4. LIKELY QUESTIONS AND SAMPLE ANSWERS ===\n${(m.faq||[]).map((f,i) => `Q${i+1} (${f.kind||'general'}): ${f.q}\n${f.a}`).join('\n\n') || '(not prepared yet)'}`,
+    `\n=== 5. SOURCES ===\n${(m.sources||[]).map(s => `- ${s.t||''} ${s.u||''}`).join('\n') || '(none)'}`,
+    `\n=== 6. MOCK INTERVIEW SCRIPT ===\nRole-play: two interviewers question the candidate one question at a time, pause for the spoken answer, then give a strong answer from the candidate's CV and push back on vague answers or missing numbers.\n${(v.script||[]).map((q,i) => `${i+1}. ${q}`).join('\n') || '(not built yet)'}`
+  ];
+  return parts.join('\n');
+}
+function openProfile(){
+  $('#profile-name').value = S.profile?.name || '';
+  $('#profile-text').value = S.profile?.markdown || '';
+  $('#profile-meta').textContent = S.profile?.updatedAt ? 'Last saved ' + syncText(S.profile.updatedAt) : 'Paste your CV here.';
+  $('#dlg-profile').showModal();
+}
+$('#form-profile').addEventListener('submit', e => {
+  e.preventDefault();
+  if(S.readOnly) return;
+  const doc = {name: $('#profile-name').value.trim().slice(0,120), markdown: $('#profile-text').value.slice(0,200000), updatedAt: new Date().toISOString()};
+  S.profile = doc;
+  if(S.mode === 'db') queue('profile', () => db.doc('profile/main').set(doc));
+  $('#dlg-profile').close(); render();
+});
+
+let cardsParsed = [];
+function openCards(){ $('#cards-text').value=''; $('#cards-file').value=''; cardsParsed=[]; updateCards(); $('#dlg-cards').showModal(); }
+function updateCards(name){
+  cardsParsed = parseCards($('#cards-text').value, name);
+  const P = $('#cards-preview');
+  if(!cardsParsed.length) P.textContent = $('#cards-text').value.trim() ? 'No cards recognised. Try one card per line as "Front :: Back".' : 'No cards found yet.';
+  else P.innerHTML = `<strong>${cardsParsed.length} cards found</strong><ul>${cardsParsed.slice(0,5).map(c=>`<li>${esc(c.f)} <span class="muted">→ ${esc(c.b.slice(0,80))}${c.b.length>80?'…':''}</span></li>`).join('')}${cardsParsed.length>5?`<li>and ${cardsParsed.length-5} more</li>`:''}</ul>`;
+  $('#cards-go').disabled = !cardsParsed.length;
+}
+$('#cards-text').addEventListener('input', () => updateCards());
+$('#cards-file').addEventListener('change', e => { const f = e.target.files[0]; if(!f) return; f.text().then(t => { $('#cards-text').value = t; updateCards(f.name); }); });
+$('#form-cards').addEventListener('submit', e => {
+  e.preventDefault(); const it = current(); if(!it) return;
+  const cards = ($('#cards-replace').checked ? [] : (it.cards||[])).concat(cardsParsed).slice(0,400);
+  S.drill = {idx:0, flipped:false, only:false};
+  save(it.id, {cards, checks:{cards:false}}); $('#dlg-cards').close();
+});
+
+// ---------- boot ----------
+render();
+(async () => {
+  try { S.sample = window.claude && window.claude.use ? await window.claude.use('sample') : null; } catch(e){ S.sample = null; }
+  S.sampleState = S.sample ? 'ready' : 'off';
+  if(S.tab === 'mock') renderDetailSafe();
+})();
+setInterval(() => { if(!document.querySelector('dialog[open]')) { renderStrip(); renderList(); } }, 60000);
+
+(async () => {
+  try { db = window.claude && window.claude.use ? await window.claude.use('db') : null; } catch(e){ db = null; }
+  if(!db){
+    S.mode = 'local';
+    banner('Saving is off in this view, so changes last only until you close the page. Open the artifact on claude.ai to keep your progress.');
+    render(); return;
+  }
+  S.mode = 'db';
+  db.doc('profile/main').onSnapshot(snap => {
+    S.profile = snap.exists ? clone(snap.data()) : null;
+    if(S.tab === 'materials') renderDetailSafe();
+  }, () => {});
+  db.collection('interviews').onSnapshot(snap => {
+    const fresh = snap.docs.map(d => Object.assign({id:d.id}, clone(d.data())));
+    S.items = fresh; S.loaded = true;
+    // keep typed values that have not been written yet
+    for(const id in pending) patchLocal(id, clone(pending[id]));
+    if(S.sel && !S.items.some(x=>x.id===S.sel)) S.sel = null;
+    render();
+  }, err => {
+    if(err && err.code === 'revoked'){ S.readOnly = true; render(); }
+    else banner('Live updates stopped. Reload the page to reconnect.');
+  });
+})();
+})();
+</script>
+

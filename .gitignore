@@ -1,0 +1,11 @@
+.DS_Store
+node_modules/
+.fablize/
+.env
+.env.*
+*.local.*
+local/
+privacy-denylist.txt
+.claude/.cc-writes
+.claude/settings.local.json
+.preview/

@@ -1,0 +1,38 @@
+{
+  "company": "Contoso Pharma",
+  "role": "Head of Digital Quality",
+  "date": "",
+  "time": "",
+  "format": "Video call, then an onsite panel",
+  "interviewers": "VP Quality (hiring manager), HR business partner",
+  "focus": "Electronic QMS rollout, computer software assurance, data integrity, building a team",
+  "job_link": "https://example.com/jobs/head-of-digital-quality",
+  "jd": "Made-up example. Contoso Pharma is looking for a Head of Digital Quality to lead the rollout of a cloud QMS across 5 sites, set the validation approach (risk-based CSA), own data integrity and build a team of 6. Asks for 10+ years in GMP quality, hands-on electronic QMS implementation and people leadership. German is a plus.",
+  "prepRequested": false,
+  "prepped": true,
+  "prepError": "",
+  "syncedAt": "2026-01-15T07:00:00Z",
+  "notes": "",
+  "checks": {},
+  "questions": ["How is the QMS rollout governed across the sites?"],
+  "quizScore": "",
+  "cards": [
+    {"f": "Contoso Pharma rollout scope", "b": "A cloud QMS across 5 sites (made-up example).", "k": false},
+    {"f": "CSA in one sentence", "b": "Risk-based assurance that puts testing effort where software can affect patient safety or product quality.", "k": false},
+    {"f": "Your strongest proof point", "b": "CAPA cycle time from 62 to 38 days after the electronic QMS rollout at Northwind.", "k": false}
+  ],
+  "materials": {
+    "generatedAt": "2026-01-15T07:00:00Z",
+    "briefing": "## Company snapshot\nContoso Pharma is a made-up mid-size manufacturer used for examples.\n\n## The role and what they are really hiring for\nA hands-on leader who can land an electronic QMS rollout across sites on time.\n\n## Your fit\n| Requirement | Evidence from profile | Strength |\n|---|---|---|\n| Electronic QMS implementation | Electronic QMS at 3 sites, Northwind | strong |\n| Team building | Leads a team of 9 | strong |\n| Multi-site scope | 3 sites in one country [add figure] | partial |\n\n## Your gaps and how to address them\nMulti-site scope: explain how the 3-site model scales to 5 sites.\n\n## Likely interview themes\nRollout governance, CSA, data integrity, leading people through change.\n\n## Questions you should ask\nWhat does success look like after 12 months?\n\n## Things to watch out for\nDo not overclaim global experience.\n\n## 60-second pitch\nI lead quality systems at Northwind Therapeutics, where I moved three sites from paper to an electronic QMS and cut CAPA cycle time from 62 to 38 days.",
+    "faq": [
+      {"q": "Why do you want this role?", "a": "Because it is the rollout I have already delivered at three sites, now at five, and I want to lead it end to end. (Made-up example, shortened.)", "kind": "motivation"},
+      {"q": "Tell us about a rollout that did not go to plan.", "a": "**Situation:** go-live at the second site slipped. **Task:** recover without losing the inspection window. **Action:** I split the release. **Result:** live 3 weeks later [add figure]. (Made-up example, shortened.)", "kind": "behavioral"}
+    ],
+    "quiz": [
+      {"q": "Which EU GMP annex covers computerised systems?", "o": ["Annex 1", "Annex 11", "Annex 15", "Annex 16"], "a": 1, "why": "Annex 11 sets the rules for computerised systems."},
+      {"q": "What does CSA stand for?", "o": ["Computer Software Assurance", "Continuous System Audit", "Controlled System Access", "Critical Supplier Assessment"], "a": 0, "why": "CSA is the FDA's risk-based approach to software assurance."}
+    ],
+    "sources": [{"t": "Made-up source for the example", "u": "https://example.com/contoso-pharma"}]
+  },
+  "createdAt": "2026-01-10T09:00:00Z"
+}

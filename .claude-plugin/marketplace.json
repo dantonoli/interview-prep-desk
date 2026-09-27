@@ -1,0 +1,15 @@
+{
+  "name": "interview-prep-desk",
+  "description": "Interview Prep Desk: a private interview prep dashboard with morning research, a practice chat and an optional NotebookLM voice mock.",
+  "owner": {
+    "name": "dantonoli",
+    "url": "https://github.com/dantonoli"
+  },
+  "plugins": [
+    {
+      "name": "interview-prep-desk",
+      "source": "./plugin",
+      "description": "One private dashboard for interview prep, with morning research, a practice chat and an optional NotebookLM voice mock."
+    }
+  ]
+}

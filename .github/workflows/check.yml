@@ -1,0 +1,30 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      DISABLE_TELEMETRY: "1"
+      DISABLE_ERROR_REPORTING: "1"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Structure checks
+        run: node scripts/check.mjs
+      - name: Privacy scan
+        run: node scripts/privacy-scan.mjs
+      - name: Validate marketplace and plugin
+        run: |
+          npm install --global @anthropic-ai/claude-code@2.1.283
+          claude plugin validate . --strict
+          claude plugin validate ./plugin --strict
