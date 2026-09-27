@@ -359,6 +359,7 @@ const S = { items:[], sel:null, tab:'materials', mode:'loading', readOnly:false,
   sub:'briefing', quiz:{}, profile:null };
 S.chat = {id:null, busy:false, ctl:null, draft:'', streaming:'', pendingAnswer:'', error:'', confirmReset:false};
 S.sample = null; S.sampleState = 'loading';
+S.voice = null;
 
 function md(s){
   s = String(s || '');
@@ -563,7 +564,7 @@ function renderDetail(){
         <div><span class="label">Interviewers</span><span>${esc(it.interviewers||'Not set')}</span></div>
         <div><span class="label">Focus</span><span>${esc(it.focus||'Not set')}</span></div>
         <div><span class="label">Job posting</span><span>${linkOr(it.job_link,'Open posting') || 'No link'}${it.jd?' · description saved':''}</span></div>
-        <div><span class="label">NotebookLM</span><span>${linkOr(it.notebook_url,'Open mock interview') || (it.voiceRequested ? 'Queued for the next voice run' : 'No notebook yet')}</span></div>
+        ${voiceOn(it) ? `<div><span class="label">NotebookLM</span><span>${linkOr(it.notebook_url,'Open mock interview') || (it.voiceRequested ? 'Queued for the next voice run' : 'No notebook yet')}</span></div>` : ''}
         <div><span class="label">Prep</span><span>${it.materials?.generatedAt ? 'Prepared ' + esc(syncText(it.materials.generatedAt)) : it.prepRequested || (n!==null && n>=0 && n<=7) ? 'Queued for the next morning run' : n===null ? 'Add a date, or request prep' : 'Starts 7 days before'}</span></div>
       </div>
       <div class="ready"><span class="label" style="white-space:nowrap">Ready</span><span class="bar"><i style="width:${r*100}%"></i></span><span class="mono" style="font-size:13px">${Math.round(r*100)}%</span></div>
@@ -634,6 +635,10 @@ function quizBody(it, quiz){
     }).join('')}
   </div>`;
 }
+function voiceOn(it){
+  const v = it.voice || {};
+  return !!((S.voice && S.voice.enabled) || it.notebook_url || it.voiceRequested || v.status || (v.script || []).length);
+}
 function voiceState(it){
   const v = it.voice || {};
   if(it.voiceRequested) return {text: it.notebook_url ? 'New audio queued for the next voice run' : 'Queued for the next voice run', cls:''};
@@ -648,6 +653,9 @@ function mockCount(it){
   return script.length ? `${script.filter((q,i) => done[i]).length}/${script.length}` : '';
 }
 function mockBody(it){
+  if(!voiceOn(it)) return `<div class="mock">${chatBody(it)}
+    <div class="callout"><span>Want to rehearse out loud too? Copy everything NotebookLM needs and build a voice mock there yourself.</span><button class="btn" type="button" data-act="nlm">Copy for NotebookLM</button></div>
+  </div>`;
   const v = it.voice || {}, script = v.script || [], done = v.practised || {}, ro = S.readOnly ? 'disabled' : '';
   const st = voiceState(it), n = daysUntil(it.date), has = /^https?:\/\//i.test(it.notebook_url || '');
   const auto = n !== null && n >= 0 && n <= 7;
@@ -1098,7 +1106,7 @@ function openProfile(){
 $('#form-profile').addEventListener('submit', e => {
   e.preventDefault();
   if(S.readOnly) return;
-  const doc = {name: $('#profile-name').value.trim().slice(0,120), markdown: $('#profile-text').value.slice(0,200000), updatedAt: new Date().toISOString()};
+  const doc = Object.assign({}, S.profile || {}, {name: $('#profile-name').value.trim().slice(0,120), markdown: $('#profile-text').value.slice(0,200000), updatedAt: new Date().toISOString()});
   S.profile = doc;
   if(S.mode === 'db') queue('profile', () => db.doc('profile/main').set(doc));
   $('#dlg-profile').close(); render();
@@ -1142,6 +1150,10 @@ setInterval(() => { if(!document.querySelector('dialog[open]')) { renderStrip();
   db.doc('profile/main').onSnapshot(snap => {
     S.profile = snap.exists ? clone(snap.data()) : null;
     if(S.tab === 'materials') renderDetailSafe();
+  }, () => {});
+  db.doc('settings/voice').onSnapshot(snap => {
+    S.voice = snap.exists ? clone(snap.data()) : null;
+    renderDetailSafe();
   }, () => {});
   db.collection('interviews').onSnapshot(snap => {
     const fresh = snap.docs.map(d => Object.assign({id:d.id}, clone(d.data())));

@@ -1,0 +1,21 @@
+{
+  "name": "interview-prep-desk-voice",
+  "displayName": "Interview Prep Desk Voice Mock",
+  "version": "0.1.0",
+  "description": "Optional add-on for Interview Prep Desk: builds a NotebookLM voice mock interview for each interview with the unofficial gemini-notebook-mcp-cli tool.",
+  "author": {
+    "name": "dantonoli",
+    "url": "https://github.com/dantonoli"
+  },
+  "homepage": "https://github.com/dantonoli/interview-prep-desk",
+  "repository": "https://github.com/dantonoli/interview-prep-desk",
+  "license": "MIT",
+  "keywords": [
+    "interview",
+    "notebooklm",
+    "voice"
+  ],
+  "dependencies": [
+    "interview-prep-desk"
+  ]
+}

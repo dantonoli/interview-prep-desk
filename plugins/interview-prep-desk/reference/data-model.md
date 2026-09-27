@@ -1,8 +1,10 @@
 # Data model
 
-The dashboard artifact's database holds two collections. The page writes through `db`; skills and routines write through the `ArtifactData` tool. An update merges nested objects and replaces arrays whole. Writers pin each update to the version they read (`if_version`) and, on a conflict, read again and redo only their own change.
+The dashboard artifact's database holds three collections. The page writes through `db`; skills and routines write through the `ArtifactData` tool. An update merges nested objects and replaces arrays whole. Writers pin each update to the version they read (`if_version`) and, on a conflict, read again and redo only their own change.
 
 ## `profile/main`
+
+The dashboard's profile dialog saves the whole document and keeps any field it does not edit.
 
 | Field | Type | Owner | Notes |
 |---|---|---|---|
@@ -37,15 +39,25 @@ For example "Société Générale" with no date gives `societe-generale-undated`
 | `prepRequested` | boolean | user sets true, prep sets false | Queues prep for the next run. |
 | `prepped`, `prepError`, `syncedAt` | boolean, string, ISO 8601 | prep | |
 | `materials` | object | prep | `generatedAt`, `briefing` (markdown), `faq` (`{q, a, kind}`), `quiz` (`{q, o, a, why}` with four options), `sources` (`{t, u}`). Under 150 KB. |
-| `voiceRequested` | boolean | user sets true, voice task sets false | Queues a voice mock. |
-| `notebook_url` | URL | voice task | |
-| `voice` | object | voice task | `status` (`generating`, `ready` or `failed`), `audioTitle`, `audioId`, `script` (the questions), `updatedAt`, `error`. |
-| `voice.practised` | object of booleans, keyed by question number | user | Ticked questions. The voice task deletes it only when it writes a new script. |
+| `voiceRequested` | boolean | user sets true, voice add-on sets false | Queues a voice mock. |
+| `notebook_url` | URL | voice add-on | |
+| `voice` | object | voice add-on | `status` (`generating`, `ready` or `failed`), `audioTitle`, `audioId`, `script` (the questions), `updatedAt`, `error`. |
+| `voice.practised` | object of booleans, keyed by question number | user | Ticked questions. The voice add-on deletes it only when it writes a new script. |
 | `mockChat` | object | dashboard | `turns` (`{r, t}`, where `r` is `i` for interviewer or `c` for candidate) and `updatedAt`. |
 | `createdAt` | ISO 8601 | creator | |
 | `example` | boolean | creator | `true` marks a sample record. Routines skip it. |
 
+## `settings/voice`
+
+Written by the voice add-on's setup. The dashboard shows the voice mock controls only when `enabled` is true, or when an interview already has `notebook_url`, `voiceRequested` or `voice` data.
+
+| Field | Type | Owner | Notes |
+|---|---|---|---|
+| `enabled` | boolean | voice add-on | Turns the voice controls on or off. |
+| `time` | `HH:MM` | voice add-on | Time of the daily voice task. |
+| `updatedAt` | ISO 8601 | voice add-on | |
+
 ## Who picks what
 
 - **Prep** works on an interview when `prepRequested` is true, or when `date` is within the next 7 days and `materials.generatedAt` is missing. It skips `example` records and past dates.
-- **Voice mock** builds a notebook when `notebook_url` is empty, `materials.generatedAt` is set, and the date is within 7 days or `voiceRequested` is true. It makes a new audio when `notebook_url` is set and `voiceRequested` is true, and refreshes the status while `voice.status` is `generating`.
+- **Voice add-on** builds a notebook when `notebook_url` is empty, `materials.generatedAt` is set, and the date is within 7 days or `voiceRequested` is true. It makes a new audio when `notebook_url` is set and `voiceRequested` is true, and refreshes the status while `voice.status` is `generating`.

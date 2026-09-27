@@ -8,8 +8,13 @@
   "plugins": [
     {
       "name": "interview-prep-desk",
-      "source": "./plugin",
-      "description": "One private dashboard for interview prep, with morning research, a practice chat and an optional NotebookLM voice mock."
+      "source": "./plugins/interview-prep-desk",
+      "description": "One private dashboard for interview prep, with morning research and a practice chat."
+    },
+    {
+      "name": "interview-prep-desk-voice",
+      "source": "./plugins/interview-prep-desk-voice",
+      "description": "Optional add-on: a NotebookLM voice mock interview, built with an unofficial community tool."
     }
   ]
 }

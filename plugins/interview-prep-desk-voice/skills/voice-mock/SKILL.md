@@ -6,7 +6,7 @@ argument-hint: "<company or interview id>"
 
 # Voice mock now
 
-This needs the NotebookLM MCP server from gemini-notebook-mcp-cli (https://github.com/jacob-bd/gemini-notebook-mcp-cli), an unofficial tool that signs in with Google browser cookies. If its tools (names ending in `server_info`, `notebook_create`, `source_add`, `studio_create`, `studio_status`) are missing, explain how to install it and stop.
+This needs Claude Code with the ArtifactData tool (load it with ToolSearch "select:ArtifactData" if needed) and the NotebookLM MCP server from gemini-notebook-mcp-cli (https://github.com/jacob-bd/gemini-notebook-mcp-cli), an unofficial tool that signs in with Google browser cookies. If ArtifactData is missing, tell the user to run this in Claude Code and stop. If the NotebookLM tools (names ending in `server_info`, `notebook_create`, `source_add`, `studio_create`, `studio_status`) are missing, explain how to install it and stop.
 
 1. Read `~/.config/interview-prep-desk/config.json`. If it is missing, tell the user to run `/interview-prep-desk:setup` and stop.
 2. The interview must already have materials. If `materials.generatedAt` is missing, suggest `/interview-prep-desk:prep <company>` first and stop.

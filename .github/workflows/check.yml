@@ -23,8 +23,8 @@ jobs:
         run: node scripts/check.mjs
       - name: Privacy scan
         run: node scripts/privacy-scan.mjs
-      - name: Validate marketplace and plugin
+      - name: Validate marketplace and plugins
         run: |
           npm install --global @anthropic-ai/claude-code@2.1.283
           claude plugin validate . --strict
-          claude plugin validate ./plugin --strict
+          for d in plugins/*/; do claude plugin validate "$d" --strict; done

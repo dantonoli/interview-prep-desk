@@ -6,7 +6,7 @@ argument-hint: "<job link or pasted description>"
 
 # Add an interview
 
-Add one interview record to the user's dashboard. Never use an em dash character in anything you write. The database tool is `ArtifactData`; if it is not loaded yet, load it with ToolSearch "select:ArtifactData".
+Add one interview record to the user's dashboard. Never use an em dash character in anything you write. The database tool is `ArtifactData`; if it is not loaded yet, load it with ToolSearch "select:ArtifactData". This skill needs Claude Code; if ArtifactData is not available, for example in claude.ai chat or in Cowork, tell the user that Interview Prep Desk runs in Claude Code and stop.
 
 1. Read `~/.config/interview-prep-desk/config.json` for `dashboard_url`. If it is missing, tell the user to run `/interview-prep-desk:setup` first and stop.
 2. Get the posting from the arguments.
