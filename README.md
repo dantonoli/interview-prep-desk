@@ -1,6 +1,6 @@
 # Interview Prep Desk
 
-![Interview Prep Desk: Claude researches the role, writes your briefing and plays the interviewer.](docs/images/banner.png)
+![Interview Prep Desk: Claude researches the role, writes your briefing and plays the interviewer. Optional voice mock in NotebookLM.](docs/images/banner.png)
 
 A Claude Code plugin that keeps your interview prep in one private dashboard and does the research for you.
 
