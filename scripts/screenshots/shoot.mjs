@@ -39,7 +39,10 @@ const chrome = spawn(CHROME, ['--headless=new', '--remote-debugging-port=0', `--
   '--hide-scrollbars', '--lang=en-US', 'about:blank'], { stdio: 'ignore' });
 chrome.on('error', () => {}); // a failed launch shows up below as "Chrome did not start"
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const cleanup = () => { try { chrome.kill(); } catch {} rmSync(work, { recursive: true, force: true }); };
+const cleanup = async () => { // wait for Chrome to exit, or it may still be writing into its profile folder
+  if (chrome.exitCode === null && chrome.signalCode === null) { chrome.kill(); await Promise.race([new Promise(r => chrome.once('exit', r)), sleep(3000)]); }
+  rmSync(work, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+};
 
 try {
   let port, page;
@@ -104,5 +107,5 @@ try {
   console.error('screenshots: ' + e.message);
   process.exitCode = 1;
 } finally {
-  cleanup();
+  await cleanup();
 }
