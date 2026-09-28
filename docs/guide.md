@@ -29,11 +29,15 @@ flowchart TB
     direction LR
     A["Install the plugin"] --> B["Set up your desk:<br/>CV, dashboard, morning prep"]
   end
-  subgraph each["For each interview"]
+  subgraph prepare["Each interview"]
     direction LR
-    C["Add the interview"] --> D["Morning prep:<br/>research and materials"] --> E["Study:<br/>briefing, FAQ, quiz, cards"] --> F["Practice chat:<br/>Claude interviews you"] --> G["Voice mock in NotebookLM<br/>(optional)"]
+    C["Add the interview"] --> D["Morning prep:<br/>research and materials"] --> E["Study:<br/>briefing, FAQ, quiz, cards"]
   end
-  once --> each
+  subgraph rehearse["Rehearse"]
+    direction LR
+    F["Practice chat:<br/>Claude interviews you"] --> G["Voice mock in NotebookLM<br/>(optional)"] --> H["Interview day"]
+  end
+  once --> prepare --> rehearse
 ```
 
 ## Before you start
