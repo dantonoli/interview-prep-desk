@@ -1,5 +1,7 @@
 # Interview Prep Desk
 
+![Interview Prep Desk: Claude researches the role, writes your briefing and plays the interviewer.](docs/images/banner.png)
+
 A Claude Code plugin that keeps your interview prep in one private dashboard and does the research for you.
 
 Add an interview from a job link. Every morning a routine researches the company and the role, then writes a briefing, 15 likely questions with answers built from your CV, a quiz and flashcards into your dashboard. There you work through a checklist, drill the cards and rehearse in a practice chat: Claude plays the interviewer, pushes back on vague answers and shows you a stronger answer built only from your real experience.

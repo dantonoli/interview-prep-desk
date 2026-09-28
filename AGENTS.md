@@ -20,7 +20,7 @@ The repo root is for development. Users install only the folders under `plugins/
 | `plugins/interview-prep-desk-voice/` | Voice add-on: manifest, `README.md`, `LICENSE`, `skills/` (`setup`, `voice-mock`), `templates/voice-routine.md` |
 | `examples/` | A made-up profile and interview for tests and docs |
 | `scripts/` | `check.mjs` (structure and dashboard checks), `privacy-scan.mjs` (blocks personal data) |
-| `docs/` | `architecture.md`, `privacy.md` (the privacy policy) |
+| `docs/` | `architecture.md`, `privacy.md` (the privacy policy), `images/` (the README banner and the GitHub social preview) |
 | `SECURITY.md` | How to report security problems privately |
 
 ## Rules
