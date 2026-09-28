@@ -6,6 +6,8 @@ A Claude Code plugin that keeps your interview prep in one private dashboard and
 
 Add an interview from a job link. Every morning a routine researches the company and the role, then writes a briefing, 15 likely questions with answers built from your CV, a quiz and flashcards into your dashboard. There you work through a checklist, drill the cards and rehearse in a practice chat: Claude plays the interviewer, pushes back on vague answers and shows you a stronger answer built only from your real experience.
 
+New here? The [step-by-step guide](docs/guide.md) takes you from install to interview day, with the exact commands and screenshots.
+
 > Status: early (core 0.1.2). Built for personal use and shared as is.
 
 ## What you get
@@ -54,6 +56,8 @@ Then run `/interview-prep-desk-voice:setup`.
 | Prepare one now instead of tomorrow morning | `/interview-prep-desk:prep <company>` |
 | Build the voice mock now (add-on) | `/interview-prep-desk-voice:voice-mock <company>` |
 | Update your dashboard to the latest version | `/interview-prep-desk:setup update` |
+
+The guide's [cheat sheet](docs/guide.md#cheat-sheet) also lists what you can ask for in your own words.
 
 To get a new version later, run `claude plugin update interview-prep-desk@interview-prep-desk`, then `/interview-prep-desk:setup update` so your dashboard gets the new page too.
 

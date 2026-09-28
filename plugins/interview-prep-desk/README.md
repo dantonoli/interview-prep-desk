@@ -21,6 +21,8 @@ Claude Code: the terminal, an IDE extension, or the Code tab of the Claude deskt
 - **Schedules:** one daily morning prep routine on your account, and only if you confirm it during setup.
 - **Keeps:** everything until you delete it. Delete interviews in the dashboard, or the dashboard artifact to remove everything; delete the config file and the routine to stop the plugin.
 
+Step-by-step guide: https://github.com/dantonoli/interview-prep-desk/blob/main/docs/guide.md
+
 Privacy policy: https://github.com/dantonoli/interview-prep-desk/blob/main/docs/privacy.md
 
 Support: https://github.com/dantonoli/interview-prep-desk/issues

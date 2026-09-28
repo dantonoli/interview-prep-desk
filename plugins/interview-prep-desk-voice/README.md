@@ -17,4 +17,6 @@ An optional add-on for Interview Prep Desk. For each interview it builds a noteb
 
 Installing it also installs the core plugin, `interview-prep-desk`, which it needs.
 
+Step-by-step guide: https://github.com/dantonoli/interview-prep-desk/blob/main/docs/guide.md#step-7-rehearse-out-loud-in-notebooklm
+
 Documentation and privacy notes: https://github.com/dantonoli/interview-prep-desk
