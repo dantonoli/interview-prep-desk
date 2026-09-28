@@ -139,9 +139,9 @@ else {
 
 // 6. House style: no em dash characters in any text file
 const EM_DASH = String.fromCharCode(0x2014);
-const files = tracked('.');
-const dashed = files.filter(f => existsSync(f) && read(f).includes(EM_DASH));
-dashed.length ? bad(`em dash characters in: ${dashed.join(', ')}`) : ok(`no em dash characters in ${files.length} files`);
+const textFiles = tracked('.').filter(f => existsSync(f) && !readFileSync(f).includes(0));
+const dashed = textFiles.filter(f => read(f).includes(EM_DASH));
+dashed.length ? bad(`em dash characters in: ${dashed.join(', ')}`) : ok(`no em dash characters in ${textFiles.length} text files`);
 
 console.log(failures.length ? `\n${failures.length} check(s) failed` : '\nall checks passed');
 process.exit(failures.length ? 1 : 0);

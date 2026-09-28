@@ -25,7 +25,7 @@ The repo root is for development. Users install only the folders under `plugins/
 
 ## Rules
 
-1. **No personal data, ever.** Never commit a real CV, interview record, job posting text, interviewer name, email address, phone number, claude.ai artifact link, share key (`?sk=`) or NotebookLM notebook link. Examples use made-up people and companies. The pre-commit hook and CI run `scripts/privacy-scan.mjs`; never bypass them.
+1. **No personal data, ever.** Never commit a real CV, interview record, job posting text, interviewer name, email address, phone number, claude.ai artifact link, share key (`?sk=`) or NotebookLM notebook link. Examples use made-up people and companies, and images show only made-up data and carry no metadata. The pre-commit hook and CI run `scripts/privacy-scan.mjs`; never bypass them.
 2. **The data contract lives in `plugins/interview-prep-desk/reference/data-model.md`.** It says which part of the system owns each database field. Change it there first, then change the dashboard, skills and templates together. Routines never overwrite fields the user owns.
 3. **One source per fact.** Prep instructions live in the core plugin's `templates/prep-routine.md` and voice instructions in the add-on's `templates/voice-routine.md`. Skills point to them instead of copying them.
 4. **The core plugin stays independent of the unofficial NotebookLM tool.** Anything that uses it belongs in the add-on; `check.mjs` enforces this.

@@ -19,7 +19,29 @@ const files = (staged
   : git('ls-files', '-z', '--cached', '--others', '--exclude-standard')
 ).split(NUL).filter(Boolean);
 
-const readFile = f => staged ? git('show', ':' + f) : existsSync(f) ? readFileSync(f, 'utf8') : '';
+const readFile = f => staged
+  ? execFileSync('git', ['show', ':' + f], { maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'ignore'] })
+  : existsSync(f) ? readFileSync(f) : Buffer.alloc(0);
+
+// Binary files cannot be scanned as text, and images can carry metadata such as an author, a device, a place or a
+// file path. So PNG and JPEG images must carry no metadata, and any other binary file fails.
+const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+const PNG_IMAGE_CHUNKS = new Set(['IHDR', 'PLTE', 'IDAT', 'IEND', 'tRNS', 'gAMA', 'cHRM', 'sRGB', 'sBIT', 'pHYs', 'bKGD']);
+const isJpegMetadata = m => (m >= 0xe1 && m <= 0xef && m !== 0xee) || m === 0xfe; // APP1 to APP15 except APP14, and COM
+function binaryFinding(buf) {
+  const meta = new Set();
+  if (buf.subarray(0, 8).equals(PNG_SIGNATURE)) {
+    for (let i = 8; i + 8 <= buf.length; i += 12 + buf.readUInt32BE(i)) {
+      const type = buf.toString('latin1', i + 4, i + 8);
+      if (!PNG_IMAGE_CHUNKS.has(type)) meta.add(type);
+    }
+  } else if (buf[0] === 0xff && buf[1] === 0xd8) {
+    for (let i = 2; i + 4 <= buf.length && buf[i] === 0xff && buf[i + 1] !== 0xda; i += 2 + buf.readUInt16BE(i + 2)) {
+      if (isJpegMetadata(buf[i + 1])) meta.add(buf[i + 1] === 0xfe ? 'COM' : 'APP' + (buf[i + 1] - 0xe0));
+    }
+  } else return 'binary file the scan cannot read; only PNG and JPEG images are allowed';
+  return meta.size ? `image metadata (${[...meta].join(', ')}); save the image without metadata` : '';
+}
 
 const PATTERNS = [
   ['email address', /[A-Za-z0-9._%+-]+@(?!example\.(?:com|org)\b)[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}/g],
@@ -46,10 +68,10 @@ const mask = s => (s.length <= 4 ? '' : s.slice(0, 3)) + '***';
 const findings = [];
 
 for (const f of files) {
-  let text;
-  try { text = readFile(f); } catch { continue; }
-  if (text.includes(NUL)) continue;
-  text.split('\n').forEach((line, i) => {
+  let buf;
+  try { buf = readFile(f); } catch { continue; }
+  if (buf.includes(0)) { const why = binaryFinding(buf); if (why) findings.push(`${f}: ${why}`); continue; }
+  buf.toString('utf8').split('\n').forEach((line, i) => {
     for (const [label, re] of PATTERNS) for (const m of line.matchAll(re)) findings.push(`${f}:${i + 1}: ${label} (${mask(m[0])})`);
     const low = norm(line);
     for (const t of terms) if (low.includes(t)) findings.push(`${f}:${i + 1}: denylisted term (${mask(t)})`);

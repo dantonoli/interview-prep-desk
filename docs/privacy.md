@@ -50,8 +50,11 @@ Changes to this policy are made in this file, and its history on GitHub shows ev
 - claude.ai artifact links with a real id, and `?sk=` share keys
 - NotebookLM notebook links
 - commit and tag identities whose email is not a GitHub noreply address (`<id>+<login>@users.noreply.github.com`)
+- images that carry metadata (EXIF, XMP and text chunks can hold an author, a device, a place or a file path), and any binary file other than a PNG or JPEG image, because the scan cannot read it
 
-It also reads an optional denylist of your own terms: your name, your employers, the companies you are interviewing with, the people interviewing you. Keep that file outside the repo and point to it with `git config privacy.denylist /path/to/file` or the `PRIVACY_DENYLIST` environment variable. The denylist applies to every file and to commit and tag identities, with no exceptions. The author appears only as the GitHub handle.
+It also reads an optional denylist of your own terms: your name, your employers, the companies you are interviewing with, the people interviewing you. Keep that file outside the repo and point to it with `git config privacy.denylist /path/to/file` or the `PRIVACY_DENYLIST` environment variable. The denylist applies to every text file and to commit and tag identities, with no exceptions. The author appears only as the GitHub handle.
+
+The scan cannot read text drawn inside an image. Images in this repository show only made-up data, so check every screenshot yourself before you add it.
 
 To keep your time zone out of the history as well, commit with `TZ=UTC` and turn on the check with `git config privacy.requireUtc true`.
 
