@@ -42,7 +42,7 @@ For example "Société Générale" with no date gives `societe-generale-undated`
 | `voiceRequested` | boolean | user sets true, voice add-on sets false | Queues a voice mock. |
 | `notebook_url` | URL | voice add-on | |
 | `voice` | object | voice add-on | `status` (`generating`, `ready` or `failed`), `audioTitle`, `audioId`, `script` (the questions), `updatedAt`, `error`. |
-| `voice.practised` | object of booleans, keyed by question number | user | Ticked questions. The voice add-on deletes it only when it writes a new script. |
+| `voice.practised` | object of booleans, keyed by the 0-based question index | user | Ticked questions. The voice add-on deletes it only when it writes a new script. |
 | `mockChat` | object | dashboard | `turns` (`{r, t}`, where `r` is `i` for interviewer or `c` for candidate) and `updatedAt`. |
 | `createdAt` | ISO 8601 | creator | |
 | `example` | boolean | creator | `true` marks a sample record. Routines skip it. |

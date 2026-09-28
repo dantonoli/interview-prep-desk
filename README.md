@@ -8,7 +8,7 @@ Add an interview from a job link. Every morning a routine researches the company
 
 New here? The [step-by-step guide](docs/guide.md) takes you from install to interview day, with the exact commands and screenshots.
 
-> Status: early (core 0.1.2). Built for personal use and shared as is.
+> Status: early (core 0.1.3). Built for personal use and shared as is.
 
 ## What you get
 

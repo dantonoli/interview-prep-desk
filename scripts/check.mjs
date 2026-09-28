@@ -137,6 +137,18 @@ else {
   offOk && onOk ? ok('dashboard: voice controls follow settings/voice and existing voice data') : bad('dashboard: voiceOn() does not follow settings/voice and existing voice data');
 }
 
+// 5d. Dashboard: past and example interviews are not offered a prep request, because the morning prep skips them
+if (!fn('prepSkipped') || !fn('daysUntil') || !fn('parseDate')) bad('dashboard: prepSkipped() not found');
+else {
+  const pctx = {};
+  vm.createContext(pctx);
+  vm.runInContext([fn('parseDate'), fn('daysUntil'), fn('prepSkipped')].join('\n') + '\nthis.prepSkipped = prepSkipped;', pctx);
+  const day = n => { const d = new Date(); d.setDate(d.getDate() + n); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+  const cases = [[{ date: day(-1) }, 'past'], [{ date: day(0) }, ''], [{ date: day(3) }, ''], [{ date: '' }, ''], [{ date: day(3), example: true }, 'example']];
+  const wrong = cases.filter(([it, want]) => pctx.prepSkipped(it) !== want);
+  wrong.length ? bad(`dashboard: prepSkipped() is wrong for ${wrong.map(c => JSON.stringify(c[0])).join(', ')}`) : ok(`dashboard: prepSkipped() matches the prep rules on ${cases.length} cases`);
+}
+
 // 6. House style: no em dash characters in any text file
 const EM_DASH = String.fromCharCode(0x2014);
 const textFiles = tracked('.').filter(f => existsSync(f) && !readFileSync(f).includes(0));

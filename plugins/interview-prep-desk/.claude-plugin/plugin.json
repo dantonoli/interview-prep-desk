@@ -1,7 +1,7 @@
 {
   "name": "interview-prep-desk",
   "displayName": "Interview Prep Desk",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "One private dashboard for interview prep: morning research, briefing, FAQ, quiz, flashcards and a practice chat where Claude plays the interviewer.",
   "author": {
     "name": "dantonoli",
