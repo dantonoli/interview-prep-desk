@@ -23,4 +23,6 @@ export const shots = [
   { name: 'copy-notebooklm', page: 'main', width: 1200, height: 1000, clip: "document.getElementById('dlg-nlm')", steps: [tab('Mock interview'), { click: 'Copy for NotebookLM', sel: 'button' }, { wait: 800 },
     { eval: "(() => { const t = document.getElementById('nlm-text'); t.setSelectionRange(0, 0); t.scrollTop = 0; t.blur(); getSelection().removeAllRanges(); })()" }] },
   { name: 'voice-mock', page: 'voice', width: 1200, height: 900, clip: panel, maxHeight: 640, steps: [...progress, tab('Mock interview')] },
+  { name: 'application-fit', page: 'main', width: 1200, height: 900, steps: [{ click: 'Applications', sel: 'button' }, tab('Fit')] },
+  { name: 'application-cv', page: 'main', width: 1200, height: 900, clip: panel, maxHeight: 900, steps: [{ click: 'Applications', sel: 'button' }, tab('CV')] },
 ];

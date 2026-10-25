@@ -110,7 +110,74 @@ const proseware = {
 const withVoice = { ...contoso, notebook_url: 'https://notebooklm.google.com/', voice: { status: 'ready', audioTitle: 'Contoso Pharma mock interview', audioId: 'a1', script, updatedAt: at(0, '07:45'), error: '', practised: { 0: true, 1: true } } };
 
 const others = [{ id: `trey-research-${day(8)}`, data: trey }, { id: 'proseware-health-undated', data: proseware }];
+
+// Applications: one application pack, written as Claude would for Robin and a made-up Head of Validation job.
+const pack = (company, role) => ({
+  analysis: {
+    summary: `${company} needs someone to set a risk-based validation approach for its lab systems and lead a small team through a LIMS replacement, while keeping inspections clean. They want a lead who has applied CSA in practice, not only on paper.`,
+    skills: ['Computer software assurance (CSA)', 'GAMP 5', 'LIMS validation', 'EU GMP Annex 11', '21 CFR Part 11', 'Data integrity (ALCOA+)', 'Team leadership', 'Inspection readiness'],
+    responsibilities: ['Set and own the validation strategy for lab systems', 'Lead the validation of the new LIMS', 'Keep systems in a validated state with periodic reviews', 'Lead and develop a team of 4 validation engineers', 'Represent validation in inspections and audits'],
+    goals: ['A validated LIMS live within 18 months', 'Less validation effort without new inspection findings', 'A team that runs the validated state on its own'],
+    keywords: ['computer software assurance', 'CSA', 'GAMP 5', 'LIMS', 'risk-based validation', 'EU GMP Annex 11', '21 CFR Part 11', 'data integrity', 'ALCOA+', 'validation master plan', 'periodic review', 'inspection readiness', 'team leadership', 'change control', 'computerised systems'],
+    standout: ['Has cut validation effort with CSA', 'Has validated a LIMS for a new plant', 'Builds data integrity habits across a site'],
+    fit: { score: 78, rows: [
+      { req: 'Risk-based validation (CSA)', evidence: 'Introduced CSA at Northwind Therapeutics; about 30% less validation effort for low-risk systems', level: 'strong' },
+      { req: 'LIMS validation', evidence: 'Owned MES and LIMS validation for a new biologics plant at Fabrikam Biologics', level: 'strong' },
+      { req: 'Inspection readiness', evidence: 'The new plant\'s first regulatory inspection found no critical issues', level: 'strong' },
+      { req: 'Data integrity', evidence: 'Built the ALCOA+ programme and trained 200 staff', level: 'strong' },
+      { req: 'Leading a validation team', evidence: 'Leads a team of 9 across quality systems, validation and data integrity', level: 'strong' },
+      { req: 'Validation master plan', evidence: 'Implied by owning MES and LIMS validation, but not named in the CV', level: 'partial' },
+      { req: 'Chromatography data systems and ELN', evidence: '', level: 'gap' } ],
+      gaps: [
+        { gap: 'Chromatography data systems and ELN', how: 'Explain how your CSA approach applies to lab instruments, and do not claim CDS experience.' },
+        { gap: 'Validation master plan', how: 'Describe how you set the validation approach at Northwind, and offer to write the plan in your first 90 days.' } ] },
+    ats: { missing: ['validation master plan', 'periodic review', 'computerised systems'],
+      weak: ['Your CV names CSA but not how many systems you cover [add figure]', 'The LIMS work sits under your 2016 to 2021 role; bring it into the summary'],
+      summary: 'Validation and quality systems leader with 14 years in GMP manufacturing. Introduced computer software assurance at Northwind Therapeutics, cutting validation effort for low-risk systems by about 30%, and owned MES and LIMS validation for a new biologics plant whose first inspection found no critical issues. Leads a team of 9 and builds data integrity habits (ALCOA+) across sites.' },
+    generatedAt: at(-1, '18:20') },
+  cv: {
+    name: 'Robin Muster', headline: 'Validation and quality systems leader | CSA, GAMP 5, LIMS',
+    summary: 'Validation and quality systems leader with 14 years in GMP manufacturing. Introduced computer software assurance at Northwind Therapeutics, cutting validation effort for low-risk systems by about 30%, and owned MES and LIMS validation for a new biologics plant whose first inspection found no critical issues. Leads a team of 9 and builds data integrity habits (ALCOA+) across sites.',
+    skills: ['Computer software assurance (CSA)', 'GAMP 5', 'CSV', 'LIMS and MES validation', 'EU GMP Annex 11', '21 CFR Part 11', 'Data integrity (ALCOA+)', 'Electronic QMS rollouts', 'Change control', 'Supplier qualification', 'Team leadership', 'Stakeholder management'],
+    experience: [
+      { title: 'Head of Quality Systems', company: 'Northwind Therapeutics', location: '', dates: '2021 to today', bullets: [
+        'Lead a team of 9 across quality systems, validation and data integrity, covering [add figure] GMP computerised systems.',
+        'Introduced risk-based computer software assurance (CSA), cutting validation effort for low-risk systems by about 30%.',
+        'Replaced a paper-based deviation and CAPA process with an electronic QMS at 3 sites, reducing CAPA cycle time from 62 to 38 days.'] },
+      { title: 'Validation Lead', company: 'Fabrikam Biologics', location: '', dates: '2016 to 2021', bullets: [
+        'Owned the validation of MES and LIMS for a new biologics plant; the first regulatory inspection found no critical issues.',
+        'Built the site data integrity programme (ALCOA+) and trained 200 staff.'] },
+      { title: 'Quality Engineer', company: 'Litware Labs', location: '', dates: '2011 to 2016', bullets: ['Ran change control and supplier qualification for a sterile filling line.'] } ],
+    education: [{ degree: 'MSc Pharmaceutical Sciences', school: '', dates: '2011' }],
+    certifications: [], languages: ['English (fluent)', 'German (fluent)', 'French (basic)'], other: [],
+    labels: { summary: 'Summary', skills: 'Skills', experience: 'Experience', education: 'Education', certifications: 'Certifications', languages: 'Languages', other: 'Other' },
+    generatedAt: at(-1, '18:22') },
+  letters: {
+    subject: `Application for ${role}`,
+    coverLetter: `Dear Hiring Team,\n\n${company} wants a risk-based validation approach for its lab systems and a team that keeps them in a validated state. That is the work I have led in my last two roles, and I would like to do it for you.\n\nAt Northwind Therapeutics I introduced computer software assurance, which cut validation effort for low-risk systems by about 30%. Before that, at Fabrikam Biologics, I owned the validation of MES and LIMS for a new biologics plant, and its first regulatory inspection found no critical issues. I also built the site's data integrity programme and trained 200 staff.\n\nToday I lead a team of 9 across quality systems, validation and data integrity. I would bring the same approach to your LIMS replacement: one validation strategy, testing effort where the risk is, and a team that owns the validated state after go-live.\n\nI would welcome the chance to talk about how this could work at ${company}.\n\nKind regards,\nRobin Muster`,
+    message: `Hello, I have just applied for the ${role} role at ${company}. I introduced computer software assurance at Northwind Therapeutics, cutting validation effort for low-risk systems by about 30%, and validated MES and LIMS for a new biologics plant. I would be glad to talk about your LIMS replacement. Best regards, Robin Muster`,
+    followUpSubject: `${role} application`,
+    followUpBody: `Dear Hiring Team,\n\nI applied for the ${role} role last week and wanted to check that my application arrived. I remain very interested, especially in the LIMS replacement, and I am happy to share more about the CSA approach I introduced at Northwind Therapeutics.\n\nKind regards,\nRobin Muster`,
+    lang: 'en', generatedAt: at(-1, '18:24') },
+  review: {
+    verdict: 'shortlist',
+    summary: 'A strong match on CSA, LIMS validation and team leadership, with results that have numbers. The letter speaks to the LIMS replacement. Lab systems beyond LIMS are the gap, and the letter does not mention them.',
+    strengths: ['CSA in practice, with a result: about 30% less validation effort', 'LIMS validation for a new plant and a clean first inspection', 'Leads a larger team than the posting asks for', 'A data integrity programme with 200 staff trained'],
+    weaknesses: ['No chromatography data system or ELN experience', 'The number of systems covered is still [add figure]', 'Ownership of a validation master plan is implied, not stated'],
+    fixes: ['Fill in [add figure] with the number of GMP systems you cover', 'Add one line on the validation strategy you set at Northwind', 'Say how CSA would apply to lab instruments, without claiming CDS experience', 'Move the LIMS result higher in the summary'],
+    generatedAt: at(-1, '18:25') },
+});
+const jd = company => `Made-up example. ${company}, full time, permanent. Leads validation for the lab systems and the replacement of the LIMS, sets a risk-based CSA approach, keeps systems in a validated state and leads a team of 4 validation engineers. Asks for 8+ years of GMP validation, hands-on LIMS validation, GAMP 5 and EU GMP Annex 11, and team leadership. Inspection experience and German are a plus. Offers hybrid work, two days a week on site.`;
+const jobs = [
+  { id: 'woodgrove-labs-head-of-validation', data: { company: 'Woodgrove Labs', role: 'Head of Validation', location: 'Basel area, hybrid', job_link: 'https://example.com/jobs/head-of-validation',
+    jd: jd('Woodgrove Labs'), status: 'interested', appliedAt: '', followedUpAt: '', notes: '', pack: pack('Woodgrove Labs', 'Head of Validation'), createdAt: at(-1, '18:10') } },
+  { id: 'lamna-healthcare-director-quality-systems', data: { company: 'Lamna Healthcare', role: 'Director Quality Systems', location: 'Zurich', job_link: 'https://example.com/jobs/director-quality-systems',
+    jd: jd('Lamna Healthcare'), status: 'applied', appliedAt: day(-9), followedUpAt: '', notes: 'Applied through the company site.', pack: pack('Lamna Healthcare', 'Director Quality Systems'), createdAt: at(-10, '20:05') } },
+  { id: 'contoso-pharma-head-of-digital-quality', data: { company: 'Contoso Pharma', role: 'Head of Digital Quality', location: 'Basel area', job_link: 'https://example.com/jobs/head-of-digital-quality',
+    jd: contoso.jd, status: 'interviewing', appliedAt: day(-16), followedUpAt: day(-8), notes: '', interviewId: `contoso-pharma-${day(3)}`, createdAt: at(-17, '19:30') } },
+  { id: 'adatum-pharma-quality-systems-manager', data: { company: 'Adatum Pharma', role: 'Quality Systems Manager', location: 'Remote', job_link: '', jd: '', status: 'closed', appliedAt: day(-30), followedUpAt: day(-22), notes: 'They chose an internal candidate.', createdAt: at(-31, '08:15') } },
+];
 export const scenarios = {
-  main: { profile, interviews: [{ id: `contoso-pharma-${day(3)}`, data: contoso }, ...others] },
+  main: { profile, interviews: [{ id: `contoso-pharma-${day(3)}`, data: contoso }, ...others], jobs },
   voice: { profile, voice: { enabled: true, time: '09:30', updatedAt: at(0, '07:00') }, interviews: [{ id: `contoso-pharma-${day(3)}`, data: withVoice }, ...others] },
 };

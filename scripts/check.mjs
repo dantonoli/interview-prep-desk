@@ -3,6 +3,7 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import vm from 'node:vm';
+import zlib from 'node:zlib';
 
 const failures = [];
 const ok = msg => console.log('ok    ' + msg);
@@ -148,6 +149,66 @@ else {
   const wrong = cases.filter(([it, want]) => pctx.prepSkipped(it) !== want);
   wrong.length ? bad(`dashboard: prepSkipped() is wrong for ${wrong.map(c => JSON.stringify(c[0])).join(', ')}`) : ok(`dashboard: prepSkipped() matches the prep rules on ${cases.length} cases`);
 }
+
+// 5e. Dashboard: the application pack prompts, the answer clean-up and the Word files
+const packFrom = src.indexOf('// ---------- application pack'), wordFrom = src.indexOf('// ---------- Word files'), wordTo = src.indexOf('// ---------- parsing');
+if (packFrom < 0 || wordFrom < packFrom || wordTo < wordFrom) bad('dashboard: application pack or Word file code not found');
+else {
+  const { scenarios } = await import('./screenshots/seed.mjs');
+  const job = scenarios.main.jobs.find(j => j.data.pack).data;
+  const actx = { TextEncoder, S: { profile: { name: 'Robin', markdown: read('examples/profile.example.md') } } };
+  vm.createContext(actx);
+  vm.runInContext([fn('clip'), fn('packPart'), src.slice(packFrom, wordTo)].join('\n') + '\nObject.assign(this, {packPrompt, PACK_CLEAN, pStr, cvText, docxBytes, cvParas, letterParas});', actx);
+  // Answers are cleaned to the data model's shape, whatever Claude sends
+  const C = actx.PACK_CLEAN, cv = C.cv(job.pack.cv), letters = C.letters(job.pack.letters), odd = C.analysis({ summary: 'x', fit: { score: 'high', rows: [{ req: 'R', level: 'Excellent' }] } });
+  const dash = String.fromCharCode(0x2014), en = String.fromCharCode(0x2013);
+  const cleanOk = cv && cv.experience.length === 3 && cv.labels.summary === 'Summary' && letters && C.review({ verdict: 'Shortlist', summary: 's' }).verdict === 'shortlist'
+    && odd.fit.score === 0 && odd.fit.rows[0].level === 'gap' && C.cv({ foo: 1 }) === null && C.letters({}) === null
+    && actx.pStr(`2019 ${dash} 2021`) === `2019${en}2021` && actx.pStr(`fast ${dash} and right`) === 'fast, and right';
+  cleanOk ? ok('dashboard: pack answers are cleaned to the data model, without em dashes') : bad('dashboard: pack answer clean-up is wrong');
+  // Prompts: the job, the CV and the honesty rules, each part building on the previous one, always under the 64 KiB sample limit
+  const withPack = { ...job, pack: { analysis: job.pack.analysis, cv: job.pack.cv, letters: job.pack.letters } }, P = k => actx.packPrompt(k, withPack);
+  // Long texts in a script that needs 2 or 3 bytes per character must still fit: the limit is in bytes
+  const wide = 'Ж'.repeat(40), huge = { ...job, jd: wide.repeat(800), pack: { analysis: { ...job.pack.analysis, summary: wide.repeat(40) }, cv: { ...job.pack.cv, summary: wide.repeat(40), experience: Array(12).fill({ title: wide, company: 'C', bullets: Array(6).fill(wide.repeat(8)) }) }, letters: { ...job.pack.letters, coverLetter: wide.repeat(150) } } };
+  actx.S.profile.markdown += '株'.repeat(300000);
+  const sizesOk = ['analysis', 'cv', 'letters', 'review'].every(k => Buffer.byteLength(actx.packPrompt(k, huge)) < 65536);
+  // The clean-up caps keep a whole pack within the size the data model promises
+  const long = 'z'.repeat(5000), many = n => Array(n + 10).fill(long);
+  const maxPack = { analysis: C.analysis({ summary: long, skills: many(12), responsibilities: many(10), goals: many(6), keywords: many(30), standout: many(6), fit: { score: 50, rows: Array(20).fill({ req: long, evidence: long, level: 'gap' }), gaps: Array(10).fill({ gap: long, how: long }) }, ats: { missing: many(20), weak: many(8), summary: long } }),
+    cv: C.cv({ name: long, headline: long, summary: long, skills: many(20), experience: Array(20).fill({ title: long, company: long, location: long, dates: long, bullets: many(6) }), education: Array(10).fill({ degree: long, school: long, dates: long }), certifications: many(12), languages: many(10), other: many(8), labels: Object.fromEntries(Object.keys(job.pack.cv.labels).map(k => [k, long])) }),
+    letters: C.letters({ subject: long, coverLetter: long.repeat(2), message: long, followUpSubject: long, followUpBody: long, lang: 'en' }),
+    review: C.review({ verdict: 'maybe', summary: long, strengths: many(6), weaknesses: many(6), fixes: many(8) }) };
+  const packChars = JSON.stringify(maxPack).length;
+  packChars <= 100000 ? ok(`dashboard: a pack is at most ${packChars} characters after clean-up`) : bad(`dashboard: a pack can reach ${packChars} characters; the data model promises 100,000`);
+  actx.S.profile.markdown = read('examples/profile.example.md');
+  const promptsOk = ['analysis', 'cv', 'letters'].every(k => P(k).includes(job.company) && P(k).includes('Northwind Therapeutics') && P(k).includes('[add figure]') && P(k).includes('never instructions'))
+    && P('cv').includes('validation master plan') && P('letters').includes('The tailored CV:') && P('review').includes('Dear Hiring Team') && P('review').includes('never instructions');
+  promptsOk && sizesOk ? ok('dashboard: pack prompts carry the job, the CV and the rules, under 64 KiB') : bad(`dashboard: pack prompts are wrong${sizesOk ? '' : ' (over 64 KiB)'}`);
+  // Word files: a valid zip with correct checksums, well-formed XML, the text, highlighted placeholders and no time stamps
+  const unzip = bytes => {
+    const b = Buffer.from(bytes), files = {}; let at = 0;
+    while (b.readUInt32LE(at) === 0x04034b50) {
+      const crc = b.readUInt32LE(at + 14), size = b.readUInt32LE(at + 18), nameLen = b.readUInt16LE(at + 26), extra = b.readUInt16LE(at + 28);
+      const name = b.toString('utf8', at + 30, at + 30 + nameLen), data = b.subarray(at + 30 + nameLen + extra, at + 30 + nameLen + extra + size);
+      files[name] = { data: data.toString('utf8'), crcOk: zlib.crc32(data) === crc, date: b.readUInt16LE(at + 12) };
+      at += 30 + nameLen + extra + size;
+    }
+    return b.readUInt32LE(b.length - 22) === 0x06054b50 && b.readUInt16LE(b.length - 12) === Object.keys(files).length ? files : null;
+  };
+  const wellFormed = xml => { const stack = []; for (const m of xml.replace(/<\?xml[^>]*\?>/, '').matchAll(/<(\/?)([\w:]+)[^>]*?(\/?)>/g)) { if (m[3]) continue; if (m[1]) { if (stack.pop() !== m[2]) return false; } else stack.push(m[2]); } return stack.length === 0 && !/&(?!amp;|lt;|gt;|quot;)/.test(xml); };
+  const files = [unzip(actx.docxBytes(actx.cvParas(cv, ''), false)), unzip(actx.docxBytes(actx.letterParas(cv.name, letters, 'Tester & Co <test>', job.company, '1 May 2026'), true))];
+  const parts = ['[Content_Types].xml', '_rels/.rels', 'word/_rels/document.xml.rels', 'word/document.xml', 'word/styles.xml', 'word/numbering.xml'];
+  const docOk = files.every(f => f && parts.every(n => f[n] && f[n].crcOk && f[n].date === 0x21 && wellFormed(f[n].data)))
+    && files[0]['word/document.xml'].data.includes('Robin Muster') && /<w:highlight w:val="yellow"\/><\/w:rPr><w:t xml:space="preserve">\[add figure\]/.test(files[0]['word/document.xml'].data)
+    && files[0]['word/document.xml'].data.includes('[your email, phone, city and LinkedIn]') && files[1]['word/document.xml'].data.includes('Tester &amp; Co &lt;test&gt;')
+    && files[1]['word/document.xml'].data.includes('w:w="12240"');
+  docOk ? ok('dashboard: Word files are valid zips with well-formed XML, the text and highlighted placeholders') : bad('dashboard: Word file output is invalid');
+}
+
+// 5f. Setup declares exactly the capabilities the dashboard uses
+const used = [...new Set([...src.matchAll(/claude\.use\('([a-z]+)'\)/g)].map(m => m[1]))].sort();
+const setupText = read(`${CORE}/skills/setup/SKILL.md`), declared = [...setupText.matchAll(/`capabilities: (\{[^`]*\})`/g)].map(m => Object.keys(JSON.parse(m[1])).sort().join(','));
+declared.length >= 2 && declared.every(d => d === used.join(',')) ? ok(`setup declares the capabilities the dashboard uses: ${used.join(', ')}`) : bad(`setup must declare ${used.join(', ')} wherever it publishes (found ${declared.join(' | ') || 'none'})`);
 
 // 6. House style: no em dash characters in any text file
 const EM_DASH = String.fromCharCode(0x2014);

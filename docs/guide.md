@@ -1,6 +1,6 @@
 # Interview Prep Desk guide
 
-This guide takes you from installing the plugin to walking into the interview, with the exact commands to type at each step. The screenshots use made-up data: Robin Muster and the companies are invented.
+This guide takes you from installing the plugin to applying for a job and walking into the interview, with the exact commands to type at each step. The screenshots use made-up data: Robin Muster and the companies are invented.
 
 **Contents**
 
@@ -8,26 +8,31 @@ This guide takes you from installing the plugin to walking into the interview, w
 2. [Before you start](#before-you-start)
 3. [Step 1. Install](#step-1-install)
 4. [Step 2. Set up your desk](#step-2-set-up-your-desk)
-5. [Step 3. Add an interview](#step-3-add-an-interview)
-6. [Step 4. Get the prep](#step-4-get-the-prep)
-7. [Step 5. Study in the dashboard](#step-5-study-in-the-dashboard)
-8. [Step 6. Rehearse in the practice chat](#step-6-rehearse-in-the-practice-chat)
-9. [Step 7. Rehearse out loud in NotebookLM](#step-7-rehearse-out-loud-in-notebooklm)
-10. [A week before the interview](#a-week-before-the-interview)
-11. [Keep it up to date](#keep-it-up-to-date)
-12. [Your data](#your-data)
-13. [Troubleshooting](#troubleshooting)
-14. [Cheat sheet](#cheat-sheet)
+5. [Step 3. Apply for jobs](#step-3-apply-for-jobs)
+6. [Step 4. Add an interview](#step-4-add-an-interview)
+7. [Step 5. Get the prep](#step-5-get-the-prep)
+8. [Step 6. Study in the dashboard](#step-6-study-in-the-dashboard)
+9. [Step 7. Rehearse in the practice chat](#step-7-rehearse-in-the-practice-chat)
+10. [Step 8. Rehearse out loud in NotebookLM](#step-8-rehearse-out-loud-in-notebooklm)
+11. [A week before the interview](#a-week-before-the-interview)
+12. [Keep it up to date](#keep-it-up-to-date)
+13. [Your data](#your-data)
+14. [Troubleshooting](#troubleshooting)
+15. [Cheat sheet](#cheat-sheet)
 
 ## How it works
 
-You work in two places. In **Claude Code** you type the commands. The **dashboard** is a private page in your own claude.ai account that holds your CV, your interviews and everything prepared for them. A routine prepares each interview every morning, so most days you only open the dashboard.
+You work in two places. In **Claude Code** you type the commands. The **dashboard** is a private page in your own claude.ai account that holds your CV, the jobs you apply to, your interviews and everything prepared for them. Claude writes an application pack for each job when you ask, and a routine prepares each interview every morning, so most days you only open the dashboard.
 
 ```mermaid
 flowchart TB
   subgraph once["Once"]
     direction LR
     A["Install the plugin"] --> B["Set up your desk:<br/>CV, dashboard, morning prep"]
+  end
+  subgraph apply["Each application"]
+    direction LR
+    I["Add a job"] --> J["Application pack:<br/>fit, CV, letter"] --> K["Apply and<br/>follow up"]
   end
   subgraph prepare["Each interview"]
     direction LR
@@ -37,16 +42,16 @@ flowchart TB
     direction LR
     F["Practice chat:<br/>Claude interviews you"] --> G["Voice mock in NotebookLM<br/>(optional)"] --> H["Interview day"]
   end
-  once --> prepare --> rehearse
+  once --> apply --> prepare --> rehearse
 ```
 
 ## Before you start
 
 - **Claude Code**: the terminal, an IDE extension or the Code tab of the Claude desktop app. The commands do not run in claude.ai chat or in Cowork, because they need Claude Code's artifact and file tools.
-- **A Claude plan that can publish artifacts with a database and Claude calls** (the `db` and `sample` capabilities). Availability depends on your plan and your organization's settings.
+- **A Claude plan that can publish artifacts with a database, Claude calls and file downloads** (the `db`, `sample` and `downloads` capabilities). Availability depends on your plan and your organization's settings.
 - **Your CV** as a PDF, Word, Markdown or text file, or ready to paste.
 - **For the daily prep**: claude.ai routines (`/schedule`), or the Claude desktop app for a scheduled task on your computer.
-- **For the voice mock add-on only**: the Claude desktop app, a Google account with NotebookLM, and [gemini-notebook-mcp-cli](https://github.com/jacob-bd/gemini-notebook-mcp-cli). You can also build a voice mock by hand without the add-on; see [step 7](#step-7-rehearse-out-loud-in-notebooklm).
+- **For the voice mock add-on only**: the Claude desktop app, a Google account with NotebookLM, and [gemini-notebook-mcp-cli](https://github.com/jacob-bd/gemini-notebook-mcp-cli). You can also build a voice mock by hand without the add-on; see [step 8](#step-8-rehearse-out-loud-in-notebooklm).
 
 ## Step 1. Install
 
@@ -97,7 +102,42 @@ Then it:
 
 > **Tip:** the prep only knows what your CV says. Add your numbers, such as team sizes, budgets and results, in the dashboard's **Your profile** dialog. Where a number is missing, the answers say `[add figure]`.
 
-## Step 3. Add an interview
+## Step 3. Apply for jobs
+
+Before there is an interview, the dashboard's **Applications** section keeps the jobs you are considering, writes an application pack for each and reminds you to follow up. Switch between **Interviews** and **Applications** at the top of the dashboard.
+
+**Add a job with a command.** Pass the job link:
+
+```
+/interview-prep-desk:add-job https://example.com/jobs/head-of-validation
+```
+
+or say "Add this job to my applications: &lt;link&gt;". Claude reads the posting and saves a summary in its own words that keeps the exact names of skills, tools and qualifications, because those are the keywords an applicant tracking system (ATS) looks for. When the job site blocks reading, paste the description after the command instead of the link.
+
+**Or in the dashboard.** Choose **Add job** and paste the whole job description. The dashboard cannot open job sites, so the pack is built from what you paste.
+
+**Create the application pack.** Open the job and choose **Create the application pack**. Claude writes four parts, one after the other, in a few minutes and on your own Claude usage:
+
+| Part | Tab | What you get |
+|---|---|---|
+| Fit analysis | **Fit** | What they are really hiring for; a fit score and a table of each requirement with your evidence; your gaps and how to handle them honestly; the ATS keywords, with the ones your CV lacks highlighted; your CV summary rewritten for this job |
+| Tailored CV | **CV** | Your CV rewritten for this job, ready as a Word file |
+| Letters | **Letters** | A cover letter as a Word file, a short message for the recruiter, and a follow-up email for a week later |
+| Recruiter review | **Review** | A recruiter's verdict on the tailored CV and letter (shortlist, maybe or reject), with quick fixes |
+
+The pack uses only facts from your CV. It keeps every employer, title and date as you wrote them, and writes `[add figure]` where a number would help. **Write it again** on any tab redoes that part only.
+
+![The Applications section with four made-up jobs; Woodgrove Labs is selected and its Fit tab shows a fit of 78](images/guide/application-fit.png)
+
+**Download the Word files.** On the **CV** tab, enter your contact line once (email, phone, city, LinkedIn). It stays in this browser and is never saved in the dashboard's database. Then choose **Download the CV (Word)**, and on the **Letters** tab **Download the letter (Word)**. The files are plain, single-column documents that applicant tracking systems read well. Open them in Word, fill in the placeholders highlighted in yellow, and read every line before you send anything.
+
+![The CV tab with the contact line field and a preview of the tailored CV](images/guide/application-cv.png)
+
+**Apply and follow up.** You apply on the company's site yourself: the dashboard sends nothing to the company. Then choose **Mark as applied**. If you have not heard back a week later, the job shows **Follow up**: send the follow-up email from the **Letters** tab and choose **Follow-up sent**. The **Status** list moves a job between Interested, Applied, Interviewing, Offer and Closed.
+
+**When an interview is booked**, choose **Interview booked**. The Add interview form opens with the company, role, link, job description and focus filled in. Add the date and time and save: the job moves to Interviewing, and the interview appears under **Interviews**, ready for the next steps.
+
+## Step 4. Add an interview
 
 **With a command.** Pass the job link:
 
@@ -141,7 +181,7 @@ If the same company and role already exist, it asks whether to update that inter
 
 It reads the keys `date` (YYYY-MM-DD), `time`, `format`, `interviewers`, `focus`, `notes`, `job_link`, `notebook` and `prepped`, and ignores anything else, including job descriptions. The dialog previews what it found before you import. Importing an interview that already exists with the same company and date updates its details and keeps your checklist, flashcards and notes.
 
-## Step 4. Get the prep
+## Step 5. Get the prep
 
 **Automatically.** Every morning the prep routine prepares:
 
@@ -170,9 +210,9 @@ For each interview it searches the web for the company's business, its news from
 
 Everything is grounded in the sources and your CV. The prep never invents facts, numbers or achievements about you.
 
-## Step 5. Study in the dashboard
+## Step 6. Study in the dashboard
 
-Open your dashboard link. On the left is your interview list, each with a countdown. At the top, **Next up** shows your next interview and how ready you are, and **Needs attention** counts interviews within a week that are less than 60% ready.
+Open your dashboard link and choose **Interviews** at the top. On the left is your interview list, each with a countdown. At the top, **Next up** shows your next interview and how ready you are, and **Needs attention** counts interviews within a week that are less than 60% ready.
 
 ![The dashboard with three made-up interviews; Contoso Pharma is selected and 67% ready](images/guide/dashboard.png)
 
@@ -209,7 +249,7 @@ Collect your own questions for the interviewers in **Questions to ask**: type on
 
 The morning prep never changes your notes, questions, checklist, quiz score or flashcard progress.
 
-## Step 6. Rehearse in the practice chat
+## Step 7. Rehearse in the practice chat
 
 Open the **Mock interview** tab and choose **Start the mock interview**. Claude plays the interviewers at the company: it greets you and asks the first question. It asks 8 questions built from the job, your gaps and the likely themes, or the voice mock's 8 questions if the add-on has built them. Type your answer, or use your computer's dictation, and choose **Send answer** (or press Cmd+Enter or Ctrl+Enter). The counter under the box shows your word count and how long it would take to say; about two minutes, roughly 250 to 300 words, is a good length.
 
@@ -223,7 +263,7 @@ After each answer Claude replies with:
 
 Choose **End and get my verdict** at any time, or answer all the questions, to get a **Verdict** (whether you would move to the next round, and why) and **Fix first**: three things to work on. The conversation is saved in your dashboard, so you can come back to it; **Start over** clears it. Each reply uses your own Claude usage.
 
-## Step 7. Rehearse out loud in NotebookLM
+## Step 8. Rehearse out loud in NotebookLM
 
 The practice chat is typed. To practise out loud, use a NotebookLM Audio Overview in which two interviewers question you and pause for your answers. There are two ways.
 
@@ -298,14 +338,14 @@ Then, in Claude Code:
 /interview-prep-desk:setup update
 ```
 
-This publishes the new version of the page to your existing dashboard. Your data is not touched. Reload any dashboard tab that was already open.
+This publishes the new version of the page to your existing dashboard, with the permissions it needs (version 0.2 adds file downloads for the Word files). Your data is not touched. Reload any dashboard tab that was already open.
 
 ## Your data
 
-- Your CV, interviews, materials and practice chats live in your private dashboard's database in your own claude.ai account. The config file lives on your computer.
-- Nothing goes to the plugin's author: there is no server and no tracking. Research queries go to web search, and the prep and the practice chat send your CV, the job and the briefing to Claude on your account. With the voice mock, NotebookLM receives your CV and the job.
+- Your CV, jobs and application packs, interviews, materials and practice chats live in your private dashboard's database in your own claude.ai account. The config file lives on your computer, and so do the Word files you download. The contact line for the Word files stays in your browser.
+- Nothing goes to the plugin's author: there is no server and no tracking. Research queries go to web search, and the application pack, the prep and the practice chat send your CV, the job and the briefing to Claude on your account. With the voice mock, NotebookLM receives your CV and the job.
 - Sharing the dashboard shares everything in it, including your CV.
-- To delete: remove an interview with **Delete** in the dashboard, which removes its materials, checklist, flashcards, notes and practice chat with no undo; delete the dashboard artifact to remove everything; delete the config file and the routine or scheduled task, and uninstall the plugin, to stop it completely.
+- To delete: remove a job or an interview with **Delete** in the dashboard; deleting an interview removes its materials, checklist, flashcards, notes and practice chat with no undo; delete the dashboard artifact to remove everything; delete the config file and the routine or scheduled task, and uninstall the plugin, to stop it completely.
 
 The full [privacy policy](privacy.md) has the details.
 
@@ -316,6 +356,9 @@ The full [privacy policy](privacy.md) has the details.
 | "Interview Prep Desk runs in Claude Code" | You are in claude.ai chat or Cowork. Open Claude Code and run the command there. |
 | A command asks you to run setup first | The config file is missing. Run `/interview-prep-desk:setup`. |
 | Claude asks you to paste the job description | The job site blocks automated reading. Paste the description. |
+| A job asks you to paste the job description before the pack | The pack is built from the description, and the dashboard cannot open job sites. Choose **Edit** and paste the whole posting. |
+| There is no **Download** button for the Word files | Open the dashboard on claude.ai or in the Claude app. After an update from version 0.1, run `/interview-prep-desk:setup update` so the dashboard may offer files. Meanwhile, **Copy** the text. |
+| "Claude's answer could not be read." | Choose **Finish the pack** or **Write it again**. The parts already written are kept. |
 | The morning prep replies "No interviews need prep today." | It only prepares interviews in the next 7 days without materials, and queued ones. Choose **Request prep for the next run** (or **Refresh next run** once materials exist), or run `/interview-prep-desk:prep <company>`. |
 | Answers are full of `[add figure]` | Your CV has no numbers for those points. Add them in **Your profile**, then use **Refresh next run**. |
 | The dashboard still looks old after an update | Reload the dashboard tab or the Claude app window. |
@@ -334,6 +377,7 @@ Still stuck? Open an [issue](https://github.com/dantonoli/interview-prep-desk/is
 | You want to | Type | Or say |
 |---|---|---|
 | Set up your desk | `/interview-prep-desk:setup` | (slash command only) |
+| Add a job you might apply to | `/interview-prep-desk:add-job <job link or text>` | "Add this job to my applications: &lt;link&gt;" |
 | Add an interview | `/interview-prep-desk:add-interview <job link or text>` | "Add this job to my interview prep: &lt;link&gt;" |
 | Prepare one now | `/interview-prep-desk:prep <company>` | "Prepare my &lt;company&gt; interview now" |
 | Move your dashboard to a new version | `/interview-prep-desk:setup update` | (slash command only) |

@@ -27,9 +27,9 @@ This skill needs Claude Code (the terminal, an IDE extension, or the Code tab of
 
 Read the config if it exists. If it has `dashboard_url`, or the user passed "update", offer to update the dashboard:
 
-1. Read the live artifact with the Artifact tool (action "read", `url` = `dashboard_url`).
+1. Load the `artifact-capabilities` skill. Read the live artifact with the Artifact tool (action "read", `url` = `dashboard_url`).
 2. Copy the plugin's dashboard page into your scratchpad directory (or the current working directory if you have none) and read the copy in full.
-3. Publish the copy with `url` = `dashboard_url`. Omit `capabilities` and `icon` so the artifact keeps its own. The database is not touched.
+3. Publish the copy with `url` = `dashboard_url` and `capabilities: {"db": {}, "sample": {}, "downloads": true}`, the full set the page uses. Omit `icon` so the artifact keeps its own. The database is not touched.
 4. Tell the user to reload any dashboard tab or Claude app window that was already open, then report the new version and stop.
 
 Otherwise continue with a new setup.
@@ -60,9 +60,9 @@ Convert the CV to markdown. Remove contact details: email addresses, phone numbe
 
 ## 5. Publish the dashboard
 
-Load the `artifact-capabilities` skill first, and `artifact-design` too if your Artifact tool requires it before any publish. Copy the plugin's dashboard page into your scratchpad directory (or the current working directory if you have none), read the copy in full, then publish it with the Artifact tool: `capabilities: {"db": {}, "sample": {}}`, `icon: "briefcase"`, description "Private interview prep dashboard". Keep the returned URL.
+Load the `artifact-capabilities` skill first, and `artifact-design` too if your Artifact tool requires it before any publish. Copy the plugin's dashboard page into your scratchpad directory (or the current working directory if you have none), read the copy in full, then publish it with the Artifact tool: `capabilities: {"db": {}, "sample": {}, "downloads": true}`, `icon: "briefcase"`, description "Private interview prep dashboard". Keep the returned URL.
 
-Then run one ArtifactData list on the `profile` collection and one on `interviews`. Both are empty on a new dashboard.
+Then run one ArtifactData list on each of the `profile`, `interviews` and `jobs` collections. All are empty on a new dashboard.
 
 ## 6. Save the profile
 

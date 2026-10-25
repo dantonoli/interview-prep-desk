@@ -78,6 +78,7 @@ try {
     if (only.length && !only.includes(shot.name)) continue;
     const w = shot.width || 1200, h = shot.height || 860;
     await send('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: 2, mobile: false });
+    await evaluate('try { localStorage.clear() } catch {}'); // each shot starts from the default view and tabs
     const loaded = new Promise(r => waiters.push(function f(m) { m.method === 'Page.loadEventFired' ? r() : waiters.push(f); }));
     await send('Page.navigate', { url: 'file://' + join(work, `${shot.page}.html`) });
     await loaded;

@@ -1,6 +1,6 @@
 ---
 name: add-interview
-description: Add a job or interview to the Interview Prep Desk dashboard from a job posting link or a pasted job description, and queue it for the morning prep. Use when the user shares a job posting they want to prepare for or mentions an upcoming interview.
+description: Add an interview to the Interview Prep Desk dashboard from a job posting link or a pasted job description, and queue it for the morning prep. Use when the user has an interview booked or expected and wants to prepare for it. For a job the user is only considering or applying to, use add-job instead.
 argument-hint: "<job link or pasted description>"
 ---
 

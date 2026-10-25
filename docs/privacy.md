@@ -1,6 +1,6 @@
 # Privacy policy
 
-Last updated: 28 September 2026. This policy covers the Interview Prep Desk plugin (`interview-prep-desk`) and its optional voice add-on (`interview-prep-desk-voice`).
+Last updated: 25 October 2026. This policy covers the Interview Prep Desk plugin (`interview-prep-desk`) and its optional voice add-on (`interview-prep-desk-voice`).
 
 ## Summary
 
@@ -11,6 +11,9 @@ The plugins have no server. Their author does not receive, store or see any of y
 | Data | Why | Where it is stored | Who else receives it |
 |---|---|---|---|
 | Your CV, without contact details | To write answers and find gaps from your real experience | Your private artifact's database on claude.ai | Claude, on your own account, when it prepares materials or runs the practice chat |
+| The jobs you add: company, role, location, job description, status, dates, notes | To write the application pack and track your applications | The same database | Claude, on your own account, when it writes the application pack |
+| Application packs: fit analysis, tailored CV, cover letter, messages, recruiter review | To help you apply | The same database; the Word files you download are saved on your computer | Claude, on your own account, while it writes them |
+| The contact line printed on the Word files | So the files are ready to send | Your browser's own storage for the dashboard, never the database | Nobody |
 | The interviews you add: company, role, dates, interviewers, job description summary, notes | To prepare each interview | The same database | Web search, for research queries about them; Claude, on your own account |
 | Prepared materials and practice chats | To show and continue your prep | The same database | Claude, on your own account, during the practice chat |
 | Dashboard link, the name interviewers should use, timezone and run times | So the commands find your dashboard | `~/.config/interview-prep-desk/config.json` on your computer | Nobody |
@@ -22,6 +25,7 @@ Setup removes contact details (email, phone, address, date of birth) from your C
 
 Nothing expires by itself. Your data stays until you delete it:
 
+- Delete a job in the dashboard to remove it with its application pack. Delete Word files you downloaded from your computer.
 - Delete an interview in the dashboard to remove it with its materials and practice chat.
 - Delete the dashboard artifact in your claude.ai artifacts to remove everything it holds.
 - Delete `~/.config/interview-prep-desk/config.json`, delete any routine or scheduled task you created, and uninstall the plugins to stop them completely.
