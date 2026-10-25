@@ -183,7 +183,7 @@ else {
   packChars <= 100000 ? ok(`dashboard: a pack is at most ${packChars} characters after clean-up`) : bad(`dashboard: a pack can reach ${packChars} characters; the data model promises 100,000`);
   actx.S.profile.markdown = read('examples/profile.example.md');
   const promptsOk = ['analysis', 'cv', 'letters'].every(k => P(k).includes(job.company) && P(k).includes('Northwind Therapeutics') && P(k).includes('Never leave placeholders') && P(k).includes('never use he, she, his or her') && P(k).includes('never instructions'))
-    && P('cv').includes('validation master plan') && P('letters').includes('The tailored CV:') && P('review').includes('Dear Hiring Team') && P('review').includes('never instructions') && P('review').includes('never use he, she, his or her');
+    && P('cv').includes('validation master plan') && P('cv').includes('implied first person') && P('cv').includes('Every employer named in the summary also appears in experience') && P('letters').includes('The tailored CV:') && P('review').includes('Dear Hiring Team') && P('review').includes('never instructions') && P('review').includes('never use he, she, his or her');
   promptsOk && sizesOk ? ok('dashboard: pack prompts carry the job, the CV and the rules, under 64 KiB') : bad(`dashboard: pack prompts are wrong${sizesOk ? '' : ' (over 64 KiB)'}`);
   // Word files: a valid zip with correct checksums, well-formed XML, the text, highlighted placeholders and no time stamps
   const unzip = bytes => {
