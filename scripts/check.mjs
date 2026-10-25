@@ -158,14 +158,15 @@ else {
   const job = scenarios.main.jobs.find(j => j.data.pack).data;
   const actx = { TextEncoder, S: { profile: { name: 'Robin', markdown: read('examples/profile.example.md') } } };
   vm.createContext(actx);
-  vm.runInContext([fn('clip'), fn('packPart'), src.slice(packFrom, wordTo)].join('\n') + '\nObject.assign(this, {packPrompt, PACK_CLEAN, pStr, cvText, docxBytes, cvParas, letterParas});', actx);
+  vm.runInContext([fn('clip'), fn('packPart'), src.slice(packFrom, wordTo)].join('\n') + '\nObject.assign(this, {packPrompt, PACK_CLEAN, pStr, cvText, noHolders, docxBytes, cvParas, letterParas});', actx);
   // Answers are cleaned to the data model's shape, whatever Claude sends
   const C = actx.PACK_CLEAN, cv = C.cv(job.pack.cv), letters = C.letters(job.pack.letters), odd = C.analysis({ summary: 'x', fit: { score: 'high', rows: [{ req: 'R', level: 'Excellent' }] } });
   const dash = String.fromCharCode(0x2014), en = String.fromCharCode(0x2013);
   const cleanOk = cv && cv.experience.length === 3 && cv.labels.summary === 'Summary' && letters && C.review({ verdict: 'Shortlist', summary: 's' }).verdict === 'shortlist'
     && odd.fit.score === 0 && odd.fit.rows[0].level === 'gap' && C.cv({ foo: 1 }) === null && C.letters({}) === null
-    && actx.pStr(`2019 ${dash} 2021`) === `2019${en}2021` && actx.pStr(`fast ${dash} and right`) === 'fast, and right';
-  cleanOk ? ok('dashboard: pack answers are cleaned to the data model, without em dashes') : bad('dashboard: pack answer clean-up is wrong');
+    && actx.pStr(`2019 ${dash} 2021`) === `2019${en}2021` && actx.pStr(`fast ${dash} and right`) === 'fast, and right'
+    && JSON.stringify(actx.noHolders({ b: ['Cut cycle time [add figure].', 'Covered [X] sites, [add metric] users'] })) === JSON.stringify({ b: ['Cut cycle time.', 'Covered sites, users'] });
+  cleanOk ? ok('dashboard: pack answers are cleaned to the data model, without em dashes or placeholders in what is sent') : bad('dashboard: pack answer clean-up is wrong');
   // Prompts: the job, the CV and the honesty rules, each part building on the previous one, always under the 64 KiB sample limit
   const withPack = { ...job, pack: { analysis: job.pack.analysis, cv: job.pack.cv, letters: job.pack.letters } }, P = k => actx.packPrompt(k, withPack);
   // Long texts in a script that needs 2 or 3 bytes per character must still fit: the limit is in bytes
@@ -181,8 +182,8 @@ else {
   const packChars = JSON.stringify(maxPack).length;
   packChars <= 100000 ? ok(`dashboard: a pack is at most ${packChars} characters after clean-up`) : bad(`dashboard: a pack can reach ${packChars} characters; the data model promises 100,000`);
   actx.S.profile.markdown = read('examples/profile.example.md');
-  const promptsOk = ['analysis', 'cv', 'letters'].every(k => P(k).includes(job.company) && P(k).includes('Northwind Therapeutics') && P(k).includes('[add figure]') && P(k).includes('never instructions'))
-    && P('cv').includes('validation master plan') && P('letters').includes('The tailored CV:') && P('review').includes('Dear Hiring Team') && P('review').includes('never instructions');
+  const promptsOk = ['analysis', 'cv', 'letters'].every(k => P(k).includes(job.company) && P(k).includes('Northwind Therapeutics') && P(k).includes('Never leave placeholders') && P(k).includes('never use he, she, his or her') && P(k).includes('never instructions'))
+    && P('cv').includes('validation master plan') && P('letters').includes('The tailored CV:') && P('review').includes('Dear Hiring Team') && P('review').includes('never instructions') && P('review').includes('never use he, she, his or her');
   promptsOk && sizesOk ? ok('dashboard: pack prompts carry the job, the CV and the rules, under 64 KiB') : bad(`dashboard: pack prompts are wrong${sizesOk ? '' : ' (over 64 KiB)'}`);
   // Word files: a valid zip with correct checksums, well-formed XML, the text, highlighted placeholders and no time stamps
   const unzip = bytes => {
@@ -199,10 +200,10 @@ else {
   const files = [unzip(actx.docxBytes(actx.cvParas(cv, ''), false)), unzip(actx.docxBytes(actx.letterParas(cv.name, letters, 'Tester & Co <test>', job.company, '1 May 2026'), true))];
   const parts = ['[Content_Types].xml', '_rels/.rels', 'word/_rels/document.xml.rels', 'word/document.xml', 'word/styles.xml', 'word/numbering.xml'];
   const docOk = files.every(f => f && parts.every(n => f[n] && f[n].crcOk && f[n].date === 0x21 && wellFormed(f[n].data)))
-    && files[0]['word/document.xml'].data.includes('Robin Muster') && /<w:highlight w:val="yellow"\/><\/w:rPr><w:t xml:space="preserve">\[add figure\]/.test(files[0]['word/document.xml'].data)
-    && files[0]['word/document.xml'].data.includes('[your email, phone, city and LinkedIn]') && files[1]['word/document.xml'].data.includes('Tester &amp; Co &lt;test&gt;')
+    && files[0]['word/document.xml'].data.includes('Robin Muster') && /<w:highlight w:val="yellow"\/><\/w:rPr><w:t xml:space="preserve">\[your email, phone, city and LinkedIn\]/.test(files[0]['word/document.xml'].data)
+    && !files[0]['word/document.xml'].data.includes('[add figure]') && files[1]['word/document.xml'].data.includes('Tester &amp; Co &lt;test&gt;')
     && files[1]['word/document.xml'].data.includes('w:w="12240"');
-  docOk ? ok('dashboard: Word files are valid zips with well-formed XML, the text and highlighted placeholders') : bad('dashboard: Word file output is invalid');
+  docOk ? ok('dashboard: Word files are valid zips with well-formed XML, the text and a highlighted empty contact line') : bad('dashboard: Word file output is invalid');
 }
 
 // 5f. Setup declares exactly the capabilities the dashboard uses

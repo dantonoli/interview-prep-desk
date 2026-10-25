@@ -72,7 +72,7 @@ A job the candidate is considering or has applied to. `id` is `slug(company + "-
 - `letters`: `subject` and `coverLetter`, `message` (a short note to the recruiter), `followUpSubject` and `followUpBody`, and `lang` (the language code of the texts, used to write the date on the letter).
 - `review`: a recruiter's view of the tailored CV and cover letter. `verdict` (`shortlist`, `maybe` or `reject`), `summary`, `strengths`, `weaknesses` and `fixes`.
 
-Every part uses only facts from the profile, with `[add figure]` where a number is missing. Contact details are never stored: the contact line printed on the Word files stays in the viewer's own browser storage.
+Every part uses only facts from the profile. It never invents a number and never leaves a placeholder: where the profile has no figure, the text states the result without one, and the review suggests which figures to add. Contact details are never stored: the contact line printed on the Word files stays in the viewer's own browser storage.
 
 ## `settings/voice`
 

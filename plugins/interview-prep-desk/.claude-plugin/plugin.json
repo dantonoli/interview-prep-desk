@@ -1,7 +1,7 @@
 {
   "name": "interview-prep-desk",
   "displayName": "Interview Prep Desk",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "One private dashboard for job applications and interview prep: application packs with a tailored CV and cover letter as Word files, morning research, briefing, FAQ, quiz, flashcards and a practice chat where Claude plays the interviewer.",
   "author": {
     "name": "dantonoli",

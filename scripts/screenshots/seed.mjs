@@ -132,7 +132,7 @@ const pack = (company, role) => ({
         { gap: 'Chromatography data systems and ELN', how: 'Explain how your CSA approach applies to lab instruments, and do not claim CDS experience.' },
         { gap: 'Validation master plan', how: 'Describe how you set the validation approach at Northwind, and offer to write the plan in your first 90 days.' } ] },
     ats: { missing: ['validation master plan', 'periodic review', 'computerised systems'],
-      weak: ['Your CV names CSA but not how many systems you cover [add figure]', 'The LIMS work sits under your 2016 to 2021 role; bring it into the summary'],
+      weak: ['Your CV names CSA but not how many systems you cover', 'The LIMS work sits under your 2016 to 2021 role; bring it into the summary'],
       summary: 'Validation and quality systems leader with 14 years in GMP manufacturing. Introduced computer software assurance at Northwind Therapeutics, cutting validation effort for low-risk systems by about 30%, and owned MES and LIMS validation for a new biologics plant whose first inspection found no critical issues. Leads a team of 9 and builds data integrity habits (ALCOA+) across sites.' },
     generatedAt: at(-1, '18:20') },
   cv: {
@@ -141,7 +141,7 @@ const pack = (company, role) => ({
     skills: ['Computer software assurance (CSA)', 'GAMP 5', 'CSV', 'LIMS and MES validation', 'EU GMP Annex 11', '21 CFR Part 11', 'Data integrity (ALCOA+)', 'Electronic QMS rollouts', 'Change control', 'Supplier qualification', 'Team leadership', 'Stakeholder management'],
     experience: [
       { title: 'Head of Quality Systems', company: 'Northwind Therapeutics', location: '', dates: '2021 to today', bullets: [
-        'Lead a team of 9 across quality systems, validation and data integrity, covering [add figure] GMP computerised systems.',
+        'Lead a team of 9 across quality systems, validation and data integrity for GMP computerised systems.',
         'Introduced risk-based computer software assurance (CSA), cutting validation effort for low-risk systems by about 30%.',
         'Replaced a paper-based deviation and CAPA process with an electronic QMS at 3 sites, reducing CAPA cycle time from 62 to 38 days.'] },
       { title: 'Validation Lead', company: 'Fabrikam Biologics', location: '', dates: '2016 to 2021', bullets: [
@@ -163,8 +163,8 @@ const pack = (company, role) => ({
     verdict: 'shortlist',
     summary: 'A strong match on CSA, LIMS validation and team leadership, with results that have numbers. The letter speaks to the LIMS replacement. Lab systems beyond LIMS are the gap, and the letter does not mention them.',
     strengths: ['CSA in practice, with a result: about 30% less validation effort', 'LIMS validation for a new plant and a clean first inspection', 'Leads a larger team than the posting asks for', 'A data integrity programme with 200 staff trained'],
-    weaknesses: ['No chromatography data system or ELN experience', 'The number of systems covered is still [add figure]', 'Ownership of a validation master plan is implied, not stated'],
-    fixes: ['Fill in [add figure] with the number of GMP systems you cover', 'Add one line on the validation strategy you set at Northwind', 'Say how CSA would apply to lab instruments, without claiming CDS experience', 'Move the LIMS result higher in the summary'],
+    weaknesses: ['No chromatography data system or ELN experience', 'The CV does not say how many systems you cover', 'Ownership of a validation master plan is implied, not stated'],
+    fixes: ['Add the number of GMP systems you cover to your profile', 'Add one line on the validation strategy you set at Northwind', 'Say how CSA would apply to lab instruments, without claiming CDS experience', 'Move the LIMS result higher in the summary'],
     generatedAt: at(-1, '18:25') },
 });
 const jd = company => `Made-up example. ${company}, full time, permanent. Leads validation for the lab systems and the replacement of the LIMS, sets a risk-based CSA approach, keeps systems in a validated state and leads a team of 4 validation engineers. Asks for 8+ years of GMP validation, hands-on LIMS validation, GAMP 5 and EU GMP Annex 11, and team leadership. Inspection experience and German are a plus. Offers hybrid work, two days a week on site.`;

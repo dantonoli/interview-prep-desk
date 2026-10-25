@@ -125,11 +125,11 @@ or say "Add this job to my applications: &lt;link&gt;". Claude reads the posting
 | Letters | **Letters** | A cover letter as a Word file, a short message for the recruiter, and a follow-up email for a week later |
 | Recruiter review | **Review** | A recruiter's verdict on the tailored CV and letter (shortlist, maybe or reject), with quick fixes |
 
-The pack uses only facts from your CV. It keeps every employer, title and date as you wrote them, and writes `[add figure]` where a number would help. **Write it again** on any tab redoes that part only.
+The pack uses only facts from your CV. It keeps every employer, title and date as you wrote them, never invents a number and never leaves a placeholder: where your CV has no figure, the text says what you did without one. The recruiter review then tells you which figures would make the application stronger; add them under **Your profile** and choose **Write it again**. **Write it again** on any tab redoes that part only.
 
 ![The Applications section with four made-up jobs; Woodgrove Labs is selected and its Fit tab shows a fit of 78](images/guide/application-fit.png)
 
-**Download the Word files.** On the **CV** tab, enter your contact line once (email, phone, city, LinkedIn). It stays in this browser and is never saved in the dashboard's database. Then choose **Download the CV (Word)**, and on the **Letters** tab **Download the letter (Word)**. The files are plain, single-column documents that applicant tracking systems read well. Open them in Word, fill in the placeholders highlighted in yellow, and read every line before you send anything.
+**Download the Word files.** On the **CV** tab, enter your contact line once (email, phone, city, LinkedIn). It stays in this browser and is never saved in the dashboard's database. Then choose **Download the CV (Word)**, and on the **Letters** tab **Download the letter (Word)**. The files are plain, single-column documents that applicant tracking systems read well. Open them in Word, fill in your contact line if you left it empty (it shows highlighted in yellow), and read every line before you send anything.
 
 ![The CV tab with the contact line field and a preview of the tailored CV](images/guide/application-cv.png)
 
