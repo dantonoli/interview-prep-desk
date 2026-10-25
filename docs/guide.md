@@ -100,7 +100,7 @@ Then it:
    - a **desktop scheduled task**: runs only while the Claude desktop app is open and the computer is awake.
 5. **Gives you the dashboard link.** Bookmark it and keep it private: anyone you share the dashboard with sees your CV.
 
-> **Tip:** the prep only knows what your CV says. Add your numbers, such as team sizes, budgets and results, in the dashboard's **Your profile** dialog. Where a number is missing, the answers say `[add figure]`.
+> **Tip:** the prep only knows what your CV says. Add your numbers, such as team sizes, budgets and results, in the dashboard's **Your profile** dialog. Where a number is missing, the answers make the point without one, and the briefing's gaps section lists the figures worth adding.
 
 ## Step 3. Apply for jobs
 
@@ -256,7 +256,7 @@ Open the **Mock interview** tab and choose **Start the mock interview**. Claude 
 After each answer Claude replies with:
 
 - **Feedback**: what worked and what was missing;
-- **Stronger answer**: 80 to 130 words in the first person, built only from facts in your CV, with `[add figure]` where a number would help;
+- **Stronger answer**: 80 to 130 words in the first person, built only from facts in your CV, never with invented numbers or placeholders;
 - **Next**: a follow-up on a vague or number-free answer, or the next question.
 
 ![The practice chat: the interviewer's question, Robin's answer, feedback with a stronger answer, and the next question](images/guide/mock-chat.png)
@@ -361,7 +361,7 @@ The full [privacy policy](privacy.md) has the details.
 | "Claude's answer for the fit analysis stopped after ... characters, before it was complete" | The answer was cut off, so that part was not saved. Choose **Finish the pack** or **Write it again**; the parts already written are kept. If it keeps stopping, choose **Edit** and cut the job description down to the role and its requirements. |
 | "Claude's answer ... was not in the format the dashboard reads", "... did not have the fields the dashboard needs" or "... could not be read" | Choose **Finish the pack** or **Write it again**. The parts already written are kept. |
 | The morning prep replies "No interviews need prep today." | It only prepares interviews in the next 7 days without materials, and queued ones. Choose **Request prep for the next run** (or **Refresh next run** once materials exist), or run `/interview-prep-desk:prep <company>`. |
-| Answers are full of `[add figure]` | Your CV has no numbers for those points. Add them in **Your profile**, then use **Refresh next run**. |
+| Answers have no numbers | Your CV has no numbers for those points; the briefing's gaps section lists which ones would help. Add them in **Your profile**, then use **Refresh next run**. |
 | The dashboard still looks old after an update | Reload the dashboard tab or the Claude app window. |
 | "Saving is off in this view" | You opened a copy of the page outside claude.ai. Open your dashboard link on claude.ai or in the Claude app. |
 | "You can view this board, but your access does not allow changes." | Someone shared the dashboard with you to view only. The owner can give you edit access. |

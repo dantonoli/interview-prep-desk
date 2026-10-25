@@ -8,7 +8,7 @@ Add a job you want, and Claude writes an application pack from your CV: a fit an
 
 New here? The [step-by-step guide](docs/guide.md) takes you from install to interview day, with the exact commands and screenshots.
 
-> Status: early (core 0.2.2). Built for personal use and shared as is.
+> Status: early (core 0.2.3). Built for personal use and shared as is.
 
 ## What you get
 
@@ -73,7 +73,7 @@ Your CV and interviews live in your private artifact's database in your own clau
 - Artifacts cannot embed NotebookLM or use the microphone. In the practice chat you type, or use your computer's dictation.
 - Some job sites block automated reading, and the dashboard cannot open job sites at all. Paste the job description instead.
 - The dashboard does not apply for you or send messages. You submit applications and send the texts yourself.
-- The prep only knows what your CV says. Add your numbers to the profile; missing ones show up as `[add figure]`.
+- The prep only knows what your CV says. Add your numbers to the profile; where one is missing, the answers make the point without it and the briefing lists the figures worth adding.
 
 ## Support and security
 

@@ -29,7 +29,7 @@ Use `company`, `role`, `focus`, `interviewers`, `job_link` and `jd` (the job des
 
 ## 4. Write the materials
 
-Ground everything in the sources and in the profile. Never invent facts, numbers or achievements about the candidate. Where a figure would help but is not in the profile, write "[add figure]".
+Ground everything in the sources and in the profile. Never invent facts, numbers or achievements about the candidate, and never leave placeholders such as "[add figure]" or "[X]": where a figure would help but is not in the profile, make the point without a number. Name the figures worth adding to the profile in the briefing's "Your gaps and how to address them" section.
 
 - briefing: markdown, 900 to 1500 words, with these sections as "## " headings: Company snapshot; The role and what they are really hiring for; Your fit (a markdown table: requirement | evidence from profile | strength: strong / partial / gap); Your gaps and how to address them; Likely interview themes; Questions you should ask; Things to watch out for; 60-second pitch (first person, tailored to this role).
 - faq: 15 items {"q", "a", "kind"} where kind is one of "motivation", "business", "technical", "behavioral", "leadership". At least 4 behavioral or leadership answers as STAR stories built from real profile experience. Answers in the first person, 120 to 220 words, markdown allowed.

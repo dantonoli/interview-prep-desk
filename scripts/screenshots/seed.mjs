@@ -20,7 +20,7 @@ A hands-on leader who can land the QMS rollout across five sites on time, keep i
 | Risk-based validation (CSA) | Introduced CSA, about 30% less validation effort | strong |
 | Data integrity | ALCOA+ programme, 200 staff trained, Fabrikam Biologics | strong |
 | Team building | Leads a team of 9 | strong |
-| Five-site scope | 3 sites so far [add figure] | partial |
+| Five-site scope | 3 sites so far | partial |
 
 ## Your gaps and how to address them
 - Five sites instead of three: explain the rollout model you would reuse and what you would change.
@@ -43,7 +43,7 @@ const faq = [
   { q: 'Why do you want this role?', kind: 'motivation', a: 'Because it is the rollout I have already delivered at three sites, now at five, and I want to lead it end to end. At Northwind I saw what an electronic QMS does for CAPA cycle time: it fell from 62 to 38 days.' },
   { q: 'How would you run the rollout across five sites?', kind: 'business', a: 'One global template, one pilot site, then waves of two sites. Each wave has a site owner, a validation lead and a go-live checklist that the site signs off.' },
   { q: 'How do you apply CSA without weakening compliance?', kind: 'technical', a: 'I classify each function by its risk to patient safety and product quality, then put scripted testing where the risk is high and unscripted testing where it is low. At Northwind that cut validation effort for low-risk systems by about 30%.' },
-  { q: 'Tell us about a rollout that did not go to plan.', kind: 'behavioral', a: '**Situation:** go-live at the second site slipped. **Task:** recover without losing the inspection window. **Action:** I split the release and moved training forward. **Result:** live 3 weeks later [add figure].' },
+  { q: 'Tell us about a rollout that did not go to plan.', kind: 'behavioral', a: '**Situation:** go-live at the second site slipped. **Task:** recover without losing the inspection window. **Action:** I split the release and moved training forward. **Result:** live 3 weeks later.' },
   { q: 'Tell us about a time you brought a sceptical team with you.', kind: 'behavioral', a: '**Situation:** the deviation team preferred paper. **Task:** move them to the new QMS. **Action:** I made two of them super users and fixed their top three complaints first. **Result:** the site went live on time.' },
   { q: 'How would you build the team of 6?', kind: 'leadership', a: 'Two validation engineers, two QMS administrators, one data integrity lead and one trainer, hired in that order so the pilot has validation cover first.' },
 ];

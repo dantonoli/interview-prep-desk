@@ -101,8 +101,17 @@ else {
   withProfile.includes('for Robin Muster, the candidate') && withProfile.includes('panel at Contoso Pharma')
     ? ok('dashboard: practice chat prompt uses the profile name and the company')
     : bad('dashboard: practice chat prompt does not use the profile name and the company');
+  withProfile.includes('never leave placeholders such as [add figure]') && !/write \[add figure\]/i.test(withProfile)
+    ? ok('dashboard: practice chat answers never leave placeholders')
+    : bad('dashboard: practice chat prompt still asks for placeholders');
   ctx.S.profile = null;
   ctx.chatRules(ex).includes('interview for the candidate.') ? ok('dashboard: practice chat prompt works without a profile') : bad('dashboard: practice chat prompt breaks without a profile');
+}
+{
+  const prep = read(`${CORE}/templates/prep-routine.md`);
+  prep.includes('never leave placeholders') && !/write "\[add figure\]"/i.test(prep) && prep.includes('Your gaps and how to address them" section')
+    ? ok('prep routine: no placeholders, missing figures named as gaps')
+    : bad('prep routine: still asks for [add figure] placeholders');
 }
 
 // 5b. Dashboard: the id rule gives the results documented in the data model
