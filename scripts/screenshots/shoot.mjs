@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Regenerates the screenshots in docs/images/guide from the current dashboard file and made-up data.
-// Usage: node scripts/screenshots/shoot.mjs [shot ...] [--out <dir>]
+// Usage: node scripts/screenshots/shoot.mjs [shot ...] [--tests] [--out <dir>]
+//   --tests runs the test shots instead, which check the page and save their images to a temporary folder.
 //   Needs Node 22 or later and Google Chrome (set CHROME=/path/to/chrome if it is not found). Fonts load from Google Fonts.
 //   Times show in UTC and dates written by the page in en-US, so they do not reveal your time zone. The date field in
 //   the form follows the computer's own region setting on macOS.
@@ -17,10 +18,12 @@ const here = p => fileURLToPath(new URL(p, import.meta.url));
 const args = process.argv.slice(2);
 const outAt = args.indexOf('--out');
 if (outAt >= 0 && !args[outAt + 1]) { console.error('--out needs a folder'); process.exit(2); }
-const outDir = outAt >= 0 ? args[outAt + 1] : here('../../docs/images/guide');
-const only = outAt >= 0 ? args.filter((a, i) => i !== outAt && i !== outAt + 1) : args;
+const tests = args.includes('--tests');
+const only = args.filter((a, i) => a !== '--tests' && (outAt < 0 || (i !== outAt && i !== outAt + 1)));
 const unknown = only.filter(n => !shots.some(s => s.name === n));
 if (unknown.length) { console.error(`unknown shot: ${unknown.join(', ')}. Known: ${shots.map(s => s.name).join(', ')}`); process.exit(2); }
+const picked = shots.filter(s => only.length ? only.includes(s.name) : !!s.test === tests);
+const outDir = outAt >= 0 ? args[outAt + 1] : picked.some(s => s.test) ? join(tmpdir(), 'ipd-shot-tests') : here('../../docs/images/guide');
 
 const CHROME = (process.env.CHROME ? [process.env.CHROME] : ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser']).find(existsSync);
 if (!CHROME) { console.error(`Google Chrome not found${process.env.CHROME ? ' at ' + process.env.CHROME : ''}. Set CHROME=/path/to/chrome.`); process.exit(2); }
@@ -73,9 +76,9 @@ try {
   await send('Emulation.setLocaleOverride', { locale: 'en-US' });
   await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: 'light' }] });
   mkdirSync(outDir, { recursive: true });
+  const failed = [];
 
-  for (const shot of shots) {
-    if (only.length && !only.includes(shot.name)) continue;
+  for (const shot of picked) {
     const w = shot.width || 1200, h = shot.height || 860;
     await send('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: 2, mobile: false });
     await evaluate('try { localStorage.clear() } catch {}'); // each shot starts from the default view and tabs
@@ -91,6 +94,9 @@ try {
       if (step.eval) await evaluate(step.eval);
       await sleep(step.wait ?? 350);
     }
+    // expect: an expression that returns true, or what is wrong. The image is saved either way, to look at.
+    const verdict = shot.expect ? await evaluate(shot.expect) : true;
+    if (verdict !== true) failed.push(`${shot.name}: ${verdict}`);
     let clip = { x: 0, y: await evaluate('scrollY'), width: w, height: h, scale: 1 };
     if (shot.clip) {
       const r = await evaluate(`(() => { const els = [].concat(${shot.clip}).filter(Boolean); if (!els.length) return null; els[0].scrollIntoView({block: 'start'});
@@ -101,9 +107,11 @@ try {
     }
     const { data } = await send('Page.captureScreenshot', { format: 'png', clip, captureBeyondViewport: true });
     writeFileSync(join(outDir, `${shot.name}.png`), Buffer.from(data, 'base64'));
-    console.log(`saved ${shot.name}.png (${Math.round(clip.width)}x${Math.round(clip.height)} at 2x)`);
+    console.log(`${shot.expect ? (verdict === true ? 'ok    ' : 'FAIL  ') : ''}saved ${shot.name}.png (${Math.round(clip.width)}x${Math.round(clip.height)} at 2x)`);
   }
   ws.close();
+  console.log(`images in ${outDir}`);
+  if (failed.length) { console.error(`\n${failed.length} check(s) failed:\n${failed.join('\n')}`); process.exitCode = 1; }
 } catch (e) {
   console.error('screenshots: ' + e.message);
   process.exitCode = 1;

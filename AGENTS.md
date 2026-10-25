@@ -19,7 +19,7 @@ The repo root is for development. Users install only the folders under `plugins/
 | `plugins/interview-prep-desk/` | Core plugin: `.claude-plugin/plugin.json`, `README.md` (the directory listing text), `LICENSE`, `skills/` (`setup`, `add-job`, `add-interview`, `prep`), `dashboard/interview-prep-desk.html`, `templates/prep-routine.md`, `reference/data-model.md` |
 | `plugins/interview-prep-desk-voice/` | Voice add-on: manifest, `README.md`, `LICENSE`, `skills/` (`setup`, `voice-mock`), `templates/voice-routine.md` |
 | `examples/` | A made-up profile and interview for tests and docs |
-| `scripts/` | `check.mjs` (structure and dashboard checks), `privacy-scan.mjs` (blocks personal data), `screenshots/` (regenerates the guide's screenshots from made-up data) |
+| `scripts/` | `check.mjs` (structure and dashboard checks), `privacy-scan.mjs` (blocks personal data), `screenshots/` (regenerates the guide's screenshots from made-up data; `--tests` runs the page checks that need a browser) |
 | `docs/` | `guide.md` (the step-by-step user guide), `architecture.md`, `privacy.md` (the privacy policy), `images/` (the README banner, the GitHub social preview and the guide's screenshots) |
 | `SECURITY.md` | How to report security problems privately |
 

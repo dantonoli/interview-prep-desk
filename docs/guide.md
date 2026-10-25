@@ -358,7 +358,8 @@ The full [privacy policy](privacy.md) has the details.
 | Claude asks you to paste the job description | The job site blocks automated reading. Paste the description. |
 | A job asks you to paste the job description before the pack | The pack is built from the description, and the dashboard cannot open job sites. Choose **Edit** and paste the whole posting. |
 | There is no **Download** button for the Word files | Open the dashboard on claude.ai or in the Claude app. After an update from version 0.1, run `/interview-prep-desk:setup update` so the dashboard may offer files. Meanwhile, **Copy** the text. |
-| "Claude's answer could not be read." | Choose **Finish the pack** or **Write it again**. The parts already written are kept. |
+| "Claude's answer for the fit analysis stopped after ... characters, before it was complete" | The answer was cut off, so that part was not saved. Choose **Finish the pack** or **Write it again**; the parts already written are kept. If it keeps stopping, choose **Edit** and cut the job description down to the role and its requirements. |
+| "Claude's answer ... was not in the format the dashboard reads", "... did not have the fields the dashboard needs" or "... could not be read" | Choose **Finish the pack** or **Write it again**. The parts already written are kept. |
 | The morning prep replies "No interviews need prep today." | It only prepares interviews in the next 7 days without materials, and queued ones. Choose **Request prep for the next run** (or **Refresh next run** once materials exist), or run `/interview-prep-desk:prep <company>`. |
 | Answers are full of `[add figure]` | Your CV has no numbers for those points. Add them in **Your profile**, then use **Refresh next run**. |
 | The dashboard still looks old after an update | Reload the dashboard tab or the Claude app window. |

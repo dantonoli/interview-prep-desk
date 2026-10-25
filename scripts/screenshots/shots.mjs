@@ -7,6 +7,16 @@ const panel = "[document.querySelector('#detail .tabs'), document.querySelector(
 const fill = (id, v) => `(() => { const e = document.getElementById('${id}'); e.value = ${JSON.stringify(v)}; e.dispatchEvent(new Event('input', {bubbles: true})); e.dispatchEvent(new Event('change', {bubbles: true})); })();`;
 const progress = [tab('Checklist'), tick(6)];
 
+// Test shots (--tests): Claude's answer for the fit analysis fails, and the page must say how, without showing the answer and without asking again.
+const packFails = (name, analysis, want) => ({ name, test: true, page: 'main', width: 1200, height: 900, clip: panel, maxHeight: 700, steps: [
+  { click: 'Applications', sel: 'button' }, { eval: `document.querySelector('[data-job="contoso-pharma-head-of-digital-quality"]').click()` },
+  { eval: `window.__SAMPLE = ${JSON.stringify({ analysis })}` }, { click: 'Create the application pack', sel: 'button', wait: 1000 }],
+  expect: `(() => { const t = document.querySelector('#detail .err')?.textContent || '(no error shown)';
+    return !${want}.test(t) ? 'error says: ' + t : t.includes('hands-on lead') ? 'error shows the answer: ' + t
+      : window.__prompts.length !== 1 ? 'Claude was asked ' + window.__prompts.length + ' times' : !__byText('Create the application pack', 'button') ? 'no button to try again' : true; })()` });
+const cutReply = '```json\n{"summary": "Made-up example. A hands-on lead for a {cloud} QMS rollout across 5 sites.", "skills": ["Electronic QMS", "CSA"], "fit": {"score": 72, "rows": [{"req": "Electronic QMS rollout", "evidence": "Led an electronic QMS at 3 si';
+const badReply = 'Here is the analysis. {"summary": "Made-up example. A hands-on lead for a QMS rollout.", "skills": ["Electronic QMS", "CSA",]} I hope it helps.';
+
 export const shots = [
   { name: 'dashboard', page: 'main', width: 1200, height: 860, steps: [...progress, tab('Materials'), { eval: 'window.scrollTo(0, 0)' }] },
   { name: 'add-interview', page: 'main', width: 1200, height: 1000, clip: "document.getElementById('dlg-edit')", steps: [
@@ -25,4 +35,7 @@ export const shots = [
   { name: 'voice-mock', page: 'voice', width: 1200, height: 900, clip: panel, maxHeight: 640, steps: [...progress, tab('Mock interview')] },
   { name: 'application-fit', page: 'main', width: 1200, height: 900, steps: [{ click: 'Applications', sel: 'button' }, tab('Fit')] },
   { name: 'application-cv', page: 'main', width: 1200, height: 900, clip: panel, maxHeight: 900, steps: [{ click: 'Applications', sel: 'button' }, tab('CV')] },
+  packFails('test-pack-cut-off', { code: 'invalid_json', message: 'stub', text: cutReply }, new RegExp(`fit analysis stopped after ${cutReply.length} characters, before it was complete.*job description`)),
+  packFails('test-pack-not-json', { code: 'invalid_json', message: 'stub', text: badReply }, new RegExp(`fit analysis \\(${badReply.length} characters\\) was not in the format`)),
+  packFails('test-pack-wrong-shape', { result: 'Made-up example. A hands-on lead.' }, /fit analysis \(\d+ characters\) did not have the fields/),
 ];

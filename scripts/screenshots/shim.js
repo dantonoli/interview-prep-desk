@@ -1,6 +1,7 @@
 (function(){
   // In-memory stand-in for window.claude.use('db'), seeded with made-up data. Writes apply and notify subscribers.
-  // window.__SAMPLE (optional) answers sample.json calls by pack part; window.__saved records what downloads.save got.
+  // window.__SAMPLE (optional) answers sample.json calls by pack part: an answer object, or a failure {code, message, text?}
+  // whose text streams before the call rejects, as the runtime does with invalid_json. window.__saved records what downloads.save got.
   const SEED = window.__SEED, DOCS = {};
   DOCS['profile/main'] = SEED.profile;
   if (SEED.voice) DOCS['settings/voice'] = SEED.voice;
@@ -27,9 +28,8 @@
     const part = (PARTS.find(([, m]) => String(input).includes(m)) || [])[0], answer = (window.__SAMPLE || {})[part];
     window.__prompts = (window.__prompts || []).concat({part, input: String(input)});
     if (!answer) return rej({code: 'upstream_error', message: 'no stub answer'});
-    if (answer.code) return setTimeout(() => rej(answer), 50);
-    const text = JSON.stringify(answer), t1 = setTimeout(() => opts.onText && opts.onText({text: text.slice(0, 40), delta: text.slice(0, 40)}), 60);
-    const t2 = setTimeout(() => { opts.onText && opts.onText({text, delta: text.slice(40)}); res(copy(answer)); }, window.__SAMPLE_MS || 300);
+    const text = answer.code ? answer.text || '' : JSON.stringify(answer), t1 = setTimeout(() => text && opts.onText && opts.onText({text: text.slice(0, 40), delta: text.slice(0, 40)}), 60);
+    const t2 = setTimeout(() => { text && opts.onText && opts.onText({text, delta: text.slice(40)}); answer.code ? rej(copy(answer)) : res(copy(answer)); }, window.__SAMPLE_MS || 300);
     if (opts.signal) opts.signal.addEventListener('abort', () => { clearTimeout(t1); clearTimeout(t2); rej({code: 'cancelled', message: 'aborted'}); });
   });
   const downloads = { save: async ({filename, data}) => { const bytes = new Uint8Array(await new Response(data).arrayBuffer()); window.__saved = (window.__saved || []).concat({filename, bytes: Array.from(bytes)}); return {status: 'saved'}; } };

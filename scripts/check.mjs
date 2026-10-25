@@ -158,7 +158,7 @@ else {
   const job = scenarios.main.jobs.find(j => j.data.pack).data;
   const actx = { TextEncoder, S: { profile: { name: 'Robin', markdown: read('examples/profile.example.md') } } };
   vm.createContext(actx);
-  vm.runInContext([fn('clip'), fn('packPart'), src.slice(packFrom, wordTo)].join('\n') + '\nObject.assign(this, {packPrompt, PACK_CLEAN, pStr, cvText, noHolders, docxBytes, cvParas, letterParas});', actx);
+  vm.runInContext([fn('clip'), fn('packPart'), src.slice(packFrom, wordTo)].join('\n') + '\nObject.assign(this, {packPrompt, PACK_CLEAN, PACK_ERR, packErr, pStr, cvText, noHolders, docxBytes, cvParas, letterParas});', actx);
   // Answers are cleaned to the data model's shape, whatever Claude sends
   const C = actx.PACK_CLEAN, cv = C.cv(job.pack.cv), letters = C.letters(job.pack.letters), odd = C.analysis({ summary: 'x', fit: { score: 'high', rows: [{ req: 'R', level: 'Excellent' }] } });
   const dash = String.fromCharCode(0x2014), en = String.fromCharCode(0x2013);
@@ -167,6 +167,23 @@ else {
     && actx.pStr(`2019 ${dash} 2021`) === `2019${en}2021` && actx.pStr(`fast ${dash} and right`) === 'fast, and right'
     && JSON.stringify(actx.noHolders({ b: ['Cut cycle time [add figure].', 'Covered [X] sites, [add metric] users'] })) === JSON.stringify({ b: ['Cut cycle time.', 'Covered sites, users'] });
   cleanOk ? ok('dashboard: pack answers are cleaned to the data model, without em dashes or placeholders in what is sent') : bad('dashboard: pack answer clean-up is wrong');
+  // A failed part says which part, whether the answer was cut off and how many characters arrived, never the answer itself
+  const E = (e, chars, part) => actx.packErr(part || 'analysis', e, chars), bj = text => ({ code: 'invalid_json', message: 'stub', text });
+  const cut = '```json\n{"summary": "Secret {x} \\"y]\\"", "fit": {"rows": [{"req": "R"}', shut = '{"summary": "Secret", "skills": ["a",]} Done.';
+  const errCases = [
+    [E(bj(cut)), `Claude’s answer for the fit analysis stopped after ${cut.length} characters, before it was complete, so this part was not saved. Try again. If it keeps stopping, use Edit to cut the job description down to the role and its requirements.`],
+    [E(bj(shut)), `Claude’s answer for the fit analysis (${shut.length} characters) was not in the format the dashboard reads, so this part was not saved. Try again.`],
+    [E(bj('I cannot help with that.')), 'Claude’s answer for the fit analysis (24 characters) was not in the format the dashboard reads, so this part was not saved. Try again.'],
+    [E({ code: 'invalid_json', message: 'The reply was cut short by the length limit.', text: shut }), `Claude’s answer for the fit analysis stopped after ${shut.length} characters, `, true],
+    [E(bj('{"a": "' + 'z'.repeat(1300))), 'Claude’s answer for the fit analysis stopped after 1,307 characters, ', true],
+    [E(bj('{'), 0, 'cv'), 'Claude’s answer for the tailored CV stopped after 1 character, ', true],
+    [E({ code: 'invalid_json', message: 'stub' }, 500, 'letters'), 'Claude’s answer for the cover letter and messages (500 characters) was not in the format', true],
+    [E({ code: 'bad_shape' }, 42, 'review'), 'Claude’s answer for the recruiter review (42 characters) did not have the fields the dashboard needs, so this part was not saved. Try again.'],
+    [E({ code: 'invalid_json', message: 'stub' }), actx.PACK_ERR.invalid_json], [E({ code: 'bad_shape' }), actx.PACK_ERR.invalid_json],
+    [E({ code: 'rate_limited', message: 'stub', text: 'partial' }), actx.PACK_ERR.rate_limited], [E({ code: 'something_new' }), actx.PACK_ERR.upstream_error],
+  ];
+  const errWrong = errCases.map(([got, want, start], i) => (start ? got.startsWith(want) : got === want) && !got.includes('Secret') ? null : `case ${i + 1}: ${got}`).filter(Boolean);
+  errWrong.length ? bad(`dashboard: pack error text is wrong (${errWrong.join(' | ')})`) : ok(`dashboard: pack errors name the part, a cut-off answer and its length on ${errCases.length} cases, without the answer`);
   // Prompts: the job, the CV and the honesty rules, each part building on the previous one, always under the 64 KiB sample limit
   const withPack = { ...job, pack: { analysis: job.pack.analysis, cv: job.pack.cv, letters: job.pack.letters } }, P = k => actx.packPrompt(k, withPack);
   // Long texts in a script that needs 2 or 3 bytes per character must still fit: the limit is in bytes
