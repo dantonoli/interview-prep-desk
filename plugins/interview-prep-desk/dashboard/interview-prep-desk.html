@@ -1042,7 +1042,7 @@ function removeJob(id){
 function setView(v){ S.view = v === 'jobs' ? 'jobs' : 'interviews'; S.confirmDel = S.jconfirmDel = false; S.dlMsg = ''; tryLS(() => localStorage.setItem('prep.view', S.view)); render(); }
 function renderViews(){
   const open = S.jobs.filter(j => j.status !== 'closed').length;
-  $('#views').innerHTML = [['interviews','Interviews',S.items.length],['jobs','Applications',open]]
+  $('#views').innerHTML = [['jobs','Applications',open],['interviews','Interviews',S.items.length]]
     .map(([k,l,n]) => `<button type="button" role="tab" data-view="${k}" aria-selected="${S.view===k}">${l}${n?`<span class="n">${n}</span>`:''}</button>`).join('');
 }
 function renderJobStrip(){

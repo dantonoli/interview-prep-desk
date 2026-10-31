@@ -104,7 +104,7 @@ Then it:
 
 ## Step 3. Apply for jobs
 
-Before there is an interview, the dashboard's **Applications** section keeps the jobs you are considering, writes an application pack for each and reminds you to follow up. Switch between **Interviews** and **Applications** at the top of the dashboard.
+Before there is an interview, the dashboard's **Applications** section keeps the jobs you are considering, writes an application pack for each and reminds you to follow up. Switch between **Applications** and **Interviews** at the top of the dashboard.
 
 **Add a job with a command.** Pass the job link:
 

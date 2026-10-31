@@ -8,7 +8,7 @@ Add a job you want, and Claude writes an application pack from your CV: a fit an
 
 New here? The [step-by-step guide](docs/guide.md) takes you from install to interview day, with the exact commands and screenshots.
 
-> Status: early (core 0.3.0). Built for personal use and shared as is.
+> Status: early (core 0.3.1). Built for personal use and shared as is.
 
 ## What you get
 
