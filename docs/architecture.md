@@ -9,6 +9,7 @@ Users install the core plugin, `plugins/interview-prep-desk`, and optionally the
 | Dashboard (`dashboard/interview-prep-desk.html`) | core | claude.ai artifact viewer, in a browser or the Claude app | Shows and edits everything. Keeps state in the artifact database (`db`). Writes application packs and runs the practice chat through `sample`, on the viewer's Claude usage. Builds the Word files in the page and offers them through `downloads`. |
 | `setup` skill | core | The user's Claude Code session | Publishes the dashboard as a private artifact, saves the profile, writes the local config, schedules the morning prep after the user confirms. |
 | `add-job` skill | core | The user's Claude Code session | Reads a job posting and writes a new job record for the Applications section. |
+| `apply` skill and `scripts/word-files.mjs` | core | The user's Claude Code session and browser | Writes the Word files and fills in the employer's portal from the saved Application answers; the user signs in and submits. |
 | `add-interview` skill | core | The user's Claude Code session | Reads a job posting and writes a new interview record. |
 | Morning prep (`templates/prep-routine.md`) | core | A claude.ai routine in the cloud, or a scheduled task in the Claude desktop app | Picks the interviews that need prep, researches them on the web and writes the materials. |
 | Voice setup and task (`templates/voice-routine.md`) | voice add-on | A scheduled task in the Claude desktop app on the user's computer | Builds a NotebookLM notebook and a role-play Audio Overview, then writes the link and the questions back. `settings/voice` tells the dashboard to show the voice controls. |
@@ -20,6 +21,8 @@ flowchart LR
   U[You] -->|add, drill, practise| D[Dashboard artifact]
   D <--> DB[(Artifact database)]
   J[add-job skill] --> DB
+  AP[apply skill] -->|reads answers and pack| DB
+  AP -->|fills in forms| W[Employer portal]
   A[add-interview skill] --> DB
   P[Morning prep] -->|reads interviews, writes materials| DB
   P --> W[Web search]
@@ -35,7 +38,7 @@ flowchart LR
 - **The artifact is private by default.** Only the owner can open it until they share it. Anyone the owner shares it with sees the CV and all materials.
 - **Routines act as the user.** They run on the user's Claude account and may read and write the dashboard database. Each template lists the fields it is allowed to write.
 - **No developer backend.** The plugins have no server, collect no telemetry and send nothing to their author.
-- **Some data leaves the dashboard.** Web search sees research queries. The application pack, the practice chat and the prep send the CV, the job and the briefing to Claude on the user's account. Word files go to the user's computer only after the viewer confirms each save. The contact line on them is kept in the viewer's browser, never in the database.
+- **Some data leaves the dashboard.** Web search sees research queries. The application pack, the practice chat and the prep send the CV, the job and the briefing to Claude on the user's account. Word files go to the user's computer only after the viewer confirms each save, or through the apply skill's script. Application answers stay in the viewer's private `data/users/<id>` subtree and reach a portal only when the user asks Claude to fill one in.
 - **Claude's answers are data too.** The dashboard keeps only the fields the data model lists, caps their length and never runs them as code. With the voice add-on, NotebookLM (Google) receives the CV and the job.
 - **NotebookLM access is unofficial.** The voice add-on uses a community MCP server that signs in with Google browser cookies. That is why it is a separate plugin that is not submitted to Anthropic's directory.
 

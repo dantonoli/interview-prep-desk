@@ -7,6 +7,8 @@
   if (SEED.voice) DOCS['settings/voice'] = SEED.voice;
   for (const it of SEED.interviews) DOCS['interviews/' + it.id] = it.data;
   for (const j of SEED.jobs || []) DOCS['jobs/' + j.id] = j.data;
+  // The viewer is u_example, so the private application answers live at data/users/u_example/applicant.
+  if (SEED.answers) DOCS['data/users/u_example/applicant'] = SEED.answers;
   const copy = v => v === undefined ? v : JSON.parse(JSON.stringify(v));
   const docSubs = {}, colSubs = {};
   const snapDoc = p => ({exists: !!DOCS[p], id: p.split('/')[1], data: () => copy(DOCS[p])});
@@ -34,6 +36,7 @@
   });
   const downloads = { save: async ({filename, data}) => { const bytes = new Uint8Array(await new Response(data).arrayBuffer()); window.__saved = (window.__saved || []).concat({filename, bytes: Array.from(bytes)}); return {status: 'saved'}; } };
   window.__db = DOCS;
-  window.claude = { use: async n => n === 'db' ? db : n === 'sample' ? sample : n === 'downloads' ? downloads : null };
+  const user = { id: async () => 'u_example', isOwner: async () => true, canEdit: async () => true, can: async () => true };
+  window.claude = { use: async n => n === 'db' ? db : n === 'sample' ? sample : n === 'downloads' ? downloads : n === 'user' ? user : null };
   document.documentElement.setAttribute('data-theme', 'light');
 })();

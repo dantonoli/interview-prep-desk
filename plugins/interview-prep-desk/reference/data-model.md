@@ -1,6 +1,6 @@
 # Data model
 
-The dashboard artifact's database holds four collections. The page writes through `db`; skills and routines write through the `ArtifactData` tool. An update merges nested objects and replaces arrays whole. Writers pin each update to the version they read (`if_version`) and, on a conflict, read again and redo only their own change.
+The dashboard artifact's database holds four shared collections and one private document per viewer. The page writes through `db`; skills and routines write through the `ArtifactData` tool. An update merges nested objects and replaces arrays whole. Writers pin each update to the version they read (`if_version`) and, on a conflict, read again and redo only their own change.
 
 ## `profile/main`
 
@@ -72,7 +72,7 @@ A job the candidate is considering or has applied to. `id` is `slug(company + "-
 - `letters`: `subject` and `coverLetter`, `message` (a short note to the recruiter), `followUpSubject` and `followUpBody`, and `lang` (the language code of the texts, used to write the date on the letter).
 - `review`: a recruiter's view of the tailored CV and cover letter. `verdict` (`shortlist`, `maybe` or `reject`), `summary`, `strengths`, `weaknesses` and `fixes`.
 
-Every part uses only facts from the profile. It never invents a number and never leaves a placeholder: where the profile has no figure, the text states the result without one, and the review suggests which figures to add. Contact details are never stored: the contact line printed on the Word files stays in the viewer's own browser storage.
+Every part uses only facts from the profile. It never invents a number and never leaves a placeholder: where the profile has no figure, the text states the result without one, and the review suggests which figures to add. The contact line printed on the Word files is the one the viewer types on the CV tab, kept in their browser's own storage; when they leave it empty, it is built from their Application answers (email, phone, city and country, LinkedIn).
 
 ## `settings/voice`
 
@@ -84,8 +84,26 @@ Written by the voice add-on's setup. The dashboard shows the voice mock controls
 | `time` | `HH:MM` | voice add-on | Time of the daily voice task. |
 | `updatedAt` | ISO 8601 | voice add-on | |
 
+## `data/users/<id>/applicant`
+
+The viewer's Application answers: what job portals ask again and again. `<id>` is the viewer's own id from the `user` capability, and the platform keeps every `data/users/<id>/` subtree private to that viewer, also from people the dashboard is shared with. The dashboard's Application answers dialog saves the whole document. Skills read it with ArtifactData: collection `data/users/me`, doc_id `applicant`. Never copy it into a shared document.
+
+| Field | Type | Owner | Notes |
+|---|---|---|---|
+| `email`, `phone` | string | user | The email for applications, and the phone with country code. |
+| `street`, `postcode`, `city`, `region`, `country` | string | user | The postal address. `region` is the state, county or canton. |
+| `linkedin`, `website` | URL | user | |
+| `workAuth`, `sponsorship` | string | user | Right to work, and whether visa sponsorship is needed, in the user's words. |
+| `noticePeriod`, `startDate`, `relocation`, `travel`, `salary` | string | user | In the user's words. `salary` may be a rule, such as leaving it blank where optional. |
+| `howHeard` | string | user | The default answer to "How did you hear about us". |
+| `talentCommunity` | string | user | `no`, `ask` or `yes`: talent communities, job alerts and marketing opt-ins. |
+| `demographics` | string | user | `decline` or `ask`: diversity, gender, ethnicity, disability and veteran questions. |
+| `answers` | string | user | Other standard answers, one per line. |
+| `companies` | string | user | Company-specific answers and portal accounts, for example previous employment or conflict-of-interest answers for one employer. Never passwords. |
+| `updatedAt` | ISO 8601 | user | |
+
 ## Who picks what
 
 - **Prep** works on an interview when `prepRequested` is true, or when `date` is within the next 7 days and `materials.generatedAt` is missing. It skips `example` records and past dates.
-- **Applications** have no routine. The dashboard writes `pack` only when the user asks for it, and routines never read or write `jobs`.
+- **Applications** have no routine. The dashboard writes `pack` only when the user asks for it, and routines never read or write `jobs`. The `apply` skill reads a job and the viewer's Application answers only when the user asks it to fill in an application, and writes `status` and `appliedAt` after the user confirms they submitted.
 - **Voice add-on** builds a notebook when `notebook_url` is empty, `materials.generatedAt` is set, and the date is within 7 days or `voiceRequested` is true. It makes a new audio when `notebook_url` is set and `voiceRequested` is true, and refreshes the status while `voice.status` is `generating`.

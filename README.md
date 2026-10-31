@@ -8,7 +8,7 @@ Add a job you want, and Claude writes an application pack from your CV: a fit an
 
 New here? The [step-by-step guide](docs/guide.md) takes you from install to interview day, with the exact commands and screenshots.
 
-> Status: early (core 0.2.3). Built for personal use and shared as is.
+> Status: early (core 0.3.0). Built for personal use and shared as is.
 
 ## What you get
 
@@ -20,7 +20,7 @@ New here? The [step-by-step guide](docs/guide.md) takes you from install to inte
 
 ## Requirements
 
-- Claude Code (the terminal, an IDE extension or the desktop app's Code tab) with artifact publishing that supports the `db`, `sample` and `downloads` capabilities. Availability depends on your Claude plan and organization settings. The plugin does not run in claude.ai chat or Cowork.
+- Claude Code (the terminal, an IDE extension or the desktop app's Code tab) with artifact publishing that supports the `db`, `sample`, `downloads` and `user` capabilities. Availability depends on your Claude plan and organization settings. The plugin does not run in claude.ai chat or Cowork.
 - For the morning prep: claude.ai routines (`/schedule`), or scheduled tasks in the Claude desktop app.
 - For the voice add-on: the Claude desktop app and [gemini-notebook-mcp-cli](https://github.com/jacob-bd/gemini-notebook-mcp-cli), an unofficial community MCP server for NotebookLM (now Gemini Notebook). It signs in with your Google browser cookies and can stop working when Google changes the service.
 
@@ -55,6 +55,7 @@ Then run `/interview-prep-desk-voice:setup`.
 |---|---|
 | Add a job you might apply to | `/interview-prep-desk:add-job <job link>`, or Applications > Add job in the dashboard |
 | Create its application pack | The job's Create the application pack button in the dashboard |
+| Fill in the application on the employer's portal | `/interview-prep-desk:apply <company>`, after saving your Application answers in the dashboard |
 | Add an interview | `/interview-prep-desk:add-interview <job link>`, or the dashboard's Add interview button |
 | Prepare one now instead of tomorrow morning | `/interview-prep-desk:prep <company>` |
 | Build the voice mock now (add-on) | `/interview-prep-desk-voice:voice-mock <company>` |

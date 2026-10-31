@@ -177,7 +177,12 @@ const jobs = [
     jd: contoso.jd, status: 'interviewing', appliedAt: day(-16), followedUpAt: day(-8), notes: '', interviewId: `contoso-pharma-${day(3)}`, createdAt: at(-17, '19:30') } },
   { id: 'adatum-pharma-quality-systems-manager', data: { company: 'Adatum Pharma', role: 'Quality Systems Manager', location: 'Remote', job_link: '', jd: '', status: 'closed', appliedAt: day(-30), followedUpAt: day(-22), notes: 'They chose an internal candidate.', createdAt: at(-31, '08:15') } },
 ];
+// Made-up application answers for the made-up candidate.
+const answers = { email: 'robin.muster@example.com', phone: '000 000 00 00', street: 'Musterweg 1', postcode: '8000', city: 'Zurich', region: 'Zurich', country: 'Switzerland',
+  linkedin: 'https://www.linkedin.com/in/example', website: '', workAuth: 'Swiss citizen', sponsorship: 'No', noticePeriod: '3 months', startDate: 'After the notice period', relocation: 'Within Switzerland',
+  travel: 'Up to 30%', salary: 'Leave blank where optional', howHeard: 'LinkedIn', talentCommunity: 'no', demographics: 'decline', answers: 'Driving licence: B', companies: '', updatedAt: at(1, '18:20') };
+
 export const scenarios = {
-  main: { profile, interviews: [{ id: `contoso-pharma-${day(3)}`, data: contoso }, ...others], jobs },
+  main: { profile, interviews: [{ id: `contoso-pharma-${day(3)}`, data: contoso }, ...others], jobs, answers },
   voice: { profile, voice: { enabled: true, time: '09:30', updatedAt: at(0, '07:00') }, interviews: [{ id: `contoso-pharma-${day(3)}`, data: withVoice }, ...others] },
 };

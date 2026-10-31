@@ -112,7 +112,7 @@ header.top .actions{display:flex;gap:8px;flex-wrap:wrap}
 .score{display:flex;align-items:center;gap:8px;padding:4px 10px 0 42px;font-size:13px}
 .score input{width:80px}
 
-input[type=text],input[type=date],input[type=time],input[type=url],textarea,select{background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:7px 9px;width:100%}
+input[type=text],input[type=email],input[type=tel],input[type=date],input[type=time],input[type=url],textarea,select{background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:7px 9px;width:100%}
 textarea{resize:vertical;min-height:120px;line-height:1.5}
 
 /* flashcards */
@@ -268,6 +268,7 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;f
     </div>
     <div class="actions">
       <button class="btn" id="btn-profile" type="button" data-act="profile">Your profile</button>
+      <button class="btn" id="btn-answers" type="button" data-act="answers" hidden>Application answers</button>
       <button class="btn" id="btn-import" type="button" data-act="import">Import list</button>
       <button class="btn primary" id="btn-add" type="button" data-act="add">Add interview</button>
       <button class="btn primary" id="btn-addjob" type="button" data-act="job-add" hidden>Add job</button>
@@ -344,6 +345,40 @@ ul.plain{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;f
     <div class="foot">
       <button class="btn ghost" type="button" data-close>Cancel</button>
       <button class="btn primary" type="submit" id="profile-save">Save profile</button>
+    </div>
+  </form>
+</dialog>
+<dialog id="dlg-answers">
+  <form id="form-answers" method="dialog">
+    <h2>Application answers</h2>
+    <p class="muted" style="margin:0">What job portals ask again and again. When you ask Claude to fill in an application with your saved answers, it uses these and asks you for anything missing. You still sign in, accept terms and submit yourself. Saved in your own private part of this dashboard: people you share it with cannot see them.</p>
+    <div class="grid">
+      <label>Email for applications<input type="email" id="a-email" maxlength="200"></label>
+      <label>Phone, with country code<input type="tel" id="a-phone" maxlength="60" placeholder="+41 ..."></label>
+      <label class="full">Street and number<input type="text" id="a-street" maxlength="200"></label>
+      <label>Postcode<input type="text" id="a-postcode" maxlength="20"></label>
+      <label>City<input type="text" id="a-city" maxlength="100"></label>
+      <label>Region, state or canton<input type="text" id="a-region" maxlength="100"></label>
+      <label>Country<input type="text" id="a-country" maxlength="100"></label>
+      <label>LinkedIn profile<input type="url" id="a-linkedin" maxlength="300" placeholder="https://www.linkedin.com/in/..."></label>
+      <label>Website<input type="url" id="a-website" maxlength="300" placeholder="https://"></label>
+      <label class="full">Right to work<input type="text" id="a-workAuth" maxlength="500" placeholder="For example: Swiss C permit; EU citizen"></label>
+      <label class="full">Visa sponsorship needed<input type="text" id="a-sponsorship" maxlength="300" placeholder="For example: No for Switzerland and the EU; yes for the US"></label>
+      <label>Notice period<input type="text" id="a-noticePeriod" maxlength="200" placeholder="For example: 3 months"></label>
+      <label>Earliest start<input type="text" id="a-startDate" maxlength="200"></label>
+      <label>Relocation<input type="text" id="a-relocation" maxlength="300"></label>
+      <label>Travel<input type="text" id="a-travel" maxlength="200" placeholder="For example: up to 30%"></label>
+      <label class="full">Salary expectation<input type="text" id="a-salary" maxlength="300" placeholder="For example: leave blank where optional; otherwise a range"></label>
+      <label>How you heard about the job<input type="text" id="a-howHeard" maxlength="200" placeholder="For example: LinkedIn"></label>
+      <label>Talent communities and job alerts<select id="a-talentCommunity"><option value="no">Say no</option><option value="ask">Ask me each time</option><option value="yes">Say yes</option></select></label>
+      <label>Diversity and demographic questions<select id="a-demographics"><option value="decline">Decline to answer</option><option value="ask">Ask me each time</option></select></label>
+      <label class="full">Other standard answers<textarea id="a-answers" maxlength="5000" style="min-height:110px" placeholder="One per line, for example: Driving licence: B"></textarea></label>
+      <label class="full">Company-specific answers and portal accounts<textarea id="a-companies" maxlength="5000" style="min-height:110px" placeholder="For example: Contoso: worked there 2015 to 2018; portal account uses my personal email"></textarea></label>
+    </div>
+    <div class="saved" id="answers-meta"></div>
+    <div class="foot">
+      <button class="btn ghost" type="button" data-close>Cancel</button>
+      <button class="btn primary" type="submit">Save answers</button>
     </div>
   </form>
 </dialog>
@@ -571,6 +606,7 @@ function render(){
   renderViews(); renderStrip(); renderList(); renderDetailSafe();
   $('#btn-add').disabled = $('#btn-import').disabled = $('#btn-profile').disabled = $('#btn-addjob').disabled = S.readOnly || S.mode==='loading';
   $('#btn-add').hidden = $('#btn-import').hidden = jobs; $('#btn-addjob').hidden = !jobs;
+  $('#btn-answers').hidden = !jobs || !S.uid; $('#btn-answers').disabled = S.readOnly;
 }
 
 function renderStrip(){
@@ -1156,12 +1192,12 @@ function dlNote(){
   return '';
 }
 function cvBody(cv, when, redo){
-  const contact = tryLS(() => localStorage.getItem('prep.contact'), '') || '';
+  const own = tryLS(() => localStorage.getItem('prep.contact'), '') || '', contact = contactLine();
   return `<div class="toolbar">${dlButton('cv')}<button class="btn" type="button" data-act="job-copy" data-copy="cv">Copy as text</button>${when}${redo}</div>
     ${dlNote()}
     <label class="label" for="contact-line" style="display:block;margin-bottom:4px">Contact line on your Word files</label>
-    <input type="text" id="contact-line" maxlength="200" value="${esc(contact)}" placeholder="Email · phone · city · LinkedIn" style="max-width:72ch">
-    <div class="saved" style="margin:4px 0 16px">Kept only in this browser, never in the dashboard's database. Leave it empty and the files show a placeholder to fill in.</div>
+    <input type="text" id="contact-line" maxlength="200" value="${esc(own)}" placeholder="${esc(answersContact() || 'Email · phone · city · LinkedIn')}" style="max-width:72ch">
+    <div class="saved" style="margin:4px 0 16px">Kept only in this browser, never in the dashboard's database. Leave it empty to use your Application answers; with neither, the files show a placeholder to fill in.</div>
     <div class="paper">${cvHtml(cv, contact)}</div>`;
 }
 function cvHtml(cv, contact){
@@ -1216,13 +1252,15 @@ const DL_ERR = {
   too_large: 'The file is too large to save here.'
 };
 function dateIn(lang){
-  const tag = /^[a-z]{2,3}(-[A-Za-z]{2})?$/.test(lang || '') ? lang : undefined;
+  let tag = /^[a-z]{2,3}(-[A-Za-z]{2})?$/.test(lang || '') ? lang : undefined;
+  // Plain English letters use the British order (31 October 2026) unless the browser is set to an English variant
+  if(tag === 'en'){ const nav = typeof navigator !== 'undefined' ? String(navigator.language || '') : ''; tag = /^en-[A-Za-z]{2}$/.test(nav) ? nav : 'en-GB'; }
   try { return new Date().toLocaleDateString(tag, {day:'numeric', month:'long', year:'numeric'}); } catch(e){ return isoDay(new Date()); }
 }
 async function downloadDoc(j, kind){
   const p = {cv: packPart(j, 'cv'), letters: packPart(j, 'letters')};
   if(!S.dl || !p.cv || (kind === 'letter' && !p.letters)) return;
-  const contact = (tryLS(() => localStorage.getItem('prep.contact'), '') || '').trim();
+  const contact = contactLine();
   const name = p.cv.name || S.profile?.name || 'CV';
   const paras = kind === 'cv' ? cvParas(p.cv, contact) : letterParas(name, p.letters, contact, j.company, dateIn(p.letters.lang));
   const file = `${name} ${kind === 'cv' ? 'CV' : 'cover letter'}, ${j.company}.docx`.replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim();
@@ -1606,6 +1644,7 @@ document.addEventListener('click', e => {
     return;
   }
   if(t.dataset.act === 'profile') return openProfile();
+  if(t.dataset.act === 'answers') return openAnswers();
   if(t.dataset.id){ S.sel = t.dataset.id; S.confirmDel = false; S.drill = {idx:0, flipped:false, only:S.drill.only}; tryLS(()=>localStorage.setItem('prep.sel', S.sel)); render(); if(innerWidth<860) $('#detail').scrollIntoView({behavior:'smooth', block:'start'}); return; }
   if(t.dataset.tab){ S.tab = t.dataset.tab; tryLS(()=>localStorage.setItem('prep.tab', S.tab)); renderDetail(); return; }
   if(t.dataset.mark !== undefined && it) return markCard(it, t.dataset.mark === '1');
@@ -1681,7 +1720,8 @@ document.addEventListener('input', e => {
   if(e.target.id === 'contact-line'){
     const v = e.target.value.slice(0, 200).trim(), c = document.getElementById('cv-contact');
     tryLS(() => localStorage.setItem('prep.contact', v));
-    if(c) c.innerHTML = v ? esc(v) : `<mark>${esc(CONTACT_HOLDER)}</mark>`;
+    const line = contactLine();
+    if(c) c.innerHTML = line ? esc(line) : `<mark>${esc(CONTACT_HOLDER)}</mark>`;
     return;
   }
   const it = current(); if(!it) return;
@@ -1802,6 +1842,35 @@ $('#form-profile').addEventListener('submit', e => {
   $('#dlg-profile').close(); render();
 });
 
+// ---------- application answers: one private document per viewer, data/users/<id>/applicant ----------
+const ANSWER_FIELDS = [['email',200],['phone',60],['street',200],['postcode',20],['city',100],['region',100],['country',100],['linkedin',300],['website',300],
+  ['workAuth',500],['sponsorship',300],['noticePeriod',200],['startDate',200],['relocation',300],['travel',200],['salary',300],['howHeard',200],
+  ['talentCommunity',10],['demographics',10],['answers',5000],['companies',5000]];
+const answersPath = () => `data/users/${S.uid}/applicant`;
+function answersContact(){
+  const a = S.answers || {}, place = [a.city, a.country].filter(Boolean).join(', ');
+  const li = String(a.linkedin || '').replace(/^https?:\/\/(www\.)?/i, '').replace(/\/+$/, '');
+  return [a.email, a.phone, place, li].map(x => String(x || '').trim()).filter(Boolean).join(' · ').slice(0, 200);
+}
+function contactLine(){ return (tryLS(() => localStorage.getItem('prep.contact'), '') || '').trim() || answersContact(); }
+function openAnswers(){
+  if(!S.uid) return;
+  const a = S.answers || {};
+  for(const [k] of ANSWER_FIELDS) $('#a-' + k).value = a[k] || (k === 'talentCommunity' ? 'no' : k === 'demographics' ? 'decline' : '');
+  $('#answers-meta').textContent = a.updatedAt ? 'Last saved ' + syncText(a.updatedAt) : 'Fill in what you are happy for Claude to enter for you. Leave the rest empty and Claude will ask.';
+  $('#dlg-answers').showModal();
+}
+$('#form-answers').addEventListener('submit', e => {
+  e.preventDefault();
+  if(S.readOnly || !S.uid || S.mode !== 'db') return;
+  const doc = {};
+  for(const [k, max] of ANSWER_FIELDS) doc[k] = String($('#a-' + k).value || '').trim().slice(0, max);
+  doc.updatedAt = new Date().toISOString();
+  S.answers = doc;
+  queue('answers', () => db.doc(answersPath()).set(doc));
+  $('#dlg-answers').close(); render();
+});
+
 let cardsParsed = [];
 function openCards(){ $('#cards-text').value=''; $('#cards-file').value=''; cardsParsed=[]; updateCards(); $('#dlg-cards').showModal(); }
 function updateCards(name){
@@ -1846,6 +1915,16 @@ setInterval(() => { if(!document.querySelector('dialog[open]')) { renderStrip();
     S.profile = snap.exists ? clone(snap.data()) : null;
     if(S.tab === 'materials' || S.view === 'jobs') renderDetailSafe();
   }, () => {});
+  (async () => {
+    let u = null; try { u = await window.claude.use('user'); } catch(e){ u = null; }
+    const uid = u ? await u.id().catch(() => null) : null;
+    if(!uid) return;
+    S.uid = uid; render();
+    db.doc(answersPath()).onSnapshot(snap => {
+      S.answers = snap.exists ? clone(snap.data()) : null;
+      if(S.view === 'jobs') renderDetailSafe();
+    }, () => {});
+  })();
   db.doc('settings/voice').onSnapshot(snap => {
     S.voice = snap.exists ? clone(snap.data()) : null;
     renderDetailSafe();

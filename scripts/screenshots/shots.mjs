@@ -19,6 +19,7 @@ const badReply = 'Here is the analysis. {"summary": "Made-up example. A hands-on
 
 export const shots = [
   { name: 'dashboard', page: 'main', width: 1200, height: 860, steps: [...progress, tab('Materials'), { eval: 'window.scrollTo(0, 0)' }] },
+  { name: 'application-answers', page: 'main', width: 1200, height: 1500, clip: "document.getElementById('dlg-answers')", steps: [{ click: 'Applications', sel: 'button' }, { click: 'Application answers', sel: 'button' }] },
   { name: 'add-interview', page: 'main', width: 1200, height: 1000, clip: "document.getElementById('dlg-edit')", steps: [
     { click: 'Add interview', sel: 'button' },
     { eval: [fill('f-company', 'Woodgrove Labs'), fill('f-role', 'Head of Validation'), fill('f-date', day(16)), fill('f-time', '09:30'), fill('f-format', 'Video call'),
@@ -35,6 +36,13 @@ export const shots = [
   { name: 'voice-mock', page: 'voice', width: 1200, height: 900, clip: panel, maxHeight: 640, steps: [...progress, tab('Mock interview')] },
   { name: 'application-fit', page: 'main', width: 1200, height: 900, steps: [{ click: 'Applications', sel: 'button' }, tab('Fit')] },
   { name: 'application-cv', page: 'main', width: 1200, height: 900, clip: panel, maxHeight: 900, steps: [{ click: 'Applications', sel: 'button' }, tab('CV')] },
+  // Application answers: saving them writes the viewer's private document, and the CV's contact line uses them when the browser has none.
+  { name: 'answers-save', test: true, page: 'main', width: 1200, height: 900, clip: panel, maxHeight: 700, steps: [
+    { click: 'Applications', sel: 'button' }, { click: 'Application answers', sel: 'button' }, { eval: fill('a-phone', '000 111 22 33') },
+    { click: 'Save answers', sel: 'button', wait: 500 }, { eval: `document.querySelector('[data-job="woodgrove-labs-head-of-validation"]').click()` }, tab('CV')],
+    expect: `(() => { const d = window.__db['data/users/u_example/applicant'], c = document.getElementById('cv-contact')?.textContent || '';
+      return !d || d.phone !== '000 111 22 33' ? 'answers not saved: ' + JSON.stringify(d && d.phone) : document.getElementById('dlg-answers').open ? 'dialog still open'
+        : !c.includes('robin.muster@example.com · 000 111 22 33 · Zurich, Switzerland') ? 'contact line is: ' + c : true; })()` },
   packFails('test-pack-cut-off', { code: 'invalid_json', message: 'stub', text: cutReply }, new RegExp(`fit analysis stopped after ${cutReply.length} characters, before it was complete.*job description`)),
   packFails('test-pack-not-json', { code: 'invalid_json', message: 'stub', text: badReply }, new RegExp(`fit analysis \\(${badReply.length} characters\\) was not in the format`)),
   packFails('test-pack-wrong-shape', { result: 'Made-up example. A hands-on lead.' }, /fit analysis \(\d+ characters\) did not have the fields/),

@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 // Structure checks for the repo. Run from the repo root: node scripts/check.mjs
 import { execFileSync } from 'node:child_process';
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import vm from 'node:vm';
 import zlib from 'node:zlib';
 
@@ -230,6 +232,30 @@ else {
     && !files[0]['word/document.xml'].data.includes('[add figure]') && files[1]['word/document.xml'].data.includes('Tester &amp; Co &lt;test&gt;')
     && files[1]['word/document.xml'].data.includes('w:w="12240"');
   docOk ? ok('dashboard: Word files are valid zips with well-formed XML, the text and a highlighted empty contact line') : bad('dashboard: Word file output is invalid');
+
+  // 5g. Application answers: every field has an input, the contact line falls back to them, and the plugin's Word file script uses them
+  const keys = [...(src.match(/const ANSWER_FIELDS = \[([\s\S]*?)\];/) || ['', ''])[1].matchAll(/\['([a-zA-Z]+)',\d+\]/g)].map(m => m[1]);
+  const missing = keys.filter(k => !html.includes(`id="a-${k}"`));
+  keys.length >= 20 && !missing.length && src.includes('`data/users/${S.uid}/applicant`')
+    ? ok(`dashboard: application answers have ${keys.length} fields and live in the viewer's private data/users subtree`)
+    : bad(`dashboard: application answers are incomplete (${missing.join(', ') || 'path or fields not found'})`);
+  const cctx = { S: { answers: { email: 'a@example.com', phone: '+41 1', city: 'Zurich', country: 'Switzerland', linkedin: 'https://www.linkedin.com/in/x/' } }, own: '' };
+  vm.createContext(cctx);
+  vm.runInContext([fn('answersContact'), fn('contactLine'), fn('dateIn')].join('\n') + '\nthis.tryLS = (f, d) => this.own || d; this.answersContact = answersContact; this.contactLine = contactLine; this.dateIn = dateIn;', cctx);
+  const fromAnswers = cctx.contactLine(); cctx.own = 'Own line';
+  fromAnswers === 'a@example.com · +41 1 · Zurich, Switzerland · linkedin.com/in/x' && cctx.contactLine() === 'Own line' && /^\d{1,2} [A-Z][a-z]+ \d{4}$/.test(cctx.dateIn('en'))
+    ? ok('dashboard: the contact line uses the browser line first, then the application answers; English letters use day-month-year')
+    : bad(`dashboard: contact line or letter date is wrong (${fromAnswers} | ${cctx.dateIn('en')})`);
+  const tmp = mkdtempSync(join(tmpdir(), 'ipd-word-'));
+  try {
+    writeFileSync(join(tmp, 'job.json'), JSON.stringify(job)); writeFileSync(join(tmp, 'answers.json'), JSON.stringify(cctx.S.answers));
+    const made = execFileSync('node', [`${CORE}/scripts/word-files.mjs`, join(tmp, 'job.json'), join(tmp, 'out'), '--answers', join(tmp, 'answers.json')], { encoding: 'utf8' }).trim().split('\n');
+    const docs = made.map(f => unzip(readFileSync(f)));
+    made.length === 2 && docs.every(d => d && d['word/document.xml'] && wellFormed(d['word/document.xml'].data) && d['word/document.xml'].data.includes('a@example.com · +41 1'))
+      ? ok('plugin script: word-files.mjs writes the CV and letter with the contact line from the answers')
+      : bad('plugin script: word-files.mjs output is wrong');
+  } catch (e) { bad(`plugin script: word-files.mjs failed: ${e.message.split('\n')[0]}`); }
+  finally { rmSync(tmp, { recursive: true, force: true }); }
 }
 
 // 5f. Setup declares exactly the capabilities the dashboard uses

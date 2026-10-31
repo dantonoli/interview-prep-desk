@@ -48,7 +48,7 @@ flowchart TB
 ## Before you start
 
 - **Claude Code**: the terminal, an IDE extension or the Code tab of the Claude desktop app. The commands do not run in claude.ai chat or in Cowork, because they need Claude Code's artifact and file tools.
-- **A Claude plan that can publish artifacts with a database, Claude calls and file downloads** (the `db`, `sample` and `downloads` capabilities). Availability depends on your plan and your organization's settings.
+- **A Claude plan that can publish artifacts with a database, Claude calls, file downloads and a private section per viewer** (the `db`, `sample`, `downloads` and `user` capabilities). Availability depends on your plan and your organization's settings.
 - **Your CV** as a PDF, Word, Markdown or text file, or ready to paste.
 - **For the daily prep**: claude.ai routines (`/schedule`), or the Claude desktop app for a scheduled task on your computer.
 - **For the voice mock add-on only**: the Claude desktop app, a Google account with NotebookLM, and [gemini-notebook-mcp-cli](https://github.com/jacob-bd/gemini-notebook-mcp-cli). You can also build a voice mock by hand without the add-on; see [step 8](#step-8-rehearse-out-loud-in-notebooklm).
@@ -133,7 +133,19 @@ The pack uses only facts from your CV. It keeps every employer, title and date a
 
 ![The CV tab with the contact line field and a preview of the tailored CV](images/guide/application-cv.png)
 
-**Apply and follow up.** You apply on the company's site yourself: the dashboard sends nothing to the company. Then choose **Mark as applied**. If you have not heard back a week later, the job shows **Follow up**: send the follow-up email from the **Letters** tab and choose **Follow-up sent**. The **Status** list moves a job between Interested, Applied, Interviewing, Offer and Closed.
+**Save your application answers once.** In **Applications**, choose **Application answers** and fill in what job portals ask every time: email, phone, address, right to work, notice period, salary rule, whether to join talent communities, how to answer diversity questions, and anything specific to one company. They are saved in your own private part of the dashboard's database, which nobody you share the dashboard with can see. The **CV** tab's contact line uses them when you leave it empty.
+
+![The Application answers dialog filled in for the made-up candidate](images/guide/application-answers.png)
+
+**Let Claude fill in the application.** Pass the job:
+
+```
+/interview-prep-desk:apply Woodgrove Labs
+```
+
+or say "Apply to the Woodgrove Labs job with my saved answers". Claude writes the Word files, opens the job's portal in your browser and fills in the forms from your answers and the tailored CV. It asks you for anything you did not save. You create the portal account, sign in, accept terms and press Submit yourself: Claude stops on the review page.
+
+**Apply and follow up.** Whether Claude fills in the forms or you do, the dashboard sends nothing to the company. After you submit, choose **Mark as applied** (Claude does it for you when it helped). If you have not heard back a week later, the job shows **Follow up**: send the follow-up email from the **Letters** tab and choose **Follow-up sent**. The **Status** list moves a job between Interested, Applied, Interviewing, Offer and Closed.
 
 **When an interview is booked**, choose **Interview booked**. The Add interview form opens with the company, role, link, job description and focus filled in. Add the date and time and save: the job moves to Interviewing, and the interview appears under **Interviews**, ready for the next steps.
 
@@ -338,11 +350,11 @@ Then, in Claude Code:
 /interview-prep-desk:setup update
 ```
 
-This publishes the new version of the page to your existing dashboard, with the permissions it needs (version 0.2 adds file downloads for the Word files). Your data is not touched. Reload any dashboard tab that was already open.
+This publishes the new version of the page to your existing dashboard, with the permissions it needs (version 0.2 adds file downloads for the Word files; version 0.3 adds your private Application answers). Your data is not touched. Reload any dashboard tab that was already open.
 
 ## Your data
 
-- Your CV, jobs and application packs, interviews, materials and practice chats live in your private dashboard's database in your own claude.ai account. The config file lives on your computer, and so do the Word files you download. The contact line for the Word files stays in your browser.
+- Your CV, jobs and application packs, interviews, materials and practice chats live in your private dashboard's database in your own claude.ai account. Your Application answers live in your own private part of that database, which people you share the dashboard with cannot see. The config file lives on your computer, and so do the Word files. A contact line you type on the CV tab stays in your browser.
 - Nothing goes to the plugin's author: there is no server and no tracking. Research queries go to web search, and the application pack, the prep and the practice chat send your CV, the job and the briefing to Claude on your account. With the voice mock, NotebookLM receives your CV and the job.
 - Sharing the dashboard shares everything in it, including your CV.
 - To delete: remove a job or an interview with **Delete** in the dashboard; deleting an interview removes its materials, checklist, flashcards, notes and practice chat with no undo; delete the dashboard artifact to remove everything; delete the config file and the routine or scheduled task, and uninstall the plugin, to stop it completely.
@@ -379,6 +391,7 @@ Still stuck? Open an [issue](https://github.com/dantonoli/interview-prep-desk/is
 |---|---|---|
 | Set up your desk | `/interview-prep-desk:setup` | (slash command only) |
 | Add a job you might apply to | `/interview-prep-desk:add-job <job link or text>` | "Add this job to my applications: &lt;link&gt;" |
+| Fill in an application | `/interview-prep-desk:apply <company>` | "Apply to the &lt;company&gt; job with my saved answers" |
 | Add an interview | `/interview-prep-desk:add-interview <job link or text>` | "Add this job to my interview prep: &lt;link&gt;" |
 | Prepare one now | `/interview-prep-desk:prep <company>` | "Prepare my &lt;company&gt; interview now" |
 | Move your dashboard to a new version | `/interview-prep-desk:setup update` | (slash command only) |
